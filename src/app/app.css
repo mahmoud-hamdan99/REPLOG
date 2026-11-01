@@ -1,0 +1,9 @@
+.shell {
+  padding-block: 2rem;
+  padding-inline: 1rem;
+  font-family: system-ui, sans-serif;
+}
+
+.shell h1 {
+  margin-block: 0 0.5rem;
+}

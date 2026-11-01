@@ -1,0 +1,12 @@
+# Normalise everything to LF in the repository and the working tree, so the
+# project behaves identically on Windows, macOS, Linux and in GitHub Actions.
+* text=auto eol=lf
+
+*.ico   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.woff  binary
+*.woff2 binary
+*.pdf   binary

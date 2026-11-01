@@ -1,0 +1,6 @@
+# Hand-formatted specification documents: aligned tables and ASCII wireframes
+# must not be reflowed.
+docs/
+dist/
+node_modules/
+package-lock.json

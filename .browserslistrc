@@ -1,0 +1,8 @@
+# Angular 22 does not support Safari / iOS Safari below 17, so 17 is the floor.
+# The product targets iOS 17+ anyway (see docs/UI_UX_SPEC.md section 18 device matrix).
+# APIs newer than the floor (Screen Wake Lock, etc.) are still feature-detected.
+last 2 Chrome versions
+last 2 Edge versions
+last 2 Firefox versions
+Safari >= 17
+iOS >= 17

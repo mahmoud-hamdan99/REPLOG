@@ -1,0 +1,747 @@
+# REPLOG — Implementation Plan
+
+**Version:** 1.0
+**Scope:** Version 1 as defined in [PRODUCT_SPEC.md](PRODUCT_SPEC.md)
+**Companion documents:** [ARCHITECTURE.md](ARCHITECTURE.md) · [DATABASE_SPEC.md](DATABASE_SPEC.md) · [UI_UX_SPEC.md](UI_UX_SPEC.md)
+**Environment:** Windows 11, PowerShell, Node LTS, Git, VS Code
+
+---
+
+## 1. How This Plan Is Organised
+
+Fourteen phases, each with a goal, task list, deliverables, and **acceptance criteria that are testable rather than aspirational**. Phases are ordered by dependency, not by visual payoff: the data layer and the active tracker come before analytics, because everything downstream reads what the tracker writes.
+
+**Effort** is given in *sessions* (one focused half-day of work) as a relative sizing device, not a delivery commitment. Total: **~96 sessions**. A solo developer working evenings and weekends should read this as a multi-month project; the phase boundaries are the useful unit, not the total.
+
+**Phase exit rule:** a phase is not done until its acceptance criteria pass, its tests are green, `npm run lint` and `tsc --noEmit` are clean, and the production build succeeds. No phase is "finished except for tests".
+
+### Critical path
+
+```
+P0 Setup → P1 Foundation → P2 Data layer → P3 Library → P4 Planner → P5 Tracker ──┐
+                                                                                   │
+P6 History ← ────────────────────────────────────────────────────────────────────── ┘
+   ↓
+P7 Intelligence (PRs + suggestions) ──→ P10 Analytics
+P8 Measurements ──────────────────────→ P10
+P9 Photos
+P11 Settings + Backup
+P12 PWA/Offline → P13 Deployment → P14 Hardening & release
+```
+
+P8 and P9 are independent of P4–P7 and can be built in parallel or deferred if time is short. **P5 is the one phase that must not be rushed** — it carries the product.
+
+---
+
+## 2. Milestones
+
+| Milestone | Phases | What it proves |
+|---|---|---|
+| **M1 — Skeleton** | P0–P1 | App boots, themes and both languages work, navigation is real |
+| **M2 — It remembers** | P2–P3 | Data survives a reload; the exercise library is browsable and searchable |
+| **M3 — It trains** | P4–P6 | A full loop: build a plan → train → the workout is in history. *The first genuinely usable build.* |
+| **M4 — It understands** | P7–P10 | Previous performance, PRs, suggestions, measurements, photos, analytics |
+| **M5 — It is safe** | P11 | Export/import/reset, integrity checks, storage warnings |
+| **M6 — It ships** | P12–P14 | Installs on an iPhone from GitHub Pages, works offline, release checklist signed |
+
+Use M3 yourself in a real gym for two weeks before starting M4. Everything in M4 is built on assumptions that only real use can validate.
+
+---
+
+## 3. Phase 0 — Project Setup & Tooling
+
+**Effort:** 4 sessions · **Depends on:** nothing
+
+### Tasks
+
+1. Verify prerequisites and pin versions (§3.1 PowerShell).
+2. Scaffold the Angular workspace; move these spec documents into `docs/`.
+3. Configure `tsconfig.json`: `strict: true`, `noUncheckedIndexedAccess: true`, `noImplicitOverride: true`, `exactOptionalPropertyTypes: true`, `strictTemplates: true` in `angularCompilerOptions`.
+4. ESLint + the import-boundary zones from ARCHITECTURE §12.2; stylelint with a `no-physical-properties` rule for RTL safety; Prettier; `.editorconfig` with `end_of_line = lf`.
+5. Unit test runner + `fake-indexeddb`; Playwright with Chromium and WebKit.
+6. npm scripts: `start`, `build`, `build:pages`, `test`, `test:e2e`, `lint`, `typecheck`, `check` (lint + typecheck + test), `i18n:check`, `tokens:check`.
+7. `angular.json` bundle budgets per ARCHITECTURE §10.5.
+8. Git repository, `.gitignore`, conventional-commit convention, `main` as default branch.
+9. Folder skeleton from ARCHITECTURE §4 with an `index.ts` barrel per layer.
+10. A pre-commit hook running `lint-staged` (format + lint changed files only).
+
+### 3.1 PowerShell — environment setup
+
+Check prerequisites:
+
+```powershell
+node --version; npm --version; git --version
+```
+
+Angular 22 requires Node `^22.22.3 || ^24.15.0 || >=26.0.0`. This project is pinned to **Node 26.13.0**. Install or upgrade with winget — note that the `OpenJS.NodeJS.LTS` package now tracks the Node 26 LTS line, so it will install 26.x, not 24.x:
+
+```powershell
+winget install OpenJS.NodeJS.LTS
+```
+
+Allow local scripts in this session if `ng` is blocked by execution policy:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+```
+
+Enable long paths once, from an **elevated** PowerShell (prevents deep `node_modules` failures):
+
+```powershell
+New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' -Name 'LongPathsEnabled' -Value 1 -PropertyType DWord -Force
+```
+
+### 3.2 PowerShell — scaffold the workspace
+
+`ng new` refuses a non-empty directory, and `D:\REPLOG` already holds the spec documents. Scaffold next to it, then merge.
+
+```powershell
+cd D:\; npx --yes @angular/cli@22 new REPLOG --style=css --routing --ssr=false --zoneless --strict --package-manager=npm --skip-git --ai-config=claude-code --interactive=false --directory replog-scaffold
+```
+
+`--directory` is resolved **relative to the current directory**, so it must not be an absolute path — passing `D:\replog-scaffold` while sitting in `D:\` makes the CLI attempt `D:\D:\replog-scaffold` and fail.
+
+Copy the generated project into the working folder. Copy rather than move, and skip `node_modules`: it is large, disposable, and reinstalled from the committed lockfile in the next step.
+
+```powershell
+Get-ChildItem -Path D:\replog-scaffold -Force -Exclude 'node_modules' | Copy-Item -Destination D:\REPLOG -Recurse -Force
+```
+
+```powershell
+Remove-Item -Path D:\replog-scaffold -Recurse -Force
+```
+
+Record the exact Angular version this produced — it is the pinned version for the project:
+
+```powershell
+cd D:\REPLOG; npx ng version
+```
+
+File the result in this document's §12 Version Lock table and never float the major version.
+
+Tidy the documentation into `docs\`:
+
+```powershell
+New-Item -ItemType Directory -Path D:\REPLOG\docs -Force; Move-Item -Path D:\REPLOG\*.md -Destination D:\REPLOG\docs -Force -Exclude 'README.md'
+```
+
+### 3.3 PowerShell — dependencies and first run
+
+```powershell
+npm install idb
+```
+
+```powershell
+npm install --save-dev fake-indexeddb @playwright/test stylelint stylelint-config-standard
+```
+
+```powershell
+npx playwright install chromium webkit
+```
+
+```powershell
+npm start
+```
+
+The dev server serves at `http://localhost:4200/`. To test on a physical iPhone over the LAN during development:
+
+```powershell
+npx ng serve --host 0.0.0.0 --port 4200
+```
+
+Then find the machine's address and allow the port through the firewall (elevated):
+
+```powershell
+Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notmatch 'Loopback' } | Select-Object InterfaceAlias, IPAddress
+```
+
+```powershell
+New-NetFirewallRule -DisplayName 'Angular Dev Server 4200' -Direction Inbound -LocalPort 4200 -Protocol TCP -Action Allow
+```
+
+Note: Safari will not install a PWA from a plain-HTTP LAN address, and service workers do not run there. LAN serving is for **layout and interaction testing only**; install/offline behaviour must be verified against the deployed HTTPS site (P13).
+
+### 3.4 PowerShell — repository
+
+```powershell
+cd D:\REPLOG; git init; git branch -M main; git add .; git commit -m "chore: scaffold Angular workspace and project specs"
+```
+
+```powershell
+git remote add origin https://github.com/USERNAME/REPLOG.git; git push -u origin main
+```
+
+### Acceptance criteria
+
+- [ ] `npm run check` passes on a clean checkout
+- [ ] `npm run build` produces a production bundle within budget
+- [ ] An ESLint error is raised by a deliberate `import { openDB } from 'idb'` inside a component file
+- [ ] A stylelint error is raised by a deliberate `margin-left` in a component stylesheet
+- [ ] Both Playwright browsers launch
+
+---
+
+## 4. Phase 1 — Foundation: Shell, Theme, i18n, Routing
+
+**Effort:** 9 sessions · **Depends on:** P0
+
+### Tasks
+
+1. `styles/_tokens.css`, `_themes.css`, `_base.css` from UI_UX_SPEC §3. Self-host Inter + IBM Plex Sans Arabic WOFF2 subsets in `public/fonts/` with `font-display: swap` and `preload` for the two primary faces.
+2. `index.html`: `viewport-fit=cover`, `interactive-widget=resizes-content`, theme-color metas, apple-touch-icon metas, CSP meta (ARCHITECTURE §12.5), and the **synchronous pre-paint theme/dir script** that reads `replog.prefs.v1`.
+3. `ThemeService` (system/light/dark with a `matchMedia` listener) and `SettingsStore` backed by `LocalStoragePrefs`.
+4. `TranslationService`: locale signal, lazy JSON import, `t()`, `TranslatePipe`, ICU plural selection with all six Arabic categories, `lang`/`dir` application. Seed `en.json`/`ar.json` with the shell's strings.
+5. `scripts/check-i18n.mjs` — fails on key drift between locales; wire to `npm run i18n:check` and to CI.
+6. `scripts/check-contrast.mjs` — parses tokens, asserts the UI_UX_SPEC §3.2 pairs; wire to `npm run tokens:check`.
+7. App shell: safe-area layout, sticky header with the scroll-aware border, bottom tab bar with the elevated Train tab, toast host, dialog/sheet host with focus trapping and `inert`.
+8. Router with every route from ARCHITECTURE §9 wired to placeholder pages; lazy `loadComponent`; route `data` driving title and nav state; idle preloading for `/train`.
+9. Core UI kit (UI_UX_SPEC §6.1): button, card, stat tile, delta chip, chip, sheet, dialog, toast, segmented, list row, empty state, skeleton, section header, badge, progress ring.
+10. `AppErrorHandler` + the `AppError` taxonomy + the diagnostics ring buffer.
+
+### Acceptance criteria
+
+- [ ] Theme and direction are correct on the very first paint — no flash on a hard reload in either theme or language
+- [ ] Switching to Arabic flips direction instantly, with no reload, and persists across restarts
+- [ ] Every shell string comes from the dictionaries; `i18n:check` and `tokens:check` pass
+- [ ] All routes navigate; the tab bar reflects the active destination; deep-linking a nested route works in dev
+- [ ] Safe areas verified on a real iPhone: nothing sits under the notch/Dynamic Island or the home indicator
+- [ ] The UI kit renders in a dev-only gallery route in both themes and both directions
+- [ ] Reduced-motion variants verified
+
+---
+
+## 5. Phase 2 — Data Layer
+
+**Effort:** 11 sessions · **Depends on:** P1 · **Risk: high — everything downstream depends on this being right**
+
+### Tasks
+
+1. `domain/models/*` — every interface in DATABASE_SPEC §3, plus enums (§4) and the muscle rollup map.
+2. `domain/units/*` — canonical/display conversion, step grids, property-tested round-trips.
+3. `domain/time/*` — `dayKey`, `weekKey`, ranges, duration formatting, local-vs-UTC rules.
+4. `infrastructure/idb/schema.ts` — `DB_VERSION = 1`, every store and index from DATABASE_SPEC §3, including the unused `outbox`.
+5. `infrastructure/idb/migrations/v1.ts` + the ordered migration runner, `blocked`/`versionchange` handling, forward-only guard and **safe mode** for a future-version database.
+6. `IdbDatabase`: open, upgrade, `tx()`, quota detection, `StorageError` mapping.
+7. `IdbRepository<T>` implementing `Repository<T>` (ARCHITECTURE §5.2) with envelope stamping, soft delete, and query translation.
+8. `UnitOfWork` + `TxScope` with the no-foreign-await discipline and `onCommit` hooks.
+9. `DbEvents` + the `BroadcastChannel` relay.
+10. Per-aggregate repositories and their `InjectionToken`s; an `InMemoryRepository<T>` for tests.
+11. `appMeta` accessor service (device id generation, pointers, counters).
+12. `uuidv7()` implementation with a monotonic counter for same-millisecond calls.
+13. Tests: CRUD and index coverage per store, soft-delete semantics, envelope stamping, transaction rollback, concurrent-write serialisation, the v1 migration from an empty database.
+
+### Acceptance criteria
+
+- [ ] Every query in DATABASE_SPEC §8 is implemented and covered by a test asserting it uses an index (verified by seeding 5 000 synthetic set logs and asserting the operation completes under 50 ms)
+- [ ] A rolled-back transaction leaves no partial writes (test: throw mid-`UnitOfWork`)
+- [ ] `tsc` proves no component can reach `IdbDatabase` (lint boundary test)
+- [ ] Domain layer has zero `@angular/*`, `idb`, or `rxjs` imports (lint-enforced)
+- [ ] `domain/` coverage ≥ 95 %; repositories ≥ 85 %
+- [ ] Opening a database whose `schemaVersion` exceeds `DB_VERSION` enters safe mode with export available and writes blocked
+- [ ] Unit round-trip property test passes for every step value in the kg/lb and cm/in grids
+
+---
+
+## 6. Phase 3 — Exercise Library
+
+**Effort:** 10 sessions · **Depends on:** P2
+
+### Tasks
+
+1. Author `public/data/exercises.v1.json`: 180–260 exercises, all twelve spec categories, ≥ 12 per major group, each with EN + AR names, aliases, muscles, equipment, classification, laterality, load type, weight increment, and 3–6 instruction steps. **This is content work and the largest single time sink in the phase** — budget 4 of the 10 sessions for it, and draft it in a spreadsheet exported to JSON rather than hand-editing JSON.
+2. Normalisation helpers: Latin lowercase/diacritic folding; Arabic tashkeel stripping and alef/ya/ta-marbuta folding (DATABASE_SPEC §3.3).
+3. Seeding and reconciliation per DATABASE_SPEC §6.2, with progress reporting and a "Preparing your exercise library" state.
+4. `ExerciseLibraryStore`: resident cache, filter state, in-memory search.
+5. Library screen (UI_UX_SPEC §5.7): search, muscle chips, equipment/type filter sheets, favourites, alphabetical index, virtualised list.
+6. Exercise detail page.
+7. Custom exercise create/edit form with full validation; archive and "reset to original" for edited built-ins.
+8. Optional illustration assets for the most common lifts, with the muscle-glyph fallback.
+9. Tests: seeding, reconciliation branches (new/unedited/user-edited/removed), Arabic search folding, filter combinations.
+
+### Acceptance criteria
+
+- [ ] Catalog JSON validates against the `Exercise` type at build time (a script, not trust)
+- [ ] First launch seeds the catalog without blocking the first paint
+- [ ] A re-seed with a bumped catalog version preserves user edits, favourites, and notes
+- [ ] Arabic search for "بنش" and "ضغط" finds the expected exercises; diacritics and alef forms do not matter
+- [ ] Filter + search combine correctly; the result count is accurate
+- [ ] The library payload is ≤ 60 kB gzipped and is not in the initial bundle
+- [ ] Scrolling 250 exercises stays at 60 fps on an iPhone
+
+---
+
+## 7. Phase 4 — Workout Planner
+
+**Effort:** 9 sessions · **Depends on:** P3
+
+### Tasks
+
+1. `PlannerStore`: plans, routines, active plan, editor draft with dirty tracking.
+2. Plan list + plan detail with the weekday strip (UI_UX_SPEC §5.6).
+3. Plan CRUD: create, edit, **duplicate** (deep clone with new ids and `revision: 1`), archive/unarchive, set active, delete when unreferenced.
+4. Routine CRUD within a plan, plus standalone flexible routines (`planId: null`).
+5. Routine editor: name, schedule type, weekday picker, exercise list.
+6. Exercise picker sheet (reused by the tracker) with multi-select.
+7. Per-exercise configuration sheet: target sets, rep range (fixed/range), optional target weight, rest chips + custom, planned warm-ups, tracking-mode override, notes.
+8. Reorder via drag handle **and** a menu-based "Move up/down" accessible alternative; sparse `orderIndex` writes.
+9. Superset grouping and ungrouping.
+10. Estimated duration calculation (sets × (work + rest) + transitions), labelled as an estimate.
+11. `revision` bump on structural edits; the editor's history-immutability note.
+12. Unsaved-changes guard.
+13. Tests: duplication produces no shared ids, reorder persistence, weekday assignment, superset invariants, revision bumping.
+
+### Acceptance criteria
+
+- [ ] A plan with 4 routines and 24 exercises can be built, reordered, duplicated, and archived without data loss
+- [ ] Duplicating a plan produces a fully independent copy (asserted by mutating the copy and re-reading the original)
+- [ ] Flexible routines are creatable without a plan and appear in the Train picker
+- [ ] A routine assigned to Monday and Thursday appears on both days on the dashboard
+- [ ] Reordering 20 exercises is a single write per move and survives a reload
+- [ ] Editing a routine does not alter any existing workout record (asserted with a seeded prior workout)
+
+---
+
+## 8. Phase 5 — Active Workout Tracker
+
+**Effort:** 16 sessions · **Depends on:** P4 · **Risk: highest — this is the product**
+
+Build it in the order below; each step is independently demonstrable.
+
+### Tasks
+
+1. `WorkoutSessionStore`: start from routine / quick / repeat, load, mutate, finish, discard, reset.
+2. Session creation: snapshot plan and per-exercise targets (ARCHITECTURE §7.6); pre-create planned `setLogs` rows as uncommitted drafts; snapshot the nearest body weight.
+3. The write policy in ARCHITECTURE §7.2, including the serial write lane and debounce flushing.
+4. `rl-set-row`: previous-performance text, weight/reps fields, complete toggle, warm-up badge, swipe-to-delete with undo, advanced-mode RPE/RIR/set-type/notes.
+5. `rl-numeric-pad` (UI_UX_SPEC §6.4) including the accessible hidden input, locale decimal handling, and quick-adjust from `weightIncrementKg`.
+6. `rl-exercise-card`: collapsed/expanded, one-expanded-at-a-time, current-row focus advance, superset bracket and alternating focus.
+7. Add/remove set, add warm-up, add exercise mid-session, skip, replace, reorder.
+8. Rest timer: timestamp-derived countdown, sheet + pill, ±15 s, skip, auto-start preference, completion tone and `aria-live` announcement, Screen Wake Lock behind feature detection, the stated background limitation.
+9. Pause/resume with the `pauses[]` ledger and duration maths.
+10. Interruption protection (ARCHITECTURE §7.4): `CanDeactivate` with the three-way choice, `beforeunload`, `visibilitychange`, `pagehide` flush, cold-start resume prompt, multi-tab read-only banner and heartbeat.
+11. Finish flow: the single transaction in ARCHITECTURE §7.5, the empty-set report, and the summary screen (UI_UX_SPEC §5.5).
+12. Discard flow with an explicit confirmation stating elapsed time and set count.
+13. Simple/advanced mode toggle, switchable mid-session.
+14. Tests — the reliability suite, which is the acceptance evidence for this phase:
+    * Confirm a set → kill the store → reload → the set is present and committed.
+    * Debounced draft + `pagehide` → value persisted.
+    * Finish with a throwing PR detector → full rollback, session still active and complete.
+    * Background for 10 minutes (fake timers + visibility events) → duration and rest remaining are exact.
+    * Two store instances on one session → the second is read-only.
+    * 200 set confirmations in rapid succession → no interleaved transactions, no lost writes.
+
+### Acceptance criteria
+
+- [ ] Set confirm → committed UI in under 100 ms at p95 with 5 000 existing set logs
+- [ ] No sequence of force-quit, reload, or tab switch loses a confirmed set (manual script of 20 interruption scenarios, executed on a real iPhone)
+- [ ] A session resumed after 8 hours shows correct elapsed time excluding pauses
+- [ ] Rest timer accuracy within 1 s after 10 minutes backgrounded
+- [ ] Previous performance appears for every exercise with history and says "No history yet" otherwise
+- [ ] Supersets alternate focus correctly and log to the right exercises
+- [ ] A full 6-exercise, 22-set session can be logged one-handed without reaching above the screen's midpoint
+- [ ] Leaving the screen is impossible without an explicit choice
+
+---
+
+## 9. Phase 6 — Workout History
+
+**Effort:** 6 sessions · **Depends on:** P5
+
+### Tasks
+
+1. `HistoryStore` with cursor-based paging (50 per page) and a per-exercise history cache.
+2. History list: month grouping with sticky headers, rollup badges, filters (date range, routine, exercise).
+3. Workout detail rendered **entirely from snapshots**, including the "routine has changed / no longer exists" notes.
+4. `Repeat this workout` → a new session with the same structure and no committed loads.
+5. Edit a past workout (corrections) with an edit marker, and PR recomputation afterwards.
+6. Delete a workout: confirm, soft delete, 30-day recovery in Settings → Data; rollups and PRs recomputed.
+7. Per-exercise history view: every session's sets for one exercise, newest first.
+8. Tests: paging correctness, snapshot rendering after the source routine is deleted, PR recomputation after an edit or delete.
+
+### Acceptance criteria
+
+- [ ] 500 seeded workouts page smoothly with no full-store scan
+- [ ] Deleting the routine a workout came from leaves the workout fully readable
+- [ ] Editing a historical set updates PRs deterministically (a rebuild produces the same table)
+- [ ] A deleted workout is recoverable within 30 days and its PRs are restored with it
+
+---
+
+## 10. Phase 7 — Intelligence: Records & Suggestions
+
+**Effort:** 7 sessions · **Depends on:** P6
+
+### Tasks
+
+1. `domain/strength/e1rm.ts` — Epley and Brzycki, `null` above 12 reps, `{ value, formula, isEstimate }` return shape.
+2. `domain/strength/volume.ts` — effective weight per load type, working sets only.
+3. `domain/strength/prs.ts` — all five PR types, variant-key scoping, weight bucketing for `maxRepsAtWeight`, "First record" vs "New PR", `previousValue` retention, `isCurrent` flipping.
+4. PR detection inside the finish transaction; full rebuild-from-`setLogs` routine for Settings → Data.
+5. `domain/strength/progression.ts` — the suggestion rules in ARCHITECTURE §6.2 with a human-readable `reason`.
+6. `rl-prev-performance` and `rl-suggestion-hint`: ghost text, reason, `⌁` marker, tap to accept; **never auto-applied, never written into a plan** (spec §4.5).
+7. Records screen and dashboard "recent records" list, with the variant-scope explanation banner.
+8. Tests: e1RM edge cases (1 rep, 12 reps, 13 reps, 0 reps, bodyweight), PR detection across equipment variants, tie handling, first-record labelling, rebuild determinism, suggestion rules at range top/bottom/middle and with zero history.
+
+### Acceptance criteria
+
+- [ ] A dumbbell press PR never displaces a barbell press PR
+- [ ] A 12-rep set at 20 kg never registers as a rep PR against a 5-rep set at 100 kg
+- [ ] Every estimated value on screen carries the `⌁` marker and names its formula
+- [ ] No suggestion ever mutates a routine or commits a value without a tap
+- [ ] With one prior session, the suggestion is present and explained; with none, the UI says "No history yet" and offers nothing
+- [ ] A PR rebuild over 5 000 seeded sets reproduces the incrementally built table exactly
+
+---
+
+## 11. Phase 8 — Body Measurements
+
+**Effort:** 6 sessions · **Depends on:** P2 (independent of P4–P7)
+
+### Tasks
+
+1. `MeasurementsStore` + `customMeasurementDefs` CRUD.
+2. Entry sheet (UI_UX_SPEC §5.10): weight first and focused, collapsible full set in body order, left/right pairs on one row, ghost previous values, live deltas, all fields optional.
+3. `rl-measurement-field` owning canonical↔display conversion.
+4. List grouped by date showing only recorded fields; edit and delete with undo.
+5. Same-day duplicate detection with a merge offer.
+6. Custom measurement definitions with unit types.
+7. Date filtering and historical comparison (pick two dates → delta table).
+8. Validation per DATABASE_SPEC §10, with the "question, don't clamp" behaviour.
+9. Tests: partial entries, unit conversion round-trips through the form, delta computation across gaps, custom-definition archiving with historical values intact.
+
+### Acceptance criteria
+
+- [ ] An entry with only a weight saves and renders correctly
+- [ ] Switching kg→lb changes every displayed value and no stored value (asserted by re-reading the record)
+- [ ] Deleting a custom definition keeps its historical values readable
+- [ ] Comparing two dates shows deltas only for fields present in both, and says so for the rest
+
+---
+
+## 12. Phase 9 — Progress Photos
+
+**Effort:** 6 sessions · **Depends on:** P2 (independent)
+
+### Tasks
+
+1. `PhotoBlobStore` + the processing pipeline in DATABASE_SPEC §3.12: decode, orientation correction, EXIF date read, **metadata strip via canvas re-encode**, 1600 px WebP full, 320 px WebP thumb, one transaction for both blobs plus metadata.
+2. `PhotosStore` with strict object-URL lifecycle tracking and revocation.
+3. Import flow: file input, pose selection, EXIF-prefilled date, optional note, nearest-weight snapshot.
+4. Gallery: date-grouped 3-column thumbnail grid, pose filters, lazy thumbnail loading, selection mode.
+5. Compare view: two photos with date/pose/weight captions and the computed interval; draggable divider.
+6. Delete with an explicit "cannot be recovered" confirmation and immediate blob hard-delete.
+7. Privacy affordances: no dashboard surfacing, optional blur-until-tapped, and the honest "there is no app lock" statement.
+8. Storage accounting feeding the Settings meter; the prune view.
+9. Tests: pipeline output dimensions and sizes, EXIF date extraction, **GPS removal verified by re-parsing the output blob**, URL revocation on replace and destroy, blob/metadata transactional consistency.
+
+### Acceptance criteria
+
+- [ ] A 12 MP iPhone photo is stored at ≤ 350 kB with a legible thumbnail
+- [ ] The stored blob contains no EXIF GPS data (asserted programmatically)
+- [ ] A 60-photo gallery scrolls smoothly and holds no more object URLs than visible items + a small buffer
+- [ ] Deleting a photo reclaims both blobs, reflected in the storage meter
+- [ ] No photo request ever leaves the device (verified with the network panel and the CSP)
+
+---
+
+## 13. Phase 10 — Progress Analytics
+
+**Effort:** 9 sessions · **Depends on:** P7, P8
+
+### Tasks
+
+1. `domain/analytics/*`: series builders, day/week/month bucketing, gap preservation, consistency, muscle distribution via the rollup map, moving averages (labelled as calculated).
+2. The SVG chart kit (UI_UX_SPEC §9): `rl-line-chart`, `rl-bar-chart`, `rl-sparkline`, `rl-distribution`, with scrub-to-read callouts, token colours, RTL rules, and the sparse-data states.
+3. Shared time-range selector with per-tab persistence.
+4. Strength tab: exercise picker, e1RM and top-set series, best-set table, point count.
+5. Volume tab: stacked bars by muscle group with the exclusions footnote.
+6. Body tab: weight with moving average, per-measurement charts.
+7. Records tab (from P7).
+8. Dashboard statistics wired to real queries (Q1–Q6).
+9. Tests: bucketing across month and DST boundaries, gap handling, consistency with missing weeks, distribution summing to 100 %, moving average with gaps, every empty/sparse state.
+
+### Acceptance criteria
+
+- [ ] No chart interpolates, zero-fills, or smooths across a gap
+- [ ] Fewer than 3 points → an empty state; fewer than 5 → no trend line; the point count is always shown
+- [ ] Zoomed axes display their real min/max; volume and count axes start at zero
+- [ ] Every number on the dashboard is reproducible by hand from the stored records
+- [ ] Charts are legible and correctly labelled in both themes and both directions
+- [ ] A 1-year range over 5 000 set logs renders in under 300 ms
+
+---
+
+## 14. Phase 11 — Settings, Export, Import, Integrity
+
+**Effort:** 8 sessions · **Depends on:** P3–P10
+
+### Tasks
+
+1. Settings screens per UI_UX_SPEC §5.12, every preference wired to `SettingsStore`.
+2. Profile management (all fields optional).
+3. `domain/backup/export.ts`: the envelope in DATABASE_SPEC §9.1, chunked streaming, canonical hashing, photo opt-in with a projected size, per-store CSV export.
+4. `domain/backup/import.ts`: the three-stage flow in §9.2 — validator returning a structured report, dry-run diff, merge vs replace, chunked application with accurate progress, PR rebuild after import.
+5. `FileIo`: download via an object URL, pick via `<input type="file">`; no File System Access API dependency (unavailable in Safari).
+6. Reset application data with typed confirmation and a mandatory export offer.
+7. Recently deleted (30-day recovery) across workouts, measurements, plans, routines.
+8. Integrity check routine (DATABASE_SPEC §12) with itemised, opt-in repairs and a pre-repair export offer.
+9. Storage meter via `navigator.storage.estimate()`, the photo breakdown, the quota thresholds (80 % warn, 95 % block photo writes), and `persist()` with an honest result display.
+10. Backup reminder logic and the dashboard card.
+11. About page with the platform-honesty copy (UI_UX_SPEC §7) and the diagnostics log.
+12. Tests: round-trip export→reset→import equality (including photos), hash mismatch warning path, every validator branch, merge conflict resolution by `updatedAt`, replace-mode pre-flight export, chunk failure reporting "imported N of M", import of a `formatVersion` 0 file, refusal of a future `formatVersion`.
+
+### Acceptance criteria
+
+- [ ] Export → Reset → Import reproduces the database exactly: record counts, ids, every field, and all photos
+- [ ] A truncated or hand-edited backup produces a clear report and never a partial silent import
+- [ ] Replace mode cannot be reached without a typed confirmation and an offered pre-flight export
+- [ ] Importing a backup containing fabricated `personalRecords` yields a rebuilt, correct PR table
+- [ ] The storage meter matches `navigator.storage.estimate()` within rounding
+- [ ] Every destructive action in DATABASE_SPEC §9.3 has its specified guard
+
+---
+
+## 15. Phase 12 — PWA, Offline, Updates
+
+**Effort:** 6 sessions · **Depends on:** P11
+
+### Tasks
+
+1. Add `@angular/pwa`; author `ngsw-config.json` per ARCHITECTURE §10.1 (prefetch shell, fonts, locales, catalog; empty `dataGroups` with a comment; subpath-aware `navigationUrls`).
+2. `manifest.webmanifest` per ARCHITECTURE §10.2, generated from the configured base href.
+3. Icon set: 180 opaque apple-touch, 192/256/384/512, and a 512 maskable. Optional iOS startup images.
+4. `PwaService`: `SwUpdate.versionUpdates` handling — hold updates during an active workout, otherwise a non-blocking toast; `UnrecoverableStateError` recovery that explicitly reassures the user that IndexedDB data is untouched; never auto-reload.
+5. Install guidance: iOS Share → Add to Home Screen instructions with a screenshot; `beforeinstallprompt` used only where supported.
+6. Offline verification of every screen; an offline indicator only where it is meaningful (it mostly is not, since nothing fetches).
+7. First-run storage-durability notice and acknowledgement.
+
+### Acceptance criteria
+
+- [ ] After one online load, a full cold start with the network disabled reaches a working dashboard
+- [ ] Every route loads offline, including lazy chunks and the exercise catalog
+- [ ] A new deployment surfaces an update prompt; accepting it reloads into the new version with all data intact
+- [ ] An update is deferred while a workout is active
+- [ ] Lighthouse PWA checks pass on the deployed site
+- [ ] The app installs from Safari on a real iPhone and launches standalone with no browser chrome
+- [ ] No UI claims an unsupported capability (checked against UI_UX_SPEC §7)
+
+---
+
+## 16. Phase 13 — GitHub Pages Deployment
+
+**Effort:** 4 sessions · **Depends on:** P12
+
+### Tasks
+
+1. `scripts/set-base-href.mjs` — single source for the base href, patching the manifest `start_url`/`scope` and the SW config.
+2. `npm run build:pages` — production build with `--base-href /REPOSITORY-NAME/`, then patch, then copy `index.html` → `404.html`, then write `.nojekyll`.
+3. `.github/workflows/deploy.yml` (§16.1).
+4. Repository settings: Pages source = GitHub Actions; branch protection on `main` requiring a passing check; the `github-pages` environment for the approval gate (spec §11 "approved pushes").
+5. Verify deep links, asset paths, SW scope, and manifest URLs on the live site.
+6. `README.md`: what REPLOG is, local development, the PowerShell command list, deployment, backup instructions, and the honest platform notes.
+
+### 16.1 Workflow
+
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run i18n:check
+      - run: npm run tokens:check
+      - run: npm test -- --watch=false --browsers=ChromeHeadless
+      - run: npm run build:pages
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/REPLOG/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
+```
+
+Confirm the artifact path against the pinned Angular version's output layout (`dist/<project>/browser` on recent versions, `dist/<project>` on older ones) — a wrong path here is the single most common Pages failure.
+
+### 16.2 PowerShell — local production verification
+
+Build exactly as CI does:
+
+```powershell
+cd D:\REPLOG; npm run build:pages
+```
+
+Serve the built output over a subpath so base-href and service-worker scope are exercised the way they will be in production:
+
+```powershell
+npx --yes http-server .\dist\REPLOG\browser -p 8080 --cors -c-1
+```
+
+Then open `http://localhost:8080/` and confirm routing and assets. Note that a service worker will register on `localhost` but **the subpath behaviour is only truly verified on the deployed HTTPS URL** — treat local verification as necessary, not sufficient.
+
+Deploy:
+
+```powershell
+git add .; git commit -m "feat: production build configuration for GitHub Pages"; git push origin main
+```
+
+Watch the run:
+
+```powershell
+gh run watch
+```
+
+(Requires GitHub CLI: `winget install GitHub.cli`, then `gh auth login`. Otherwise use the Actions tab.)
+
+### Acceptance criteria
+
+- [ ] `https://USERNAME.github.io/REPOSITORY-NAME/` loads the app
+- [ ] A deep link such as `/REPOSITORY-NAME/progress` loads directly (via the `404.html` fallback) and the router resolves it
+- [ ] No 404s for assets, fonts, locale JSON, or the exercise catalog
+- [ ] The manifest resolves and `start_url`/`scope` both include the subpath
+- [ ] The service worker registers with the correct scope and serves offline
+- [ ] A push to `main` deploys automatically after checks pass
+- [ ] Install from Safari on the deployed URL produces a standalone app
+
+---
+
+## 17. Phase 14 — Hardening & Release
+
+**Effort:** 9 sessions · **Depends on:** P13
+
+### Tasks
+
+1. The Playwright journey suite: plan → train → finish → history → analytics; export → reset → import; language switch; theme switch; offline cold start; interrupted session recovery.
+2. Performance pass against the ARCHITECTURE §10.5 budgets; fix regressions rather than raising budgets.
+3. Seeded-data soak test: 2 years of synthetic history (≈ 400 workouts, 10 000 set logs, 150 measurements, 60 photos) exercising every screen.
+4. Full UI_UX_SPEC §16 design QA per screen, in both themes and languages.
+5. Accessibility pass: VoiceOver on a real device, keyboard on desktop, 200 % text scaling.
+6. Real-device matrix (§18).
+7. Error-path review: every `AppError` branch reachable and humane; quota exhaustion rehearsed by filling storage.
+8. Copy review: no hardcoded strings, no over-claimed capabilities, every estimate marked, every destructive dialog specific.
+9. Definition-of-Done traceability (§19) completed with evidence.
+10. `README.md` and in-app About finalised, including backup instructions.
+11. Tag `v1.0.0`.
+
+### Acceptance criteria
+
+- [ ] All E2E journeys pass on Chromium and WebKit
+- [ ] Budgets met; no console errors or warnings in production
+- [ ] The soak dataset performs within the stated targets on a real iPhone
+- [ ] §19 is complete, with every row marked verified, manually verified, or **not verified** — and nothing left implied
+
+---
+
+## 18. Device & Browser Matrix
+
+| Target | Priority | Verified how |
+|---|---|---|
+| iPhone (iOS 17+), Safari standalone PWA | **P0** | Manual on a real device — the only way to validate install, standalone chrome, safe areas, and storage behaviour |
+| iPhone Pro Max (430 pt) | **P0** | Real device or simulator for layout |
+| iPhone SE / 320–375 pt | P1 | Simulator for layout; the numeric pad and set grid must not overflow |
+| Desktop Safari (WebKit) | P1 | Playwright + manual |
+| Desktop Chrome / Edge | P1 | Playwright + manual; primary development browser |
+| iPad Safari | P2 | Manual layout check at 744 pt |
+| Android Chrome | P2 | Should work; not a release gate |
+| Firefox | P3 | Best effort |
+
+Honesty rule for the release notes: anything verified only in a simulator is reported as such. Simulators do not reproduce iOS storage eviction, real Add-to-Home-Screen behaviour, or true standalone-mode quirks.
+
+---
+
+## 19. Definition of Done — Traceability
+
+Spec §14's fifteen criteria, each mapped to the phase that delivers it and the evidence that proves it. Fill the status column with **verified** (automated), **manually verified** (real device/human), or **not verified** — never leave it implied.
+
+| # | Criterion | Phase | Evidence | Status |
+|---|---|---|---|---|
+| 1 | Works locally on Windows | P0 | `npm start` and `npm run build:pages` succeed on Windows 11 | |
+| 2 | All main modules functional | P1–P11 | Per-phase acceptance criteria all checked | |
+| 3 | Plans can be created and saved | P4 | E2E journey + unit tests | |
+| 4 | Completed workouts persist | P5 | Reliability suite + 20-scenario interruption script on a real iPhone | |
+| 5 | Previous performance available | P5, P7 | Q7 test + visual check with seeded history | |
+| 6 | Measurements recorded and charted | P8, P10 | Unit tests + chart states | |
+| 7 | Progress photos work | P9 | Pipeline tests + GPS-removal assertion + device check | |
+| 8 | Analytics use actual stored data | P10 | Hand-reproduction of every dashboard figure from the soak dataset | |
+| 9 | English and Arabic work | P1, P14 | `i18n:check` green + per-screen RTL review | |
+| 10 | Light and dark themes work | P1, P14 | `tokens:check` green + per-screen review in both themes | |
+| 11 | Export and import work | P11 | Round-trip equality test including photos | |
+| 12 | PWA works offline after first load | P12 | Offline cold start, automated and on a device | |
+| 13 | Installs on iPhone via Safari | P12, P13 | **Manual only** — no automated equivalent exists | |
+| 14 | GitHub Pages deployment works | P13 | Live URL, deep links, SW scope, auto-deploy on push | |
+| 15 | No paid infrastructure | P0–P13 | Dependency audit: licences and runtime services | |
+
+---
+
+## 20. Risk Register
+
+| # | Risk | Impact | Likelihood | Mitigation |
+|---|---|---|---|---|
+| R1 | **iOS evicts IndexedDB** and a user loses history | Severe | Medium | Honest first-run notice, backup reminders, one-tap export, documented restore. The app cannot prevent eviction and must not imply it can. |
+| R2 | A set is lost during a session | Severe | Low | Write-through policy (ARCHITECTURE §7.2), the P5 reliability suite, the 20-scenario interruption script |
+| R3 | Tracker UX is too slow to use mid-set | Severe | Medium | Numeric pad instead of the native keyboard, one-handed layout, the < 100 ms budget, and a mandatory two-week real-gym trial at M3 before building M4 |
+| R4 | Exercise catalog authoring stalls the project | Moderate | **High** | Treat it as content work with its own budget (P3, 4 sessions); start with 60 core exercises and grow — the reconciliation logic (DATABASE_SPEC §6.2) exists precisely so the catalog can expand after release |
+| R5 | Arabic translation quality is poor or incomplete | Moderate | Medium | `i18n:check` in CI for coverage; a native-speaking lifter reviews terminology, not a generic translator |
+| R6 | GitHub Pages subpath breaks routing, assets, or the SW | Moderate | Medium | Single base-href source, `404.html` fallback, `.nojekyll`, and a live-site verification checklist in P13 |
+| R7 | Photos exhaust the storage quota | Moderate | Medium | Aggressive WebP compression, visible meter, 80 %/95 % thresholds, photo writes blocked before workout writes |
+| R8 | Migration bug corrupts data on an update | Severe | Low | Forward-only migrations, a fixture test per migration, safe mode on version mismatch, export-before-repair offers |
+| R9 | Scope creep (plate calculator, programs, Apple Watch…) | Moderate | High | The spec's §12 list is explicitly deferred; the DoD table is the release gate. New ideas go to a V2 backlog file, not into V1. |
+| R10 | Bundle growth makes the first load slow on cellular | Low | Medium | CI-failing budgets, the one-dependency rule, lazy routes, the catalog out of the initial chunk |
+| R11 | Analytics mislead (apparent progress that is not real) | Moderate | Medium | Gap preservation, point counts, trend-line minimums, estimate markers, axis-honesty rules — all tested in P10 |
+| R12 | Solo-developer burnout over a long build | Moderate | High | Phase boundaries are shippable; M3 is genuinely usable. Stop at M3 and use it rather than pushing straight through to M6. |
+
+---
+
+## 21. Backlog Deliberately Deferred to Version 2
+
+Recorded here so it stays out of V1 (spec §12): authentication, Supabase Postgres/Storage/Realtime, multi-device sync, cloud backup, trainer/family sharing, owner administration, program periodisation and mesocycles, plate calculator, barcode/NFC gym equipment, Apple Health integration, Apple Watch companion, push notifications, social features, exercise video library, AI form feedback, nutrition tracking.
+
+The seams that make these additive rather than a rewrite are listed in ARCHITECTURE §11. Nothing in that list justifies writing V2 code now.
+
+---
+
+## 22. Version Lock
+
+Fill in during P0 and treat as fixed for the V1 lifetime. Floating a major version mid-project is how a zero-dependency app acquires a week of unplanned migration work.
+
+| Item | Pinned version | Notes |
+|---|---|---|
+| Node | **26.13.0** | Node 26 LTS; matches the CI `node-version: 26` |
+| npm | **11.20.0** | Lockfile committed; CI uses `npm ci` |
+| Angular (CLI + framework) | **CLI 22.2.5 / framework 22.2.4** | Scaffolded zoneless, strict, CSS, routing, no SSR |
+| TypeScript | **6.0.3** | Pinned by Angular; do not upgrade independently |
+| `idb` | **8.0.4** | The only runtime dependency |
+| Vitest | **5.0.5** | Angular 22 CLI default unit-test runner |
+| Playwright | **1.64.1** | Chromium + WebKit installed; Firefox not used |
+| Target browsers | `.browserslistrc` | `last 2` Chrome/Edge/Firefox, Safari & iOS ≥ **17** — Angular 22 does not support Safari below 17, so 16.4 is not an available floor |
+
+Any dependency added after P0 requires: an MIT/Apache-2.0 licence, ≤ 15 kB gzipped, a note in the PR explaining why the alternative of writing it was rejected, and an update to this table.
