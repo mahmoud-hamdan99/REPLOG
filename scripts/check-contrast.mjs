@@ -20,14 +20,21 @@ const AA_TEXT = 4.5; // normal body text
 const AA_LARGE = 3.0; // large text and UI component boundaries
 const AAA_TEXT = 7.0;
 
-/** Extracts custom properties from the first block matching `selector`. */
-function readTokens(file, selector) {
+/**
+ * Extracts custom properties from the first block whose selector matches.
+ *
+ * Takes a RegExp rather than a literal string: formatters rewrite attribute
+ * selector quotes (`[data-theme="light"]` to `[data-theme='light']`) and
+ * whitespace, and this check must not break when the code is merely
+ * reformatted.
+ */
+function readTokens(file, selectorPattern) {
   const css = readFileSync(join(STYLES, file), 'utf8');
-  const start = css.indexOf(selector);
-  if (start === -1) {
-    throw new Error(`check-contrast: selector "${selector}" not found in ${file}`);
+  const match = selectorPattern.exec(css);
+  if (!match) {
+    throw new Error(`check-contrast: no selector matching ${selectorPattern} in ${file}`);
   }
-  const open = css.indexOf('{', start);
+  const open = css.indexOf('{', match.index);
   const close = css.indexOf('}', open);
   const block = css.slice(open + 1, close);
 
@@ -87,8 +94,8 @@ function contrast(a, b) {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-const base = readTokens('_tokens.css', ':root {');
-const light = readTokens('_themes.css', ':root[data-theme="light"]');
+const base = readTokens('_tokens.css', /:root\s*\{/);
+const light = readTokens('_themes.css', /:root\[data-theme=['"]?light['"]?\]\s*\{/);
 
 const themes = {
   dark: {},

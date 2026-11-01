@@ -71,7 +71,9 @@ export class App {
   protected skipToContent(): void {
     const main = this.mainContent().nativeElement;
     main.focus();
-    main.scrollIntoView();
+    // Optional call: focus is what matters, and jsdom does not implement
+    // scrollIntoView, so an unguarded call fails the unit suite.
+    main.scrollIntoView?.();
   }
 
   constructor() {

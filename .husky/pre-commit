@@ -1,1 +1,7 @@
 npx lint-staged
+
+# lint-staged reformats staged files, which can invalidate a check that was
+# green moments earlier. These two guards parse the formatted source and run in
+# about a second, so they go after the formatters rather than before.
+npm run i18n:check
+npm run tokens:check
