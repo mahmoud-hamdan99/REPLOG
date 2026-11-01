@@ -1,0 +1,51 @@
+:host {
+  display: block;
+}
+
+.seg {
+  display: flex;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 2px;
+  background: var(--surface-2);
+}
+
+.seg__item {
+  position: relative;
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 40px;
+  border-radius: calc(var(--r-md) - 3px);
+  color: var(--text-2);
+  font-size: var(--t-label);
+  font-weight: var(--fw-medium);
+  text-align: center;
+  cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-standard);
+}
+
+.seg__item--active {
+  background: var(--surface-3);
+  color: var(--text-1);
+  font-weight: var(--fw-semibold);
+}
+
+/* The real radio is visually hidden, so the focus ring has to be drawn here. */
+.seg__item:focus-within {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 1px;
+}
+
+/* Invisible, but it fills its label so clicks and taps land on the real radio
+   rather than on the text painted over it. */
+.seg__input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  appearance: none;
+  opacity: 0;
+  cursor: pointer;
+}

@@ -1,0 +1,45 @@
+.hdr {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: calc(var(--header-h) + var(--safe-t));
+  padding-block-start: var(--safe-t);
+  padding-inline: var(--gutter);
+  background: var(--bg);
+}
+
+.hdr__back {
+  display: grid;
+  place-items: center;
+  inline-size: var(--target-min);
+  block-size: var(--target-min);
+  margin-inline-start: calc(var(--sp-2) * -1);
+  border-radius: var(--r-full);
+  color: var(--text-1);
+}
+
+/* The back chevron points the way the user came from, which flips in RTL. */
+.hdr__back rl-icon {
+  transform: scaleX(-1);
+}
+
+:host-context([dir='rtl']) .hdr__back rl-icon {
+  transform: scaleX(1);
+}
+
+.hdr__title {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hdr__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}

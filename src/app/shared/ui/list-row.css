@@ -1,0 +1,47 @@
+:host {
+  display: block;
+  border-block-end: 1px solid var(--border);
+}
+
+:host(:last-of-type) {
+  border-block-end: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  inline-size: 100%;
+  min-block-size: 52px;
+  padding-inline: var(--sp-4);
+  padding-block: var(--sp-2);
+  text-align: start;
+}
+
+.row__label {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  color: var(--text-1);
+  font-size: var(--t-body);
+}
+
+.row__value {
+  color: var(--text-2);
+  font-size: var(--t-body);
+  white-space: nowrap;
+}
+
+.row--destructive .row__label {
+  color: var(--danger);
+}
+
+/* A disclosure chevron is directional and must mirror in RTL. */
+.row__chevron {
+  color: var(--text-3);
+  font-size: 1.3em;
+  line-height: 1;
+}
+
+:host-context([dir='rtl']) .row__chevron {
+  transform: scaleX(-1);
+}

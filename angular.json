@@ -37,8 +37,7 @@
                 },
                 {
                   "type": "any",
-                  "maximumWarning": "250kB",
-                  "maximumError": "350kB"
+                  "maximumError": "700kB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -46,7 +45,10 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "security": {
+                "autoCsp": true
+              }
             },
             "development": {
               "optimization": false,

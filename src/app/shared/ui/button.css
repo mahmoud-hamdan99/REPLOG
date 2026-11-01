@@ -1,0 +1,87 @@
+:host {
+  display: inline-flex;
+}
+
+:host([full]) {
+  display: flex;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  border-radius: var(--r-md);
+  font-weight: var(--fw-semibold);
+  text-align: center;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-micro) var(--ease-standard),
+    transform var(--dur-micro) var(--ease-standard);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Sizes. Minimum 44px is the documented floor for any target. */
+.btn--sm {
+  min-block-size: 36px;
+  padding-inline: var(--sp-3);
+  font-size: var(--t-label);
+}
+
+.btn--md {
+  min-block-size: var(--target-min);
+  padding-inline: var(--sp-4);
+  font-size: var(--t-body);
+}
+
+.btn--lg {
+  min-block-size: 52px;
+  padding-inline: var(--sp-5);
+  font-size: var(--t-body);
+}
+
+.btn--full {
+  inline-size: 100%;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--accent-dim);
+}
+
+.btn--secondary {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: var(--surface-3);
+}
+
+.btn--ghost {
+  background: none;
+  color: var(--accent-ink);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: var(--accent-soft);
+}
+
+.btn--danger {
+  border: 1px solid var(--danger);
+  background: none;
+  color: var(--danger);
+}

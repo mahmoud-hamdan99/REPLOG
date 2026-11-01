@@ -23,7 +23,11 @@
     },
     "custom-property-pattern": null,
     "selector-class-pattern": null,
-    "no-descending-specificity": null
+    "no-descending-specificity": null,
+    "import-notation": null,
+    "custom-property-empty-line-before": null,
+    "declaration-empty-line-before": null,
+    "property-no-vendor-prefix": true
   },
   "ignoreFiles": ["dist/**", "node_modules/**"]
 }

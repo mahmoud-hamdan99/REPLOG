@@ -31,7 +31,7 @@ Authentication, cloud database, multi-device sync, sharing, push notifications, 
 | Concern | Decision | Rationale / alternatives rejected |
 |---|---|---|
 | Framework | **Angular 22.2.4** (pinned), standalone components only, no `NgModule` | Mandated by spec §10. Pinned at scaffold time and recorded in `IMPLEMENTATION_PLAN.md` §22. Never float the major. |
-| Change detection | **Zoneless**, `ChangeDetectionStrategy.OnPush` everywhere | Scaffolded via `ng new --zoneless`: Angular 22 leaves `zone.js` out of the dependency tree entirely, so there is no polyfill to strip and no migration to stage. Makes timer-heavy screens (the rest timer) cheap. |
+| Change detection | **Zoneless**; OnPush is the v22 default and is never written explicitly | Scaffolded via `ng new --zoneless`: Angular 22 leaves `zone.js` out of the dependency tree entirely, so there is no polyfill to strip and no migration to stage. Makes timer-heavy screens (the rest timer) cheap. Writing `changeDetection: OnPush` by hand is redundant in v22 and is forbidden by the project CLAUDE.md. |
 | State | **Angular signals** + hand-written injectable stores | NgRx/NGXS add bundle weight and ceremony for a single-user offline app. `signal` / `computed` / `linkedSignal` / `effect` cover every case here. |
 | Async data | `resource()` / explicit `async` loaders inside stores | No RxJS requirement in feature code; RxJS used only where streams are natural (timer, storage events). |
 | Persistence | **IndexedDB** via [`idb`](https://github.com/jakearchibald/idb) (MIT, ~1 kB gz) behind our own repository layer | Hand-rolled IndexedDB wrapping is error-prone around transaction lifetimes. Dexie rejected: larger, and its own query DSL would leak through the repository boundary. |
@@ -101,11 +101,11 @@ REPLOG/
 │  ├─ manifest.webmanifest
 │  ├─ icons/                           # 180, 192, 256, 384, 512, maskable
 │  ├─ splash/                          # optional iOS startup images
-│  ├─ fonts/                           # self-hosted woff2 subsets
 │  └─ exercise-art/                    # optional SVG illustrations
 ├─ src/
 │  ├─ main.ts                          # bootstrapApplication
 │  ├─ index.html
+│  ├─ assets/fonts/                     # self-hosted woff2 + licences
 │  ├─ styles/
 │  │  ├─ _tokens.css                   # design tokens (UI_UX_SPEC §3)
 │  │  ├─ _themes.css                   # light/dark/system
@@ -373,7 +373,7 @@ Spec §4.6: editing a plan must never alter recorded history. Enforced by **snap
 ### 8.1 Store pattern
 
 ```ts
-@Injectable({ providedIn: 'root' })
+@Service() // Angular 22: an auto-provided root singleton
 export class MeasurementsStore {
   private readonly repo = inject(MEASUREMENTS_REPO);
   private readonly _items = signal<Measurement[] | null>(null);   // null = not loaded
@@ -395,7 +395,7 @@ Conventions:
 * Every async method is idempotent and re-entrancy safe.
 * Derived values come from `domain/` functions so the maths is tested without the store.
 * `null` means "not loaded"; an empty array means "loaded, genuinely empty". The UI renders different states for each (UI_UX_SPEC §11).
-* Stores are `providedIn: 'root'` singletons except `WorkoutSessionStore`, which is root-scoped but explicitly `reset()`-able.
+* Stores are declared with `@Service()`, Angular 22's auto-provided root singleton. `@Injectable({ providedIn: 'root' })` survives only where a class is bound to a token it does not own, such as the `ErrorHandler` and the router strategies. `WorkoutSessionStore` is root-scoped but explicitly `reset()`-able.
 
 ### 8.2 Store inventory
 
@@ -437,7 +437,7 @@ Hash-free path routing with a GitHub Pages `404.html` fallback (§10.3).
 | `/progress/exercise/:exerciseId` | Per-exercise progression | lazy |
 | `/body` | Measurements list + entry | lazy |
 | `/settings` + `/settings/{profile,appearance,units,workout,data,about}` | Settings | lazy |
-| `**` | Not found → Dashboard with a toast | |
+| `**` | Not found page | A 404 screen rather than a silent redirect: a broken link should be visible, not swallowed |
 
 Bottom navigation exposes five destinations (Home · Plans · **Train** · Progress · More); the full map above is reachable from them. Tab state is preserved per destination; the tracker is modal-feeling and deliberately sits outside tab navigation.
 
@@ -582,7 +582,8 @@ plus a stricter override block for `src/app/domain/**` forbidding `@angular/*`, 
 
 ### 12.3 Internationalisation mechanics
 
-* `TranslationService` holds `locale = signal<'en'|'ar'>`, lazily imports `locales/<locale>.json`, exposes `t(key, params?)` and a `TranslatePipe` (pure, re-evaluated via the locale signal).
+* `I18n` derives the locale as a `computed` over `SettingsStore`, lazily imports `locales/<locale>.json` as its own chunk, and exposes `t(key, params?)` plus `formatNumber`.
+* **`t()` is called directly from templates; there is no `TranslatePipe`.** A *pure* pipe memoises on its arguments, so it would not re-run when only the locale signal changed, and the original plan here was simply wrong. Calling `t()` in a template registers a read of the locale and dictionary signals against that component's reactive consumer, which is what makes language switching instant and reload-free. An impure pipe would also work, at the cost of running on every change detection.
 * Keys are dot-namespaced by feature (`workout.set.markComplete`). A CI script diffs `en.json` against `ar.json` and fails on missing or orphaned keys — this is how §6 "complete translation coverage" becomes enforceable.
 * A dev-mode lint rule flags literal strings in templates (spec §6 "no hardcoded user-facing strings").
 * `document.documentElement.lang` and `dir` are set from the locale signal; direction changes require no reload.
@@ -595,7 +596,7 @@ Minimum 44×44 pt touch targets, 4.5:1 text contrast in both themes (token pairs
 
 ### 12.5 Security & privacy posture
 
-No network calls at runtime; no third-party scripts; no analytics. A strict CSP delivered via `<meta http-equiv>` (GitHub Pages cannot set headers): `default-src 'self'; img-src 'self' blob: data:; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'`. Imported JSON is parsed and validated, never `eval`'d; imported strings are rendered as text (Angular's default escaping) and never through `innerHTML`/`bypassSecurityTrust*`. Photos never leave the device.
+No network calls at runtime; no third-party scripts; no analytics. A strict CSP in two parts, since GitHub Pages cannot set headers. Script protection comes from the builder's `security.autoCsp`, enabled for the production configuration, which emits a hash-based `script-src` covering the inline pre-paint script in `index.html`. A hand-written `<meta http-equiv>` supplies the rest: `img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'`. That meta deliberately omits `default-src`, `script-src` and `style-src`, because two policies intersect per directive: a `default-src` here would override autoCsp's hashes, and **`style-src 'self'` is not achievable at all** since Angular injects component styles as inline `<style>` elements. Imported JSON is parsed and validated, never `eval`'d; imported strings are rendered as text (Angular's default escaping) and never through `innerHTML`/`bypassSecurityTrust*`. Photos never leave the device.
 
 ---
 

@@ -1,9 +1,43 @@
-.shell {
-  padding-block: 2rem;
-  padding-inline: 1rem;
-  font-family: system-ui, sans-serif;
+:host {
+  display: block;
+  min-block-size: 100dvh;
+  background: var(--bg);
 }
 
-.shell h1 {
-  margin-block: 0 0.5rem;
+.shell__main {
+  display: block;
+
+  /* Leave room for the fixed tab bar and the home indicator. */
+  padding-block-end: calc(var(--nav-h) + var(--safe-b));
+}
+
+/* The active workout tracker has its own action bar instead of the tab bar. */
+.shell__main--no-nav {
+  padding-block-end: var(--safe-b);
+}
+
+/* Focused programmatically by the skip button; it should not draw a ring of its
+   own, since the heading it reveals is the visible result. */
+.shell__main:focus {
+  outline: none;
+}
+
+/* Visible only when focused, so keyboard users can jump past the chrome. */
+.skip {
+  position: absolute;
+  inset-block-start: calc(var(--safe-t) + var(--sp-2));
+  inset-inline-start: var(--sp-2);
+  z-index: 60;
+  border-radius: var(--r-md);
+  padding-inline: var(--sp-4);
+  padding-block: var(--sp-3);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip:focus-visible {
+  transform: translateY(0);
 }

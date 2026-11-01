@@ -1,0 +1,39 @@
+:host {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+}
+
+.ring {
+  display: block;
+  inline-size: 100%;
+
+  /* Start the sweep at 12 o'clock instead of 3 o'clock. */
+  transform: rotate(-90deg);
+}
+
+/* The ring depletes clockwise in LTR and anticlockwise in RTL, so the motion
+   reads as "unwinding" in the direction the user reads.
+   See docs/UI_UX_SPEC.md section 10.2. */
+:host-context([dir='rtl']) .ring {
+  transform: rotate(-90deg) scaleX(-1);
+}
+
+.ring__track {
+  fill: none;
+  stroke: var(--surface-3);
+}
+
+.ring__fill {
+  fill: none;
+  stroke: var(--accent);
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--dur-fast) var(--ease-standard);
+}
+
+.ring__content {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  font-variant-numeric: tabular-nums;
+}

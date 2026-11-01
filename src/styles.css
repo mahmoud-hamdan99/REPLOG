@@ -1,1 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
+/* Single global stylesheet entry. Order matters: tokens before themes before
+   base, so later layers can override earlier ones. */
+@import './styles/_fonts.css';
+@import './styles/_tokens.css';
+@import './styles/_themes.css';
+@import './styles/_base.css';
+@import './styles/_utilities.css';

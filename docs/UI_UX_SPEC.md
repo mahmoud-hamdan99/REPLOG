@@ -99,16 +99,16 @@ All tokens are CSS custom properties on `:root`, redefined per theme. Components
 
 | Pair | Ratio | Verdict |
 |---|---|---|
-| `--text-1` on `--bg` (dark) | 16.4 : 1 | ✅ |
-| `--text-2` on `--surface-1` (dark) | 7.1 : 1 | ✅ |
-| `--text-3` on `--surface-1` (dark) | 4.0 : 1 | ⚠️ captions only, ≥ 14 px, never essential |
-| `--accent` on `--bg` (dark) | 15.1 : 1 | ✅ |
-| `--on-accent` on `--accent` | 14.6 : 1 | ✅ |
-| **`--accent` as text on light `--surface-1`** | 1.4 : 1 | ❌ **forbidden** — use `--accent-ink` |
-| `--text-1` on `--surface-1` (light) | 17.2 : 1 | ✅ |
+| `--text-1` on `--bg` (dark) | 18.06 : 1 | ✅ |
+| `--text-2` on `--surface-1` (dark) | 7.81 : 1 | ✅ |
+| `--text-3` on `--surface-1` (dark) | 4.05 : 1 | ⚠️ captions only, ≥ 14 px, never essential |
+| `--accent` on `--bg` (dark) | 16.06 : 1 | ✅ |
+| `--on-accent` on `--accent` | 16.06 : 1 dark / 15.14 : 1 light | ✅ |
+| **`--accent` as text on light `--surface-1`** | 1.22 : 1 | ❌ **forbidden** — use `--accent-ink` |
+| `--text-1` on `--surface-1` (light) | 18.48 : 1 | ✅ |
 | `--positive`/`--danger` on their theme surface | ≥ 4.5 : 1 | ✅ (values above are tuned per theme) |
 
-Hard rule: **lime is a fill colour in light theme and a text colour only in dark theme.** A CI token-contrast script asserts every documented pair; adding a pair without a check fails the build.
+Hard rule: **lime is a fill colour in light theme and a text colour only in dark theme.** The ratios above are not hand-computed: `scripts/check-contrast.mjs` parses `_tokens.css` and `_themes.css`, resolves `var()` aliases and fails the build on any pair below its minimum. It also asserts that the forbidden pair *stays* illegible, so it cannot be "fixed" by darkening lime.
 
 Second hard rule: **colour is never the only signal.** Completed sets add a check glyph and a filled row; PRs add a badge with text; losses add a downward arrow; estimates add a dotted underline. Verified by a greyscale review pass.
 
@@ -180,6 +180,7 @@ Rules: transform/opacity only (no layout-animating properties); page transitions
 ```
 
 * `index.html` requires `viewport-fit=cover`; without it the insets are all `0px`.
+* `interactive-widget=resizes-content` is **Chromium-only**. Safari does not recognise the key and logs a console error for it, so the pre-paint script appends it only when `'virtualKeyboard' in navigator`. Safari resizes the visual viewport instead, which the numeric pad handles with a `visualViewport` listener.
 * Sticky header: `padding-top: calc(var(--safe-t) + var(--sp-2))`, `height: calc(var(--header-h) + var(--safe-t))`.
 * Bottom nav: `height: calc(var(--nav-h) + var(--safe-b))` with `padding-bottom: var(--safe-b)` — the home indicator must never overlap a tap target.
 * Scroll containers: `padding-bottom: calc(var(--nav-h) + var(--safe-b) + var(--sp-4))` so the last card clears the nav.
@@ -544,8 +545,8 @@ Grouped list rows with values on the trailing side:
 | `rl-stat-tile` | single · 2-up · with-sparkline | Eyebrow label + hero number + delta chip + footnote |
 | `rl-delta-chip` | up · down · flat · none | Arrow + value + optional label; never colour-only |
 | `rl-chip` | filter · choice · removable | 32 px tall, `--r-full` |
-| `rl-sheet` | half · full · adaptive | Drag handle, backdrop, focus trap, Escape/drag dismissal, `inert` on the background |
-| `rl-dialog` | confirm · destructive-confirm · typed-confirm | Destructive variants require a distinct action label (never "OK"), state the consequence, and put the destructive action on the trailing side |
+| `rl-sheet` | half · full | Built on the native `<dialog>` with `showModal()`, so the focus trap, Escape handling, background inerting and `::backdrop` come from the platform instead of hand-rolled ARIA. Drag-to-dismiss is still outstanding. |
+| `rl-dialog` | confirm · destructive-confirm · typed-confirm | Native `<dialog>`, as above. Destructive variants require a distinct action label (never "OK"), state the consequence, and put the destructive action on the trailing side |
 | `rl-toast` | info · success · undo · error | Bottom-anchored above the nav, max 2 stacked, 5 s (undo 7 s), swipe to dismiss |
 | `rl-segmented` | 2–4 segments | Theme/mode pickers; roving tabindex |
 | `rl-list-row` | value · nav · toggle · destructive | 52 px min height |
@@ -730,6 +731,7 @@ Loading policy: show skeletons after 120 ms (nothing flashes for fast local read
 
 * **Targets** 44 × 44 pt minimum; gym controls larger (§3.7).
 * **Contrast** per §3.2, enforced in CI; greyscale review required.
+* **Skip control** — a `<button>` that moves focus into `<main>` (which carries `tabindex="-1"`), **not** an anchor to `#main-content`. Safari leaves links out of the Tab order unless the user turns on full keyboard access, which would make a skip *link* unreachable by keyboard on the primary platform. Covered by an end-to-end test in WebKit.
 * **Semantics** — one `<h1>` per page, landmark `<nav>`/`<main>`, `<ul>/<li>` for lists, real `<button>`s. The set grid is a `role="table"` with row/column headers so a screen reader reads "Set 3, weight 32.5 kilograms, reps 8, not completed".
 * **Live regions** — `aria-live="polite"` for set completion and saves, `assertive` for rest-timer completion and errors. PR announcements include the record type and value.
 * **Focus** — visible 2 px `--accent` ring with a 2 px offset, never removed; focus trapped in sheets/dialogs and restored to the invoking element on close; `inert` on background content.

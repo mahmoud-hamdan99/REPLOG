@@ -1,0 +1,112 @@
+/* Composite type styles. CSS custom properties cannot bundle size, leading,
+   weight and tracking into one value, so the scale is exposed as classes. */
+
+.t-stat-xl,
+.t-stat,
+.t-stat-sm {
+  font-family: var(--font-num);
+
+  /* Numbers must not jitter as a live timer ticks. */
+  font-variant-numeric: tabular-nums;
+}
+
+.t-stat-xl {
+  font-size: var(--t-stat-xl);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.025em;
+}
+
+.t-stat {
+  font-size: var(--t-stat);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.02em;
+}
+
+.t-stat-sm {
+  font-size: var(--t-stat-sm);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  letter-spacing: -0.01em;
+}
+
+.t-h1 {
+  font-size: var(--t-h1);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  letter-spacing: -0.015em;
+}
+
+.t-h2 {
+  font-size: var(--t-h2);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  letter-spacing: -0.01em;
+}
+
+.t-h3 {
+  font-size: var(--t-h3);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-normal);
+  letter-spacing: -0.005em;
+}
+
+.t-body {
+  font-size: var(--t-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-relaxed);
+}
+
+.t-body-strong {
+  font-size: var(--t-body);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-relaxed);
+}
+
+.t-label {
+  font-size: var(--t-label);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-normal);
+  letter-spacing: 0.01em;
+}
+
+.t-caption {
+  font-size: var(--t-caption);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  letter-spacing: 0.015em;
+  color: var(--text-3);
+}
+
+/* Eyebrow label. Latin only: Arabic is never uppercased or letter-spaced. */
+.t-micro {
+  font-size: var(--t-micro);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-normal);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+:root[lang='ar'] .t-micro {
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* Screen-reader-only, still focusable. */
+.sr-only {
+  position: absolute;
+  overflow: hidden;
+  clip-path: inset(50%);
+  inline-size: 1px;
+  block-size: 1px;
+  white-space: nowrap;
+}
+
+.page {
+  padding-inline: var(--gutter);
+  padding-block: var(--sp-4) var(--scroll-pad-b);
+  max-inline-size: var(--content-max);
+  margin-inline: auto;
+}

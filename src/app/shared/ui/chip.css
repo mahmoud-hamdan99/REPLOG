@@ -1,0 +1,40 @@
+:host {
+  display: inline-flex;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-block-size: 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding-inline: var(--sp-3);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: var(--t-label);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  transition: background-color var(--dur-micro) var(--ease-standard);
+}
+
+.chip:hover {
+  background: var(--surface-3);
+}
+
+.chip--selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.chip__check,
+.chip__remove {
+  font-size: 0.9em;
+  line-height: 1;
+}
+
+.chip__remove {
+  font-size: 1.2em;
+  color: var(--text-3);
+}

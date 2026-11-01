@@ -1,0 +1,33 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--t-label);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+
+  /* Numbers and units are an LTR run in every locale (UI_UX_SPEC 10.2). */
+  direction: ltr;
+}
+
+/* Up and down are directions, not verdicts. Both stay neutral. */
+.delta--up,
+.delta--down,
+.delta--flat {
+  color: var(--text-2);
+}
+
+.delta--none {
+  color: var(--text-3);
+}
+
+/* Arrows are vertical semantics and must not mirror in RTL. */
+.delta__arrow {
+  font-size: 1.05em;
+  line-height: 1;
+}
+
+.delta__unit {
+  color: var(--text-3);
+  font-weight: var(--fw-regular);
+}

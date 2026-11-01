@@ -1,11 +1,82 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <title>REPLOG</title>
     <base href="/" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- viewport-fit=cover is required for env(safe-area-inset-*) to be non-zero.
+         interactive-widget is Chromium-only and is appended by the script below
+         where it is supported: Safari logs a console error for the unknown key,
+         and recurring noise on the primary platform hides real errors. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <!-- Script protection comes from the builder's autoCsp (production), which
+         hashes the inline script below. This policy deliberately omits
+         default-src, script-src and style-src: two policies intersect per
+         directive, so a default-src here would override autoCsp's hashes, and
+         Angular injects component styles as inline <style> elements. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+
+    <meta name="description" content="Personal workout and strength tracker. Works offline." />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0b0c0e" />
+
+    <!-- iOS standalone PWA. Icons and manifest are added in Phase 12. -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="REPLOG" />
+    <meta name="format-detection" content="telephone=no" />
+
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Runs before first paint so the theme and text direction are correct
+         immediately. Without this, a dark-theme user sees a white flash and an
+         Arabic user sees an LTR frame. It must stay inline and synchronous;
+         that is why the hex values are duplicated from _tokens.css. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        try {
+          var prefs = JSON.parse(localStorage.getItem('replog.prefs.v1') || '{}');
+          var lang = prefs.language === 'ar' ? 'ar' : 'en';
+          var theme = prefs.theme;
+          if (theme !== 'light' && theme !== 'dark') {
+            theme =
+              window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches
+                ? 'light'
+                : 'dark';
+          }
+          // Chromium keeps the layout viewport above the on-screen keyboard
+          // with this key; Safari resizes the visual viewport instead and does
+          // not recognise it. navigator.virtualKeyboard is a Chromium-only API
+          // that tracks support closely enough to gate on.
+          if ('virtualKeyboard' in navigator) {
+            var viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport) {
+              viewport.setAttribute(
+                'content',
+                viewport.getAttribute('content') + ', interactive-widget=resizes-content',
+              );
+            }
+          }
+
+          root.lang = lang;
+          root.dir = lang === 'ar' ? 'rtl' : 'ltr';
+          root.setAttribute('data-theme', theme);
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) {
+            meta.setAttribute('content', theme === 'light' ? '#f6f7f8' : '#0b0c0e');
+          }
+        } catch (e) {
+          root.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <rl-root></rl-root>

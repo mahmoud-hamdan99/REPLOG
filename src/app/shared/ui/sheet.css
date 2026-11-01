@@ -1,0 +1,56 @@
+.sheet {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline: 0;
+  inline-size: 100%;
+  max-inline-size: var(--content-max);
+  max-block-size: 85dvh;
+  margin-inline: auto;
+  margin-block-end: 0;
+  border: 0;
+  border-start-start-radius: var(--r-2xl);
+  border-start-end-radius: var(--r-2xl);
+  padding: 0;
+  background: var(--surface-1);
+  color: var(--text-1);
+  box-shadow: var(--elev-3);
+  overflow: hidden auto;
+
+  /* Clear the home indicator. */
+  padding-block-end: calc(var(--safe-b) + var(--sp-4));
+  animation: sheet-in var(--dur-sheet) var(--ease-emphasized);
+}
+
+.sheet--full {
+  max-block-size: 100dvh;
+  block-size: 100dvh;
+  border-radius: 0;
+}
+
+.sheet::backdrop {
+  background: rgb(0 0 0 / 55%);
+}
+
+.sheet__grip {
+  inline-size: 36px;
+  block-size: 4px;
+  border-radius: var(--r-full);
+  margin-inline: auto;
+  margin-block: var(--sp-3) var(--sp-2);
+  background: var(--border-strong);
+}
+
+.sheet__body {
+  padding-inline: var(--gutter);
+  padding-block-end: var(--sp-2);
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}

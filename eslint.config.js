@@ -106,6 +106,13 @@ module.exports = defineConfig([
     },
   },
 
+  // The composition root binds data/ contracts to their infrastructure
+  // implementations. It is the single intended exception to the boundary above.
+  {
+    files: ['src/app/app.config.ts'],
+    rules: { 'no-restricted-imports': 'off' },
+  },
+
   {
     files: ['**/*.html'],
     extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],

@@ -1,0 +1,52 @@
+/* Light theme and script-specific type adjustments.
+   Light is a full design, not an inverted dark theme: shadows replace surface
+   steps, borders lighten, and lime stops being a text colour. */
+
+:root[data-theme='light'] {
+  --bg: #f6f7f8;
+  --surface-1: #fff;
+  --surface-2: #f0f2f4;
+  --surface-3: #e6e9ec;
+  --border: #e1e5e9;
+  --border-strong: #c9cfd6;
+  --text-1: #111417;
+  --text-2: #555e69;
+  --text-3: #808a96;
+  --accent: #c8fa4b;
+  --accent-dim: #b2e532;
+  --accent-soft: rgb(200 250 75 / 20%);
+  --on-accent: #121417;
+
+  /* Lime on white is 1.4:1. Accent text in light theme is dark olive. */
+  --accent-ink: #4a6b07;
+  --positive: #15803d;
+  --warning: #b45309;
+  --danger: #dc2626;
+  --info: #1d6fd0;
+
+  --elev-1: 0 1px 2px rgb(16 20 24 / 8%);
+  --elev-2: 0 4px 16px rgb(16 20 24 / 10%);
+  --elev-3: 0 12px 32px rgb(16 20 24 / 14%);
+
+  color-scheme: light;
+}
+
+/* Arabic reads smaller than Latin at the same nominal size: IBM Plex Sans
+   Arabic has a shorter x-height and tighter ascenders. Bump the scale ~6% and
+   loosen leading, once, here, rather than per component. */
+:root[lang='ar'] {
+  --t-stat-xl: 3.1875rem;
+  --t-stat: 2.125rem;
+  --t-stat-sm: 1.4375rem;
+  --t-h1: 1.75rem;
+  --t-h2: 1.3125rem;
+  --t-h3: 1.125rem;
+  --t-body: 1rem;
+  --t-label: 0.875rem;
+  --t-caption: 0.8125rem;
+  --t-micro: 0.75rem;
+
+  --lh-snug: 1.32;
+  --lh-normal: 1.47;
+  --lh-relaxed: 1.57;
+}

@@ -1,0 +1,88 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* 100dvh, never 100vh: Safari reports 100vh as the pre-toolbar height. */
+  block-size: 100%;
+  /* stylelint-disable-next-line property-no-vendor-prefix -- iOS Safari only
+     honours the prefixed form; it stops landscape text inflation. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-block-size: 100dvh;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: var(--font-ui);
+  font-size: var(--t-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-relaxed);
+
+  /* Kills the 300ms double-tap-zoom delay without disabling pinch zoom. */
+  touch-action: manipulation;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+a {
+  color: var(--accent-ink);
+}
+
+/* Inputs below 16px make iOS Safari zoom the viewport on focus. */
+input,
+textarea,
+select {
+  font: inherit;
+  font-size: max(1rem, var(--t-body));
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,71 @@
+.toasts {
+  position: fixed;
+
+  /* Sits above the tab bar and the home indicator, never over it. */
+  inset-block-end: calc(var(--nav-h) + var(--safe-b) + var(--sp-2));
+  inset-inline: var(--gutter);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  max-inline-size: var(--content-max);
+  margin-inline: auto;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding-inline: var(--sp-4);
+  padding-block: var(--sp-3);
+  background: var(--surface-3);
+  color: var(--text-1);
+  font-size: var(--t-body);
+  box-shadow: var(--elev-2);
+  pointer-events: auto;
+  animation: toast-in var(--dur-fast) var(--ease-standard);
+}
+
+.toast--success {
+  border-color: var(--positive);
+}
+
+.toast--error {
+  border-color: var(--danger);
+}
+
+.toast--undo {
+  border-color: var(--border-strong);
+}
+
+.toast__message {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.toast__action {
+  color: var(--accent-ink);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+}
+
+.toast__close {
+  color: var(--text-3);
+  font-size: 1.25em;
+  line-height: 1;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,122 @@
+/* Design tokens. Single source of truth for colour, type, space, motion.
+   Mirrors docs/UI_UX_SPEC.md section 3. Components reference tokens only —
+   literal colours, sizes and durations in component CSS are a review failure.
+
+   Dark is the default theme and lives on :root. Light overrides are in
+   _themes.css. The contrast pairs in UI_UX_SPEC section 3.2 are asserted by
+   scripts/check-contrast.mjs, which parses this file and _themes.css. */
+
+:root {
+  /* ---------- Colour: dark theme (default) ---------- */
+  --bg: #0b0c0e;
+  --surface-1: #14161a;
+  --surface-2: #1c1f24;
+  --surface-3: #262a31;
+  --border: #2e333b;
+  --border-strong: #3c424c;
+  --text-1: #f4f6f8;
+  --text-2: #a3abb6;
+  --text-3: #6f7883;
+  --accent: #c8fa4b;
+  --accent-dim: #9bc92f;
+  --accent-soft: rgb(200 250 75 / 12%);
+  --on-accent: #0b0c0e;
+
+  /* Accent-coloured TEXT. In dark theme lime is legible on the background, so
+     this aliases --accent. In light theme it becomes a dark olive, because lime
+     text on white is 1.4:1. Components always use --accent-ink for text and
+     --accent for fills, so they need no theme awareness. */
+  --accent-ink: var(--accent);
+  --positive: #4ade80;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --info: #7db8ff;
+
+  /* ---------- Typography ---------- */
+  --font-ui: 'Inter', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  --font-num: 'Inter', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+
+  /* Scale. Arabic bumps these in _themes.css. */
+  --t-stat-xl: 3rem;
+  --t-stat: 2rem;
+  --t-stat-sm: 1.375rem;
+  --t-h1: 1.625rem;
+  --t-h2: 1.25rem;
+  --t-h3: 1.0625rem;
+  --t-body: 0.9375rem;
+  --t-label: 0.8125rem;
+  --t-caption: 0.75rem;
+  --t-micro: 0.6875rem;
+
+  --lh-tight: 1;
+  --lh-snug: 1.2;
+  --lh-normal: 1.35;
+  --lh-relaxed: 1.45;
+
+  --fw-regular: 450;
+  --fw-medium: 550;
+  --fw-semibold: 600;
+  --fw-bold: 650;
+
+  /* ---------- Space ---------- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+
+  /* ---------- Radius ---------- */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --r-2xl: 28px;
+  --r-full: 999px;
+
+  /* ---------- Elevation ----------
+     Dark theme expresses depth with surface steps plus a hairline; a shadow on
+     near-black reads as mud. Only the nav and open sheets get a dark shadow. */
+  --elev-0: none;
+  --elev-1: none;
+  --elev-2: 0 4px 16px rgb(0 0 0 / 40%);
+  --elev-3: 0 12px 32px rgb(0 0 0 / 50%);
+
+  /* ---------- Motion ---------- */
+  --dur-micro: 120ms;
+  --dur-fast: 180ms;
+  --dur-sheet: 260ms;
+  --dur-slow: 420ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
+
+  /* ---------- Layout and iOS safe areas ----------
+     These are 0px without <meta viewport content="viewport-fit=cover">. */
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --nav-h: 56px;
+  --header-h: 52px;
+  --gutter: var(--sp-4);
+  --content-max: 720px;
+
+  /* Bottom padding that clears the tab bar and the home indicator. */
+  --scroll-pad-b: calc(var(--nav-h) + var(--safe-b) + var(--sp-4));
+
+  /* ---------- Touch targets ---------- */
+  --target-min: 44px;
+  --target-gym: 56px;
+
+  color-scheme: dark;
+}
+
+@media (width >= 744px) {
+  :root {
+    --gutter: var(--sp-6);
+  }
+}

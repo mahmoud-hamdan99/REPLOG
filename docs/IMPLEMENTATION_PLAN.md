@@ -190,7 +190,7 @@ git remote add origin https://github.com/USERNAME/REPLOG.git; git push -u origin
 1. `styles/_tokens.css`, `_themes.css`, `_base.css` from UI_UX_SPEC §3. Self-host Inter + IBM Plex Sans Arabic WOFF2 subsets in `public/fonts/` with `font-display: swap` and `preload` for the two primary faces.
 2. `index.html`: `viewport-fit=cover`, `interactive-widget=resizes-content`, theme-color metas, apple-touch-icon metas, CSP meta (ARCHITECTURE §12.5), and the **synchronous pre-paint theme/dir script** that reads `replog.prefs.v1`.
 3. `ThemeService` (system/light/dark with a `matchMedia` listener) and `SettingsStore` backed by `LocalStoragePrefs`.
-4. `TranslationService`: locale signal, lazy JSON import, `t()`, `TranslatePipe`, ICU plural selection with all six Arabic categories, `lang`/`dir` application. Seed `en.json`/`ar.json` with the shell's strings.
+4. `I18n`: locale signal, lazy JSON import per locale, `t()`, `formatNumber()`, plural selection via `Intl.PluralRules` with all six Arabic categories, `lang`/`dir` application. Seed `en.json`/`ar.json` with the shell's strings. No `TranslatePipe` — see ARCHITECTURE §12.3 for why a pure pipe cannot track the locale signal.
 5. `scripts/check-i18n.mjs` — fails on key drift between locales; wire to `npm run i18n:check` and to CI.
 6. `scripts/check-contrast.mjs` — parses tokens, asserts the UI_UX_SPEC §3.2 pairs; wire to `npm run tokens:check`.
 7. App shell: safe-area layout, sticky header with the scroll-aware border, bottom tab bar with the elevated Train tab, toast host, dialog/sheet host with focus trapping and `inert`.
@@ -200,13 +200,13 @@ git remote add origin https://github.com/USERNAME/REPLOG.git; git push -u origin
 
 ### Acceptance criteria
 
-- [ ] Theme and direction are correct on the very first paint — no flash on a hard reload in either theme or language
-- [ ] Switching to Arabic flips direction instantly, with no reload, and persists across restarts
-- [ ] Every shell string comes from the dictionaries; `i18n:check` and `tokens:check` pass
-- [ ] All routes navigate; the tab bar reflects the active destination; deep-linking a nested route works in dev
-- [ ] Safe areas verified on a real iPhone: nothing sits under the notch/Dynamic Island or the home indicator
-- [ ] The UI kit renders in a dev-only gallery route in both themes and both directions
-- [ ] Reduced-motion variants verified
+- [x] Theme and direction are correct on the very first paint — *verified*: an E2E test seeds `replog.prefs.v1`, reloads, and asserts `lang`/`dir`/`data-theme` are already applied. That is what prevents the flash; the absence of a visible flash was not separately measured frame by frame.
+- [x] Switching to Arabic flips direction instantly, with no reload, and persists across restarts — *verified* by two E2E tests (in-place switch, and switch + reload) on Chromium, WebKit and mobile Safari.
+- [x] `i18n:check` and `tokens:check` pass, and both run in `npm run check` — *verified*. Note that "every shell string comes from the dictionaries" is currently upheld by review, not by a rule: the lint rule that flags literal strings in templates is still outstanding (see ARCHITECTURE §12.3).
+- [x] All routes navigate; the tab bar reflects the active destination; deep-linking a nested route works — *verified* by E2E, including the 404 route and the tab bar being absent on `/train/active`.
+- [ ] Safe areas on a real iPhone — **not verified.** No device available in this environment. The CSS uses `env(safe-area-inset-*)` with `viewport-fit=cover`, but inset behaviour in Safari standalone mode cannot be confirmed from a simulator or a desktop browser. Carry into the Phase 14 device pass.
+- [x] The UI kit renders in a dev-only gallery route in both themes and both directions — *verified* by visual review at 375×812 in dark, light, and Arabic RTL. That review found three real defects, now fixed: a mirrored number/unit pair (`kg 82.4`), a directional arrow used for "no change", and a doubled document title.
+- [ ] Reduced-motion variants — **not verified.** The global `prefers-reduced-motion` rule is in `_base.css` and the shimmer and sheet animations inherit it, but no test or visual pass exercises the reduced-motion branch yet.
 
 ---
 

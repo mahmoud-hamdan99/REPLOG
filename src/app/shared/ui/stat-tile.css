@@ -1,0 +1,44 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+}
+
+.tile__label {
+  margin: 0;
+}
+
+.tile__value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  margin: 0;
+  color: var(--text-1);
+
+  /* A measurement and its unit are one LTR run in every locale: "82.4 kg",
+     never "kg 82.4". Flex order would otherwise mirror them in RTL.
+     See docs/UI_UX_SPEC.md section 10.2. */
+  direction: ltr;
+  justify-content: flex-start;
+}
+
+/* The run stays LTR, but the block still sits on the reading-start side. */
+:host-context([dir='rtl']) .tile__value {
+  justify-content: flex-end;
+}
+
+.tile__unit {
+  color: var(--text-2);
+  font-size: 0.45em;
+  font-weight: var(--fw-medium);
+  letter-spacing: normal;
+}
+
+.tile__empty {
+  color: var(--text-3);
+}
+
+.tile__footnote {
+  margin: 0;
+}

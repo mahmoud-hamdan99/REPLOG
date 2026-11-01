@@ -1,0 +1,16 @@
+:host {
+  display: inline-flex;
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+.icon {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* See the mirroring matrix in docs/UI_UX_SPEC.md section 10.2: chevrons and
+   back arrows mirror, but check marks, timers and play glyphs never do. */
+:host-context([dir='rtl']).icon--directional .icon {
+  transform: scaleX(-1);
+}

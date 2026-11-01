@@ -1,0 +1,82 @@
+.tabs {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  block-size: calc(var(--nav-h) + var(--safe-b));
+
+  /* Keep every target clear of the home indicator. */
+  padding-block-end: var(--safe-b);
+  border-block-start: 1px solid var(--border);
+  background: var(--surface-1);
+  box-shadow: var(--elev-2);
+}
+
+.tab {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-inline-size: 0;
+  min-block-size: var(--nav-h);
+  color: var(--text-3);
+  text-decoration: none;
+}
+
+.tab__label {
+  font-size: var(--t-micro);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+}
+
+.tab--active {
+  color: var(--accent-ink);
+}
+
+/* Active indicator is a bar as well as a colour change, so the state does not
+   depend on colour alone. */
+.tab--active::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inline-size: 28px;
+  block-size: 3px;
+  border-end-start-radius: var(--r-full);
+  border-end-end-radius: var(--r-full);
+  background: var(--accent);
+}
+
+/* The centre Train tab: a lifted lime circle. */
+.tab--center {
+  color: var(--on-accent);
+}
+
+.tab--center .tab__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 52px;
+  block-size: 52px;
+  border-radius: var(--r-full);
+  margin-block-start: -10px;
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: var(--elev-2);
+}
+
+.tab--center .tab__label {
+  color: var(--text-2);
+}
+
+.tab--center.tab--active .tab__label {
+  color: var(--accent-ink);
+}
+
+.tab--center.tab--active::before {
+  content: none;
+}

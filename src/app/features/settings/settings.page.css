@@ -1,0 +1,15 @@
+.group {
+  margin-block-end: var(--sp-6);
+}
+
+.group__control {
+  padding: var(--sp-3);
+}
+
+.group__control + .group__control {
+  border-block-start: 1px solid var(--border);
+}
+
+.group__label {
+  margin: 0;
+}

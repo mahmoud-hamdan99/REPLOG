@@ -15,8 +15,10 @@
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.spec.json --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run lint && npm run lint:css && npm run typecheck && npm run test",
-    "prepare": "husky"
+    "check": "npm run lint && npm run lint:css && npm run i18n:check && npm run tokens:check && npm run typecheck && npm run test",
+    "prepare": "husky",
+    "i18n:check": "node scripts/check-i18n.mjs",
+    "tokens:check": "node scripts/check-contrast.mjs"
   },
   "private": true,
   "packageManager": "npm@11.20.0",
