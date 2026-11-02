@@ -44,17 +44,26 @@ export const routes: Routes = [
   // Exercise library
   {
     path: 'exercises',
-    loadComponent: placeholder,
+    loadComponent: () => import('./features/exercises/exercises.page').then((m) => m.ExercisesPage),
     data: { titleKey: 'page.exercises.title', navTab: 'plans' },
   },
   {
+    // Before the :exerciseId route, or "new" is read as an id.
     path: 'exercises/new',
-    loadComponent: placeholder,
-    data: { titleKey: 'page.exercises.title', navTab: 'plans', showBack: true },
+    loadComponent: () =>
+      import('./features/exercises/exercise-form.page').then((m) => m.ExerciseFormPage),
+    data: { titleKey: 'exercises.new', navTab: 'plans', showBack: true },
+  },
+  {
+    path: 'exercises/:exerciseId/edit',
+    loadComponent: () =>
+      import('./features/exercises/exercise-form.page').then((m) => m.ExerciseFormPage),
+    data: { titleKey: 'exercises.edit', navTab: 'plans', showBack: true },
   },
   {
     path: 'exercises/:exerciseId',
-    loadComponent: placeholder,
+    loadComponent: () =>
+      import('./features/exercises/exercise-detail.page').then((m) => m.ExerciseDetailPage),
     data: { titleKey: 'page.exercises.title', navTab: 'plans', showBack: true },
   },
 

@@ -1,0 +1,297 @@
+[
+  {
+    "id": "lying-leg-curl",
+    "en": "Lying Leg Curl",
+    "ar": "ثني الأرجل مستلقيًا",
+    "eq": "machine",
+    "pri": ["hamstrings"],
+    "sec": ["calves"],
+    "pat": "isolation",
+    "alias": ["leg curl", "ثني أرجل"],
+    "rest": 90
+  },
+  {
+    "id": "seated-leg-curl",
+    "en": "Seated Leg Curl",
+    "ar": "ثني الأرجل جالسًا",
+    "eq": "machine",
+    "pri": ["hamstrings"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 90
+  },
+  {
+    "id": "stiff-leg-deadlift",
+    "en": "Stiff-Leg Deadlift",
+    "ar": "الرفعة المميتة بأرجل مستقيمة",
+    "eq": "barbell",
+    "pri": ["hamstrings"],
+    "sec": ["glutes", "lower-back"],
+    "pat": "hinge",
+    "rest": 180
+  },
+  {
+    "id": "dumbbell-romanian-deadlift",
+    "en": "Dumbbell Romanian Deadlift",
+    "ar": "الرفعة الرومانية بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["hamstrings"],
+    "sec": ["glutes"],
+    "pat": "hinge",
+    "rest": 150,
+    "steps": {
+      "en": [
+        "Hold a dumbbell in each hand in front of your thighs.",
+        "Push your hips back and let the weights travel down your legs.",
+        "Keep a soft bend in your knees and a flat back throughout.",
+        "Stop when you feel a strong stretch, then squeeze your glutes to stand."
+      ],
+      "ar": [
+        "أمسك دمبلًا بكل يد أمام الفخذين.",
+        "ادفع الحوض للخلف ودع الأوزان تنزل بمحاذاة الساقين.",
+        "أبقِ ثنية بسيطة في الركبتين وظهرًا مستقيمًا طوال الحركة.",
+        "توقف عند الشعور بتمدد قوي ثم اعصر المؤخرة للوقوف."
+      ]
+    }
+  },
+  {
+    "id": "nordic-hamstring-curl",
+    "en": "Nordic Hamstring Curl",
+    "ar": "ثني الأرجل النوردي",
+    "eq": "bodyweight",
+    "pri": ["hamstrings"],
+    "sec": [],
+    "pat": "isolation",
+    "load": "bodyweight-plus",
+    "rest": 120
+  },
+  {
+    "id": "glute-ham-raise",
+    "en": "Glute-Ham Raise",
+    "ar": "رفع المؤخرة والخلفية",
+    "eq": "bodyweight",
+    "pri": ["hamstrings"],
+    "sec": ["glutes", "lower-back"],
+    "pat": "hinge",
+    "load": "bodyweight-plus",
+    "rest": 120
+  },
+  {
+    "id": "good-morning",
+    "en": "Good Morning",
+    "ar": "تمرين الانحناء بالبار",
+    "eq": "barbell",
+    "pri": ["hamstrings"],
+    "sec": ["lower-back", "glutes"],
+    "pat": "hinge",
+    "rest": 150
+  },
+  {
+    "id": "single-leg-romanian-deadlift",
+    "en": "Single-Leg Romanian Deadlift",
+    "ar": "الرفعة الرومانية بقدم واحدة",
+    "eq": "dumbbell",
+    "pri": ["hamstrings"],
+    "sec": ["glutes"],
+    "pat": "hinge",
+    "lat": "unilateral-separate",
+    "rest": 120
+  },
+  {
+    "id": "cable-pull-through",
+    "en": "Cable Pull-Through",
+    "ar": "سحب بين الساقين بالكابل",
+    "eq": "cable",
+    "pri": ["hamstrings", "glutes"],
+    "sec": ["lower-back"],
+    "pat": "hinge",
+    "rest": 90
+  },
+  {
+    "id": "kettlebell-swing",
+    "en": "Kettlebell Swing",
+    "ar": "مرجحة الكيتل بيل",
+    "eq": "kettlebell",
+    "pri": ["hamstrings", "glutes"],
+    "sec": ["lower-back", "abs"],
+    "pat": "hinge",
+    "alias": ["swing", "مرجحة"],
+    "rest": 90
+  },
+  {
+    "id": "banded-leg-curl",
+    "en": "Banded Leg Curl",
+    "ar": "ثني الأرجل بالمطاط",
+    "eq": "bands",
+    "pri": ["hamstrings"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 60
+  },
+  {
+    "id": "slider-leg-curl",
+    "en": "Slider Leg Curl",
+    "ar": "ثني الأرجل بالانزلاق",
+    "eq": "bodyweight",
+    "pri": ["hamstrings"],
+    "sec": ["glutes"],
+    "pat": "isolation",
+    "load": "bodyweight-plus",
+    "rest": 75
+  },
+
+  {
+    "id": "hip-thrust",
+    "en": "Hip Thrust",
+    "ar": "دفع الحوض بالبار",
+    "eq": "barbell",
+    "pri": ["glutes"],
+    "sec": ["hamstrings"],
+    "pat": "hinge",
+    "alias": ["هيب ثراست"],
+    "rest": 180,
+    "steps": {
+      "en": [
+        "Sit on the floor with your upper back against a bench and the bar over your hips.",
+        "Plant your feet so your shins are vertical at the top of the movement.",
+        "Drive through your heels and lift until your torso is parallel to the floor.",
+        "Squeeze your glutes at the top, then lower under control."
+      ],
+      "ar": [
+        "اجلس على الأرض وأعلى ظهرك مستند إلى بنش والبار فوق الحوض.",
+        "ثبّت قدميك بحيث يكون الساقان عموديين في أعلى الحركة.",
+        "ادفع بكعبيك وارفع حتى يصبح الجذع موازيًا للأرض.",
+        "اعصر عضلات المؤخرة في الأعلى ثم أنزل ببطء."
+      ]
+    }
+  },
+  {
+    "id": "glute-bridge",
+    "en": "Glute Bridge",
+    "ar": "جسر المؤخرة",
+    "eq": "bodyweight",
+    "pri": ["glutes"],
+    "sec": ["hamstrings"],
+    "pat": "hinge",
+    "load": "bodyweight-plus",
+    "rest": 75
+  },
+  {
+    "id": "machine-hip-thrust",
+    "en": "Machine Hip Thrust",
+    "ar": "دفع الحوض على الجهاز",
+    "eq": "machine",
+    "pri": ["glutes"],
+    "sec": ["hamstrings"],
+    "pat": "hinge",
+    "rest": 150
+  },
+  {
+    "id": "cable-kickback",
+    "en": "Cable Glute Kickback",
+    "ar": "ركلة خلفية بالكابل",
+    "eq": "cable",
+    "pri": ["glutes"],
+    "sec": ["hamstrings"],
+    "pat": "isolation",
+    "lat": "unilateral-separate",
+    "rest": 75
+  },
+  {
+    "id": "hip-abduction-machine",
+    "en": "Hip Abduction Machine",
+    "ar": "تبعيد الأرجل على الجهاز",
+    "eq": "machine",
+    "pri": ["abductors"],
+    "sec": ["glutes"],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "banded-hip-abduction",
+    "en": "Banded Hip Abduction",
+    "ar": "تبعيد الأرجل بالمطاط",
+    "eq": "bands",
+    "pri": ["abductors"],
+    "sec": ["glutes"],
+    "pat": "isolation",
+    "rest": 60
+  },
+  {
+    "id": "sumo-deadlift",
+    "en": "Sumo Deadlift",
+    "ar": "الرفعة المميتة سومو",
+    "eq": "barbell",
+    "pri": ["glutes", "quadriceps"],
+    "sec": ["adductors", "lower-back", "forearms"],
+    "pat": "hinge",
+    "alias": ["سومو"],
+    "rest": 240
+  },
+  {
+    "id": "frog-pump",
+    "en": "Frog Pump",
+    "ar": "جسر المؤخرة بالقدمين متقابلتين",
+    "eq": "bodyweight",
+    "pri": ["glutes"],
+    "sec": [],
+    "pat": "hinge",
+    "load": "bodyweight-plus",
+    "rest": 60
+  },
+  {
+    "id": "curtsy-lunge",
+    "en": "Curtsy Lunge",
+    "ar": "طعن متقاطع",
+    "eq": "dumbbell",
+    "pri": ["glutes"],
+    "sec": ["quadriceps", "adductors"],
+    "pat": "lunge",
+    "lat": "unilateral-alternating",
+    "rest": 90
+  },
+  {
+    "id": "single-leg-hip-thrust",
+    "en": "Single-Leg Hip Thrust",
+    "ar": "دفع الحوض بقدم واحدة",
+    "eq": "bodyweight",
+    "pri": ["glutes"],
+    "sec": ["hamstrings"],
+    "pat": "hinge",
+    "lat": "unilateral-separate",
+    "load": "bodyweight-plus",
+    "rest": 90
+  },
+  {
+    "id": "reverse-hyperextension",
+    "en": "Reverse Hyperextension",
+    "ar": "تمديد خلفي عكسي",
+    "eq": "machine",
+    "pri": ["glutes"],
+    "sec": ["hamstrings", "lower-back"],
+    "pat": "hinge",
+    "rest": 90
+  },
+  {
+    "id": "adductor-machine",
+    "en": "Hip Adduction Machine",
+    "ar": "تقريب الأرجل على الجهاز",
+    "eq": "machine",
+    "pri": ["adductors"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "copenhagen-plank",
+    "en": "Copenhagen Plank",
+    "ar": "بلانك كوبنهاجن",
+    "eq": "bodyweight",
+    "pri": ["adductors"],
+    "sec": ["abs"],
+    "pat": "carry",
+    "lat": "unilateral-separate",
+    "load": "time",
+    "rest": 60
+  }
+]

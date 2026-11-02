@@ -536,7 +536,13 @@ Rules: read synchronously in `main.ts` before bootstrap so `lang`/`dir`/theme ar
 
 ### 6.1 Shape and delivery
 
-A static, versioned JSON asset (`public/data/exercises.v1.json`), lazy-loaded on first library open and precached by the service worker. Target: **180–260 exercises** covering all twelve categories with at least 12 per major group, each with EN + AR names, muscles, equipment, classification, and 3–6 instruction steps. The file is the single source for seeding; it is never the runtime query surface (that is always IndexedDB).
+A static, versioned JSON asset at `src/app/features/exercises/data/exercises.v1.json`, imported dynamically so the bundler emits it as its own lazy chunk. Deliberately **not** `public/`: as a bundled chunk it is hashed, precached by the service worker, available offline without a runtime fetch of our own, and importable by the validation spec — the same reasoning as the locale dictionaries. **Shipped in Version 1: 168 exercises**, covering all twelve filter categories with at least 12 each (chest 15, back 19, shoulders 14, biceps 13, triceps 12, forearms 13, quadriceps 17, hamstrings 14, glutes 13, calves 12, abs 16, full-body 18). Every entry has EN + AR names, aliases, muscles, equipment, full classification and a weight increment. **17 carry written instructions**; the rest render a "no instructions yet" state.
+
+That is short of the 180–260 originally targeted, and deliberately so: breadth is what makes the library usable — you must be able to find your lift — while written instructions are additive content that the reconciliation path in section 6.2 exists to deliver incrementally. Padding the count to clear a number would not have made the library more useful. The payload budget leaves ample room: the catalog is **12.6 kB gzipped** against a 60 kB ceiling.
+
+The file is generated from terse per-group sources under `scripts/catalog/source/` by `scripts/build-catalog.mjs`, which applies defaults and enforces unique ids, enum membership, category coverage and the payload budget. It is the single source for seeding; it is never the runtime query surface (that is always IndexedDB).
+
+**Normalised search keys are absent from the file.** They are computed during seeding with the same `normalizeSearchText` the query path uses — baking them in would mean a second implementation in the build script that could drift, producing searches that fail only for certain inputs.
 
 Size control: instructions are the bulk of the payload. Budget ≤ 60 kB gzipped (ARCHITECTURE §10.5); if exceeded, split into `exercises.core.json` (names/classification, needed for pickers) and `exercises.details.json` (instructions/cues, loaded on exercise detail).
 

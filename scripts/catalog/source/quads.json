@@ -1,0 +1,169 @@
+[
+  {
+    "id": "back-squat",
+    "en": "Back Squat",
+    "ar": "القرفصاء بالبار",
+    "eq": "barbell",
+    "pri": ["quadriceps"],
+    "sec": ["glutes", "lower-back", "adductors"],
+    "pat": "squat",
+    "alias": ["squat", "سكوات", "قرفصاء"],
+    "rest": 240,
+    "steps": {
+      "en": [
+        "Set the bar on your upper back and grip it firmly with your elbows down.",
+        "Step back and stand with your feet about shoulder width, toes slightly out.",
+        "Take a breath, brace, and sit down between your hips.",
+        "Descend until your hip crease passes below your knee.",
+        "Drive up through your whole foot, keeping your chest and hips rising together."
+      ],
+      "ar": [
+        "ضع البار على أعلى الظهر وأمسكه بقوة مع إنزال المرفقين.",
+        "تراجع خطوة وقف والقدمان بعرض الكتفين وأصابع القدم للخارج قليلًا.",
+        "خذ نفسًا وشدّ جذعك وانزل بين وركيك.",
+        "انزل حتى يتجاوز مفصل الحوض مستوى الركبة.",
+        "ادفع بكامل القدم للأعلى مع صعود الصدر والحوض معًا."
+      ]
+    }
+  },
+  {
+    "id": "front-squat",
+    "en": "Front Squat",
+    "ar": "القرفصاء الأمامي",
+    "eq": "barbell",
+    "pri": ["quadriceps"],
+    "sec": ["glutes", "upper-back", "abs"],
+    "pat": "squat",
+    "rest": 210
+  },
+  {
+    "id": "goblet-squat",
+    "en": "Goblet Squat",
+    "ar": "قرفصاء بالدمبل أمام الصدر",
+    "eq": "dumbbell",
+    "pri": ["quadriceps"],
+    "sec": ["glutes", "abs"],
+    "pat": "squat",
+    "rest": 120
+  },
+  {
+    "id": "hack-squat",
+    "en": "Hack Squat",
+    "ar": "قرفصاء الهاك",
+    "eq": "machine",
+    "pri": ["quadriceps"],
+    "sec": ["glutes"],
+    "pat": "squat",
+    "alias": ["هاك"],
+    "rest": 180
+  },
+  {
+    "id": "leg-press",
+    "en": "Leg Press",
+    "ar": "ضغط الأرجل",
+    "eq": "machine",
+    "pri": ["quadriceps"],
+    "sec": ["glutes", "hamstrings"],
+    "pat": "squat",
+    "alias": ["ليج بريس", "ضغط أرجل"],
+    "rest": 180
+  },
+  {
+    "id": "leg-extension",
+    "en": "Leg Extension",
+    "ar": "تمديد الأرجل",
+    "eq": "machine",
+    "pri": ["quadriceps"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["ليج إكستنشن"],
+    "rest": 90
+  },
+  {
+    "id": "bulgarian-split-squat",
+    "en": "Bulgarian Split Squat",
+    "ar": "قرفصاء بلغاري",
+    "eq": "dumbbell",
+    "pri": ["quadriceps"],
+    "sec": ["glutes", "adductors"],
+    "pat": "lunge",
+    "lat": "unilateral-separate",
+    "alias": ["بلغاري"],
+    "rest": 150
+  },
+  {
+    "id": "walking-lunge",
+    "en": "Walking Lunge",
+    "ar": "طعن متحرك",
+    "eq": "dumbbell",
+    "pri": ["quadriceps"],
+    "sec": ["glutes", "hamstrings"],
+    "pat": "lunge",
+    "lat": "unilateral-alternating",
+    "alias": ["lunge", "طعن"],
+    "rest": 120
+  },
+  {
+    "id": "reverse-lunge",
+    "en": "Reverse Lunge",
+    "ar": "طعن للخلف",
+    "eq": "dumbbell",
+    "pri": ["quadriceps"],
+    "sec": ["glutes"],
+    "pat": "lunge",
+    "lat": "unilateral-alternating",
+    "rest": 120
+  },
+  {
+    "id": "step-up",
+    "en": "Step-Up",
+    "ar": "الصعود على الصندوق",
+    "eq": "dumbbell",
+    "pri": ["quadriceps"],
+    "sec": ["glutes"],
+    "pat": "lunge",
+    "lat": "unilateral-separate",
+    "rest": 120
+  },
+  {
+    "id": "smith-machine-squat",
+    "en": "Smith Machine Squat",
+    "ar": "قرفصاء سميث",
+    "eq": "smith-machine",
+    "pri": ["quadriceps"],
+    "sec": ["glutes"],
+    "pat": "squat",
+    "rest": 180
+  },
+  {
+    "id": "sissy-squat",
+    "en": "Sissy Squat",
+    "ar": "قرفصاء سيسي",
+    "eq": "bodyweight",
+    "pri": ["quadriceps"],
+    "sec": [],
+    "pat": "squat",
+    "load": "bodyweight-plus",
+    "rest": 90
+  },
+  {
+    "id": "box-squat",
+    "en": "Box Squat",
+    "ar": "قرفصاء الصندوق",
+    "eq": "barbell",
+    "pri": ["quadriceps"],
+    "sec": ["glutes", "hamstrings"],
+    "pat": "squat",
+    "rest": 180
+  },
+  {
+    "id": "bodyweight-squat",
+    "en": "Bodyweight Squat",
+    "ar": "قرفصاء بوزن الجسم",
+    "eq": "bodyweight",
+    "pri": ["quadriceps"],
+    "sec": ["glutes"],
+    "pat": "squat",
+    "rest": 60
+  }
+]

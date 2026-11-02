@@ -1,0 +1,230 @@
+[
+  {
+    "id": "deadlift",
+    "en": "Deadlift",
+    "ar": "الرفعة المميتة",
+    "eq": "barbell",
+    "pri": ["lower-back", "hamstrings"],
+    "sec": ["glutes", "upper-back", "forearms"],
+    "pat": "hinge",
+    "alias": ["conventional deadlift", "ديدليفت", "رفعة"],
+    "rest": 240,
+    "steps": {
+      "en": [
+        "Stand with the bar over your mid foot, about hip width apart.",
+        "Hinge at the hips and grip the bar just outside your legs.",
+        "Drop your hips until your shins touch the bar and lift your chest.",
+        "Drive through the floor and stand up, keeping the bar against your legs.",
+        "Lock out your hips, then lower by pushing your hips back first."
+      ],
+      "ar": [
+        "قف والبار فوق منتصف القدم والقدمان بعرض الحوض تقريبًا.",
+        "اثنِ من الحوض وأمسك البار خارج الساقين مباشرة.",
+        "أنزل الحوض حتى يلامس الساقان البار وارفع صدرك.",
+        "ادفع الأرض بقدميك وقف مستقيمًا مع إبقاء البار ملاصقًا للساقين.",
+        "ثبّت الحوض في الأعلى ثم أنزل البار بدفع الحوض للخلف أولًا."
+      ]
+    }
+  },
+  {
+    "id": "pull-up",
+    "en": "Pull-Up",
+    "ar": "العقلة",
+    "eq": "pull-up-bar",
+    "pri": ["lats"],
+    "sec": ["biceps", "upper-back", "forearms"],
+    "pat": "vertical-pull",
+    "load": "bodyweight-plus",
+    "alias": ["pullup", "عقلة"],
+    "rest": 150,
+    "steps": {
+      "en": [
+        "Hang from the bar with an overhand grip a little wider than your shoulders.",
+        "Pull your shoulder blades down before bending your arms.",
+        "Pull until your chin clears the bar, keeping your ribs down.",
+        "Lower under control until your arms are straight again."
+      ],
+      "ar": [
+        "تعلّق بالبار بقبضة أمامية أوسع قليلًا من الكتفين.",
+        "اسحب لوحي الكتف للأسفل قبل أن تثني ذراعيك.",
+        "اسحب حتى يتجاوز ذقنك البار مع إبقاء القفص الصدري منخفضًا.",
+        "أنزل ببطء حتى تستقيم الذراعان من جديد."
+      ]
+    }
+  },
+  {
+    "id": "chin-up",
+    "en": "Chin-Up",
+    "ar": "عقلة بقبضة عكسية",
+    "eq": "pull-up-bar",
+    "pri": ["lats"],
+    "sec": ["biceps"],
+    "pat": "vertical-pull",
+    "load": "bodyweight-plus",
+    "rest": 150
+  },
+  {
+    "id": "lat-pulldown",
+    "en": "Lat Pulldown",
+    "ar": "سحب أمامي",
+    "eq": "cable",
+    "pri": ["lats"],
+    "sec": ["biceps", "upper-back"],
+    "pat": "vertical-pull",
+    "alias": ["pulldown", "سحب"],
+    "rest": 120
+  },
+  {
+    "id": "close-grip-lat-pulldown",
+    "en": "Close-Grip Lat Pulldown",
+    "ar": "سحب أمامي بقبضة ضيقة",
+    "eq": "cable",
+    "pri": ["lats"],
+    "sec": ["biceps"],
+    "pat": "vertical-pull",
+    "rest": 120
+  },
+  {
+    "id": "barbell-row",
+    "en": "Barbell Row",
+    "ar": "تجديف بالبار",
+    "eq": "barbell",
+    "pri": ["upper-back", "lats"],
+    "sec": ["biceps", "rear-delts"],
+    "pat": "horizontal-pull",
+    "alias": ["bent over row", "تجديف"],
+    "rest": 180,
+    "steps": {
+      "en": [
+        "Hinge forward until your torso is around 45 degrees, knees softly bent.",
+        "Hold the bar just outside your knees with an overhand grip.",
+        "Pull the bar to your lower ribs, leading with your elbows.",
+        "Lower under control without letting your back round."
+      ],
+      "ar": [
+        "انحنِ للأمام حتى يصبح الجذع بزاوية 45 درجة تقريبًا مع ثني بسيط في الركبتين.",
+        "أمسك البار خارج الركبتين بقبضة أمامية.",
+        "اسحب البار إلى أسفل القفص الصدري مع تقديم المرفقين.",
+        "أنزل ببطء دون أن يتقوّس الظهر."
+      ]
+    }
+  },
+  {
+    "id": "pendlay-row",
+    "en": "Pendlay Row",
+    "ar": "تجديف بندلاي",
+    "eq": "barbell",
+    "pri": ["upper-back"],
+    "sec": ["lats", "biceps"],
+    "pat": "horizontal-pull",
+    "rest": 180
+  },
+  {
+    "id": "dumbbell-row",
+    "en": "Dumbbell Row",
+    "ar": "تجديف بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["lats", "upper-back"],
+    "sec": ["biceps", "rear-delts"],
+    "pat": "horizontal-pull",
+    "lat": "unilateral-separate",
+    "alias": ["one arm row", "تجديف دمبل"],
+    "rest": 120
+  },
+  {
+    "id": "seated-cable-row",
+    "en": "Seated Cable Row",
+    "ar": "تجديف أرضي بالكابل",
+    "eq": "cable",
+    "pri": ["upper-back", "lats"],
+    "sec": ["biceps", "rear-delts"],
+    "pat": "horizontal-pull",
+    "alias": ["cable row", "تجديف أرضي"],
+    "rest": 120
+  },
+  {
+    "id": "chest-supported-row",
+    "en": "Chest-Supported Row",
+    "ar": "تجديف بإسناد الصدر",
+    "eq": "machine",
+    "pri": ["upper-back"],
+    "sec": ["lats", "rear-delts", "biceps"],
+    "pat": "horizontal-pull",
+    "rest": 120
+  },
+  {
+    "id": "t-bar-row",
+    "en": "T-Bar Row",
+    "ar": "تجديف تي بار",
+    "eq": "barbell",
+    "pri": ["upper-back", "lats"],
+    "sec": ["biceps"],
+    "pat": "horizontal-pull",
+    "alias": ["tbar"],
+    "rest": 150
+  },
+  {
+    "id": "straight-arm-pulldown",
+    "en": "Straight-Arm Pulldown",
+    "ar": "سحب بذراع ممدودة",
+    "eq": "cable",
+    "pri": ["lats"],
+    "sec": ["triceps"],
+    "pat": "isolation",
+    "rest": 90
+  },
+  {
+    "id": "romanian-deadlift",
+    "en": "Romanian Deadlift",
+    "ar": "الرفعة الرومانية",
+    "eq": "barbell",
+    "pri": ["hamstrings", "lower-back"],
+    "sec": ["glutes"],
+    "pat": "hinge",
+    "alias": ["rdl", "روماني"],
+    "rest": 180
+  },
+  {
+    "id": "back-extension",
+    "en": "Back Extension",
+    "ar": "تمديد الظهر",
+    "eq": "bodyweight",
+    "pri": ["lower-back"],
+    "sec": ["glutes", "hamstrings"],
+    "pat": "hinge",
+    "load": "bodyweight-plus",
+    "alias": ["hyperextension"],
+    "rest": 90
+  },
+  {
+    "id": "rack-pull",
+    "en": "Rack Pull",
+    "ar": "سحب من الحامل",
+    "eq": "barbell",
+    "pri": ["upper-back", "lower-back"],
+    "sec": ["glutes", "forearms"],
+    "pat": "hinge",
+    "rest": 180
+  },
+  {
+    "id": "inverted-row",
+    "en": "Inverted Row",
+    "ar": "تجديف مقلوب",
+    "eq": "bodyweight",
+    "pri": ["upper-back"],
+    "sec": ["lats", "biceps"],
+    "pat": "horizontal-pull",
+    "load": "bodyweight-plus",
+    "rest": 90
+  },
+  {
+    "id": "machine-lat-pullover",
+    "en": "Machine Lat Pullover",
+    "ar": "بلوفر على الجهاز",
+    "eq": "machine",
+    "pri": ["lats"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 90
+  }
+]

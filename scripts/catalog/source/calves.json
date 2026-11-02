@@ -1,0 +1,144 @@
+[
+  {
+    "id": "standing-calf-raise",
+    "en": "Standing Calf Raise",
+    "ar": "رفع السمانة واقفًا",
+    "eq": "machine",
+    "pri": ["calves"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["calf raise", "سمانة"],
+    "rest": 75,
+    "steps": {
+      "en": [
+        "Place the balls of your feet on the platform with your heels hanging free.",
+        "Lower your heels until you feel a stretch in the calf.",
+        "Push up onto your toes as high as you can.",
+        "Pause briefly at the top rather than bouncing."
+      ],
+      "ar": [
+        "ضع مشط القدمين على المنصة مع ترك الكعبين معلّقين.",
+        "أنزل الكعبين حتى تشعر بتمدد في السمانة.",
+        "ادفع للأعلى على أطراف أصابعك إلى أقصى ارتفاع ممكن.",
+        "توقف لحظة في الأعلى بدل الارتداد السريع."
+      ]
+    }
+  },
+  {
+    "id": "seated-calf-raise",
+    "en": "Seated Calf Raise",
+    "ar": "رفع السمانة جالسًا",
+    "eq": "machine",
+    "pri": ["calves"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "leg-press-calf-raise",
+    "en": "Leg Press Calf Raise",
+    "ar": "رفع السمانة على جهاز الضغط",
+    "eq": "machine",
+    "pri": ["calves"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "smith-machine-calf-raise",
+    "en": "Smith Machine Calf Raise",
+    "ar": "رفع السمانة على سميث",
+    "eq": "smith-machine",
+    "pri": ["calves"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "dumbbell-calf-raise",
+    "en": "Dumbbell Calf Raise",
+    "ar": "رفع السمانة بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["calves"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 60
+  },
+  {
+    "id": "barbell-calf-raise",
+    "en": "Barbell Calf Raise",
+    "ar": "رفع السمانة بالبار",
+    "eq": "barbell",
+    "pri": ["calves"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "single-leg-calf-raise",
+    "en": "Single-Leg Calf Raise",
+    "ar": "رفع السمانة بقدم واحدة",
+    "eq": "bodyweight",
+    "pri": ["calves"],
+    "sec": [],
+    "pat": "isolation",
+    "lat": "unilateral-separate",
+    "load": "bodyweight-plus",
+    "rest": 60
+  },
+  {
+    "id": "donkey-calf-raise",
+    "en": "Donkey Calf Raise",
+    "ar": "رفع السمانة منحنيًا",
+    "eq": "machine",
+    "pri": ["calves"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "tibialis-raise",
+    "en": "Tibialis Raise",
+    "ar": "رفع مقدمة الساق",
+    "eq": "bodyweight",
+    "pri": ["calves"],
+    "sec": [],
+    "pat": "isolation",
+    "load": "bodyweight-plus",
+    "rest": 60
+  },
+  {
+    "id": "jump-rope",
+    "en": "Jump Rope",
+    "ar": "نط الحبل",
+    "eq": "other",
+    "pri": ["calves"],
+    "sec": ["cardio"],
+    "pat": "other",
+    "mech": "compound",
+    "type": "cardio",
+    "load": "time",
+    "alias": ["skipping", "حبل"],
+    "rest": 60
+  },
+  {
+    "id": "farmers-walk-on-toes",
+    "en": "Farmer's Walk on Toes",
+    "ar": "مشية المزارع على الأطراف",
+    "eq": "dumbbell",
+    "pri": ["calves"],
+    "sec": ["forearms"],
+    "pat": "carry",
+    "rest": 90
+  },
+  {
+    "id": "banded-calf-raise",
+    "en": "Banded Calf Raise",
+    "ar": "رفع السمانة بالمطاط",
+    "eq": "bands",
+    "pri": ["calves"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 60
+  }
+]

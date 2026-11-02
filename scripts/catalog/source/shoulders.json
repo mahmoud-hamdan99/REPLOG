@@ -1,0 +1,214 @@
+[
+  {
+    "id": "overhead-press",
+    "en": "Overhead Press",
+    "ar": "ضغط الكتف بالبار",
+    "eq": "barbell",
+    "pri": ["front-delts", "shoulders"],
+    "sec": ["triceps", "upper-back"],
+    "pat": "vertical-push",
+    "alias": ["ohp", "military press", "ضغط كتف"],
+    "rest": 180,
+    "steps": {
+      "en": [
+        "Hold the bar at collarbone height with your grip just outside your shoulders.",
+        "Brace your midsection and squeeze your glutes to stop your lower back arching.",
+        "Press the bar straight up, moving your head back slightly to clear it.",
+        "Finish with the bar over your mid foot and your head through your arms."
+      ],
+      "ar": [
+        "أمسك البار عند مستوى الترقوة والقبضة خارج الكتفين مباشرة.",
+        "شدّ عضلات الجذع والمؤخرة لمنع تقوّس أسفل الظهر.",
+        "ادفع البار للأعلى بخط مستقيم مع إرجاع الرأس قليلًا ليمر البار.",
+        "أنهِ الحركة والبار فوق منتصف القدم والرأس بين الذراعين."
+      ]
+    }
+  },
+  {
+    "id": "seated-dumbbell-shoulder-press",
+    "en": "Seated Dumbbell Shoulder Press",
+    "ar": "ضغط الكتف بالدمبل جالسًا",
+    "eq": "dumbbell",
+    "pri": ["front-delts", "shoulders"],
+    "sec": ["triceps"],
+    "pat": "vertical-push",
+    "alias": ["db shoulder press"],
+    "rest": 150
+  },
+  {
+    "id": "arnold-press",
+    "en": "Arnold Press",
+    "ar": "ضغط أرنولد",
+    "eq": "dumbbell",
+    "pri": ["front-delts", "side-delts"],
+    "sec": ["triceps"],
+    "pat": "vertical-push",
+    "alias": ["أرنولد"],
+    "rest": 120
+  },
+  {
+    "id": "machine-shoulder-press",
+    "en": "Machine Shoulder Press",
+    "ar": "ضغط الكتف على الجهاز",
+    "eq": "machine",
+    "pri": ["front-delts", "shoulders"],
+    "sec": ["triceps"],
+    "pat": "vertical-push",
+    "rest": 120
+  },
+  {
+    "id": "dumbbell-lateral-raise",
+    "en": "Dumbbell Lateral Raise",
+    "ar": "رفرفة جانبية بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["side-delts"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["lateral raise", "side raise", "رفرفة جانبية"],
+    "rest": 75,
+    "steps": {
+      "en": [
+        "Stand with a dumbbell in each hand, elbows very slightly bent.",
+        "Raise your arms out to the sides, leading with your elbows.",
+        "Stop at shoulder height without shrugging.",
+        "Lower slowly rather than dropping the weight."
+      ],
+      "ar": [
+        "قف وبكل يد دمبل مع ثني بسيط جدًا في المرفقين.",
+        "ارفع ذراعيك إلى الجانبين مع تقديم المرفقين.",
+        "توقف عند مستوى الكتف دون رفع الكتفين لأعلى.",
+        "أنزل ببطء بدل ترك الوزن يسقط."
+      ]
+    }
+  },
+  {
+    "id": "cable-lateral-raise",
+    "en": "Cable Lateral Raise",
+    "ar": "رفرفة جانبية بالكابل",
+    "eq": "cable",
+    "pri": ["side-delts"],
+    "sec": [],
+    "pat": "isolation",
+    "lat": "unilateral-separate",
+    "rest": 75
+  },
+  {
+    "id": "machine-lateral-raise",
+    "en": "Machine Lateral Raise",
+    "ar": "رفرفة جانبية على الجهاز",
+    "eq": "machine",
+    "pri": ["side-delts"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "dumbbell-front-raise",
+    "en": "Dumbbell Front Raise",
+    "ar": "رفرفة أمامية بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["front-delts"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["رفرفة أمامية"],
+    "rest": 75
+  },
+  {
+    "id": "reverse-pec-deck",
+    "en": "Reverse Pec Deck",
+    "ar": "رفرفة خلفية على الجهاز",
+    "eq": "machine",
+    "pri": ["rear-delts"],
+    "sec": ["upper-back"],
+    "pat": "isolation",
+    "alias": ["reverse fly", "رفرفة خلفية"],
+    "rest": 75
+  },
+  {
+    "id": "bent-over-dumbbell-reverse-fly",
+    "en": "Bent-Over Dumbbell Reverse Fly",
+    "ar": "رفرفة خلفية بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["rear-delts"],
+    "sec": ["upper-back"],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "face-pull",
+    "en": "Face Pull",
+    "ar": "سحب إلى الوجه",
+    "eq": "cable",
+    "pri": ["rear-delts"],
+    "sec": ["upper-back"],
+    "pat": "horizontal-pull",
+    "alias": ["فيس بول"],
+    "rest": 75,
+    "steps": {
+      "en": [
+        "Set a rope attachment at about face height.",
+        "Pull the rope towards your forehead, splitting your hands apart.",
+        "Finish with your upper arms in line with your shoulders and your thumbs back.",
+        "Return slowly, keeping tension on the rear shoulders."
+      ],
+      "ar": [
+        "اضبط حبل الكابل عند مستوى الوجه تقريبًا.",
+        "اسحب الحبل باتجاه جبهتك مع تباعد اليدين عن بعضهما.",
+        "أنهِ الحركة والذراعان على خط الكتفين والإبهامان للخلف.",
+        "عُد ببطء مع الحفاظ على الشد في مؤخرة الكتف."
+      ]
+    }
+  },
+  {
+    "id": "upright-row",
+    "en": "Upright Row",
+    "ar": "سحب عمودي",
+    "eq": "barbell",
+    "pri": ["side-delts"],
+    "sec": ["upper-back", "biceps"],
+    "pat": "vertical-pull",
+    "rest": 90
+  },
+  {
+    "id": "barbell-shrug",
+    "en": "Barbell Shrug",
+    "ar": "هز الأكتاف بالبار",
+    "eq": "barbell",
+    "pri": ["upper-back"],
+    "sec": ["forearms"],
+    "pat": "isolation",
+    "alias": ["shrug", "تراب"],
+    "rest": 90
+  },
+  {
+    "id": "dumbbell-shrug",
+    "en": "Dumbbell Shrug",
+    "ar": "هز الأكتاف بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["upper-back"],
+    "sec": ["forearms"],
+    "pat": "isolation",
+    "rest": 90
+  },
+  {
+    "id": "landmine-press",
+    "en": "Landmine Press",
+    "ar": "ضغط لاندماين",
+    "eq": "barbell",
+    "pri": ["front-delts"],
+    "sec": ["triceps", "chest"],
+    "pat": "vertical-push",
+    "lat": "unilateral-separate",
+    "rest": 120
+  },
+  {
+    "id": "pike-push-up",
+    "en": "Pike Push-Up",
+    "ar": "ضغط الكتف بوزن الجسم",
+    "eq": "bodyweight",
+    "pri": ["front-delts"],
+    "sec": ["triceps"],
+    "pat": "vertical-push",
+    "rest": 90
+  }
+]

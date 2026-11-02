@@ -109,7 +109,15 @@ module.exports = defineConfig([
   // The composition root binds data/ contracts to their infrastructure
   // implementations. It is the single intended exception to the boundary above.
   {
-    files: ['src/app/app.config.ts'],
+    files: ['src/app/app.config.ts', 'src/app/app.providers.ts'],
+    rules: { 'no-restricted-imports': 'off' },
+  },
+
+  // Specs may wire the real implementation: testing a store against genuine
+  // transactions is the point, and nothing here ships. The boundary still
+  // applies to every non-spec file.
+  {
+    files: ['src/app/**/*.spec.ts', 'src/app/**/testing/**/*.ts'],
     rules: { 'no-restricted-imports': 'off' },
   },
 

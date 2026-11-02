@@ -1,0 +1,222 @@
+[
+  {
+    "id": "barbell-bench-press",
+    "en": "Barbell Bench Press",
+    "ar": "ضغط البار المستوي",
+    "eq": "barbell",
+    "pri": ["chest"],
+    "sec": ["triceps", "front-delts"],
+    "pat": "horizontal-push",
+    "alias": ["bench", "bench press", "bp", "بنش"],
+    "rest": 180,
+    "steps": {
+      "en": [
+        "Lie on the bench with your eyes under the bar and your feet flat on the floor.",
+        "Grip the bar slightly wider than shoulder width and squeeze your shoulder blades together.",
+        "Unrack the bar and hold it over your upper chest with straight arms.",
+        "Lower the bar to your mid chest, keeping your elbows at roughly 45 degrees.",
+        "Press back up until your arms are straight, without letting your shoulders roll forward."
+      ],
+      "ar": [
+        "استلقِ على البنش بحيث تكون عيناك تحت البار وقدماك مستقرتان على الأرض.",
+        "أمسك البار بقبضة أوسع قليلاً من عرض الكتفين واضغط لوحي الكتف معًا.",
+        "ارفع البار من الحامل وثبّته فوق أعلى الصدر والذراعان ممدودتان.",
+        "أنزل البار إلى منتصف الصدر مع إبقاء المرفقين بزاوية 45 درجة تقريبًا.",
+        "ادفع البار للأعلى حتى تستقيم الذراعان دون أن يندفع الكتفان للأمام."
+      ]
+    }
+  },
+  {
+    "id": "incline-barbell-bench-press",
+    "en": "Incline Barbell Bench Press",
+    "ar": "ضغط البار المائل",
+    "eq": "barbell",
+    "pri": ["chest"],
+    "sec": ["front-delts", "triceps"],
+    "pat": "horizontal-push",
+    "alias": ["incline bench", "مائل"],
+    "rest": 180
+  },
+  {
+    "id": "decline-barbell-bench-press",
+    "en": "Decline Barbell Bench Press",
+    "ar": "ضغط البار العكسي",
+    "eq": "barbell",
+    "pri": ["chest"],
+    "sec": ["triceps"],
+    "pat": "horizontal-push",
+    "alias": ["decline bench"],
+    "rest": 150
+  },
+  {
+    "id": "dumbbell-bench-press",
+    "en": "Dumbbell Bench Press",
+    "ar": "ضغط الدمبل المستوي",
+    "eq": "dumbbell",
+    "pri": ["chest"],
+    "sec": ["triceps", "front-delts"],
+    "pat": "horizontal-push",
+    "alias": ["db bench", "دمبل صدر"],
+    "rest": 150
+  },
+  {
+    "id": "incline-dumbbell-press",
+    "en": "Incline Dumbbell Press",
+    "ar": "ضغط الدمبل المائل",
+    "eq": "dumbbell",
+    "pri": ["chest"],
+    "sec": ["front-delts", "triceps"],
+    "pat": "horizontal-push",
+    "alias": ["incline db"],
+    "rest": 150,
+    "steps": {
+      "en": [
+        "Set the bench to about 30 degrees and sit with a dumbbell on each thigh.",
+        "Kick the dumbbells up as you lie back, holding them at shoulder width.",
+        "Lower until your elbows are slightly below your shoulders.",
+        "Press up and slightly inward without clashing the dumbbells together."
+      ],
+      "ar": [
+        "اضبط البنش على ميل 30 درجة تقريبًا واجلس وكل دمبل على فخذ.",
+        "ادفع الدمبلين للأعلى أثناء استلقائك وثبّتهما بعرض الكتفين.",
+        "أنزل حتى يصبح المرفقان أدنى قليلًا من مستوى الكتفين.",
+        "ادفع للأعلى وللداخل قليلًا دون أن يصطدم الدمبلان ببعضهما."
+      ]
+    }
+  },
+  {
+    "id": "dumbbell-fly",
+    "en": "Dumbbell Fly",
+    "ar": "تفتيح بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["chest"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["fly", "تفتيح"],
+    "rest": 90
+  },
+  {
+    "id": "incline-dumbbell-fly",
+    "en": "Incline Dumbbell Fly",
+    "ar": "تفتيح بالدمبل المائل",
+    "eq": "dumbbell",
+    "pri": ["chest"],
+    "sec": ["front-delts"],
+    "pat": "isolation",
+    "rest": 90
+  },
+  {
+    "id": "cable-crossover",
+    "en": "Cable Crossover",
+    "ar": "تفتيح بالكابل",
+    "eq": "cable",
+    "pri": ["chest"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["crossover", "كروس"],
+    "rest": 90,
+    "steps": {
+      "en": [
+        "Set both pulleys above shoulder height and take a handle in each hand.",
+        "Step forward into a split stance with a slight forward lean.",
+        "Bring your hands together in front of your chest in a wide arc, elbows softly bent.",
+        "Return under control until you feel a stretch across your chest."
+      ],
+      "ar": [
+        "اضبط البكرتين أعلى من مستوى الكتف وأمسك مقبضًا بكل يد.",
+        "تقدّم خطوة بوضعية متباعدة مع ميل بسيط للأمام.",
+        "اجمع يديك أمام الصدر بحركة قوسية واسعة مع ثني بسيط في المرفقين.",
+        "عُد ببطء حتى تشعر بتمدد في عضلات الصدر."
+      ]
+    }
+  },
+  {
+    "id": "low-to-high-cable-fly",
+    "en": "Low-to-High Cable Fly",
+    "ar": "تفتيح بالكابل من الأسفل",
+    "eq": "cable",
+    "pri": ["chest"],
+    "sec": ["front-delts"],
+    "pat": "isolation",
+    "rest": 90
+  },
+  {
+    "id": "machine-chest-press",
+    "en": "Machine Chest Press",
+    "ar": "ضغط الصدر على الجهاز",
+    "eq": "machine",
+    "pri": ["chest"],
+    "sec": ["triceps", "front-delts"],
+    "pat": "horizontal-push",
+    "rest": 120
+  },
+  {
+    "id": "pec-deck-fly",
+    "en": "Pec Deck Fly",
+    "ar": "تفتيح على جهاز البيك ديك",
+    "eq": "machine",
+    "pri": ["chest"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["pec deck", "بيك ديك"],
+    "rest": 90
+  },
+  {
+    "id": "push-up",
+    "en": "Push-Up",
+    "ar": "تمرين الضغط",
+    "eq": "bodyweight",
+    "pri": ["chest"],
+    "sec": ["triceps", "front-delts", "abs"],
+    "pat": "horizontal-push",
+    "alias": ["pushup", "press up", "ضغط"],
+    "rest": 60,
+    "steps": {
+      "en": [
+        "Place your hands slightly wider than your shoulders with your body in a straight line.",
+        "Brace your midsection and squeeze your glutes so your hips do not sag.",
+        "Lower until your chest is just above the floor.",
+        "Press back up without letting your elbows flare straight out to the sides."
+      ],
+      "ar": [
+        "ضع يديك أوسع قليلًا من الكتفين مع إبقاء الجسم على خط مستقيم.",
+        "شدّ عضلات الجذع والمؤخرة حتى لا ينخفض الحوض.",
+        "أنزل حتى يقترب صدرك من الأرض.",
+        "ادفع للأعلى دون أن يتباعد المرفقان تمامًا إلى الجانبين."
+      ]
+    }
+  },
+  {
+    "id": "chest-dip",
+    "en": "Chest Dip",
+    "ar": "متوازي للصدر",
+    "eq": "dip-bar",
+    "pri": ["chest"],
+    "sec": ["triceps", "front-delts"],
+    "pat": "horizontal-push",
+    "load": "bodyweight-plus",
+    "alias": ["dips", "متوازي"],
+    "rest": 150
+  },
+  {
+    "id": "smith-machine-bench-press",
+    "en": "Smith Machine Bench Press",
+    "ar": "ضغط سميث للصدر",
+    "eq": "smith-machine",
+    "pri": ["chest"],
+    "sec": ["triceps", "front-delts"],
+    "pat": "horizontal-push",
+    "rest": 150
+  },
+  {
+    "id": "dumbbell-pullover",
+    "en": "Dumbbell Pullover",
+    "ar": "بلوفر بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["chest"],
+    "sec": ["lats", "triceps"],
+    "pat": "isolation",
+    "alias": ["pullover", "بلوفر"],
+    "rest": 90
+  }
+]

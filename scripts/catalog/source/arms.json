@@ -1,0 +1,400 @@
+[
+  {
+    "id": "barbell-curl",
+    "en": "Barbell Curl",
+    "ar": "تبادل البار",
+    "eq": "barbell",
+    "pri": ["biceps"],
+    "sec": ["forearms"],
+    "pat": "isolation",
+    "alias": ["bicep curl", "باي بار"],
+    "rest": 90,
+    "steps": {
+      "en": [
+        "Stand holding the bar with an underhand grip at shoulder width.",
+        "Keep your elbows pinned at your sides and your ribs down.",
+        "Curl the bar up without swinging your torso.",
+        "Lower all the way until your arms are straight."
+      ],
+      "ar": [
+        "قف ممسكًا البار بقبضة سفلية بعرض الكتفين.",
+        "أبقِ المرفقين ملاصقين للجسم والقفص الصدري منخفضًا.",
+        "ارفع البار دون تأرجح الجذع.",
+        "أنزل بالكامل حتى تستقيم الذراعان."
+      ]
+    }
+  },
+  {
+    "id": "ez-bar-curl",
+    "en": "EZ-Bar Curl",
+    "ar": "تبادل البار المتعرج",
+    "eq": "ez-bar",
+    "pri": ["biceps"],
+    "sec": ["forearms"],
+    "pat": "isolation",
+    "rest": 90
+  },
+  {
+    "id": "dumbbell-curl",
+    "en": "Dumbbell Curl",
+    "ar": "تبادل بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["biceps"],
+    "sec": ["forearms"],
+    "pat": "isolation",
+    "lat": "unilateral-alternating",
+    "alias": ["باي دمبل"],
+    "rest": 90
+  },
+  {
+    "id": "incline-dumbbell-curl",
+    "en": "Incline Dumbbell Curl",
+    "ar": "تبادل بالدمبل على بنش مائل",
+    "eq": "dumbbell",
+    "pri": ["biceps"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 90
+  },
+  {
+    "id": "hammer-curl",
+    "en": "Hammer Curl",
+    "ar": "تبادل مطرقة",
+    "eq": "dumbbell",
+    "pri": ["biceps", "forearms"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["hammer", "مطرقة"],
+    "rest": 90
+  },
+  {
+    "id": "preacher-curl",
+    "en": "Preacher Curl",
+    "ar": "تبادل على البريتشر",
+    "eq": "ez-bar",
+    "pri": ["biceps"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["بريتشر"],
+    "rest": 90
+  },
+  {
+    "id": "cable-curl",
+    "en": "Cable Curl",
+    "ar": "تبادل بالكابل",
+    "eq": "cable",
+    "pri": ["biceps"],
+    "sec": ["forearms"],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "concentration-curl",
+    "en": "Concentration Curl",
+    "ar": "تبادل تركيز",
+    "eq": "dumbbell",
+    "pri": ["biceps"],
+    "sec": [],
+    "pat": "isolation",
+    "lat": "unilateral-separate",
+    "rest": 75
+  },
+  {
+    "id": "spider-curl",
+    "en": "Spider Curl",
+    "ar": "تبادل العنكبوت",
+    "eq": "dumbbell",
+    "pri": ["biceps"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "machine-biceps-curl",
+    "en": "Machine Biceps Curl",
+    "ar": "تبادل على الجهاز",
+    "eq": "machine",
+    "pri": ["biceps"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "bayesian-cable-curl",
+    "en": "Bayesian Cable Curl",
+    "ar": "تبادل بالكابل خلف الجسم",
+    "eq": "cable",
+    "pri": ["biceps"],
+    "sec": [],
+    "pat": "isolation",
+    "lat": "unilateral-separate",
+    "rest": 75
+  },
+  {
+    "id": "zottman-curl",
+    "en": "Zottman Curl",
+    "ar": "تبادل زوتمان",
+    "eq": "dumbbell",
+    "pri": ["biceps", "forearms"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+
+  {
+    "id": "close-grip-bench-press",
+    "en": "Close-Grip Bench Press",
+    "ar": "ضغط بقبضة ضيقة",
+    "eq": "barbell",
+    "pri": ["triceps"],
+    "sec": ["chest", "front-delts"],
+    "pat": "horizontal-push",
+    "alias": ["cgbp"],
+    "rest": 150
+  },
+  {
+    "id": "triceps-pushdown",
+    "en": "Triceps Pushdown",
+    "ar": "ضغط الترايسبس بالكابل",
+    "eq": "cable",
+    "pri": ["triceps"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["pushdown", "تراي كابل"],
+    "rest": 75,
+    "steps": {
+      "en": [
+        "Attach a bar or rope at about chest height and grip it.",
+        "Tuck your elbows against your sides and lean in slightly.",
+        "Push down until your arms are straight, without your elbows drifting forward.",
+        "Return until your forearms are just past parallel."
+      ],
+      "ar": [
+        "ثبّت بارًا أو حبلًا عند مستوى الصدر تقريبًا وأمسكه.",
+        "ألصق المرفقين بجانبيك وملّ بجذعك قليلًا للأمام.",
+        "ادفع للأسفل حتى تستقيم الذراعان دون أن يتقدّم المرفقان.",
+        "عُد حتى يتجاوز الساعدان الوضع الأفقي قليلًا."
+      ]
+    }
+  },
+  {
+    "id": "rope-triceps-pushdown",
+    "en": "Rope Triceps Pushdown",
+    "ar": "ضغط الترايسبس بالحبل",
+    "eq": "cable",
+    "pri": ["triceps"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "overhead-cable-triceps-extension",
+    "en": "Overhead Cable Triceps Extension",
+    "ar": "تمديد الترايسبس من أعلى الرأس",
+    "eq": "cable",
+    "pri": ["triceps"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "skull-crusher",
+    "en": "Skull Crusher",
+    "ar": "تمديد الترايسبس مستلقيًا",
+    "eq": "ez-bar",
+    "pri": ["triceps"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["lying triceps extension"],
+    "rest": 90
+  },
+  {
+    "id": "dumbbell-overhead-triceps-extension",
+    "en": "Dumbbell Overhead Triceps Extension",
+    "ar": "تمديد الترايسبس بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["triceps"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 90
+  },
+  {
+    "id": "triceps-dip",
+    "en": "Triceps Dip",
+    "ar": "متوازي للترايسبس",
+    "eq": "dip-bar",
+    "pri": ["triceps"],
+    "sec": ["chest", "front-delts"],
+    "pat": "vertical-push",
+    "load": "bodyweight-plus",
+    "rest": 120
+  },
+  {
+    "id": "bench-dip",
+    "en": "Bench Dip",
+    "ar": "غطس على البنش",
+    "eq": "bench",
+    "pri": ["triceps"],
+    "sec": ["front-delts"],
+    "pat": "vertical-push",
+    "load": "bodyweight-plus",
+    "rest": 90
+  },
+  {
+    "id": "diamond-push-up",
+    "en": "Diamond Push-Up",
+    "ar": "ضغط الماسة",
+    "eq": "bodyweight",
+    "pri": ["triceps"],
+    "sec": ["chest"],
+    "pat": "horizontal-push",
+    "rest": 75
+  },
+  {
+    "id": "machine-triceps-extension",
+    "en": "Machine Triceps Extension",
+    "ar": "تمديد الترايسبس على الجهاز",
+    "eq": "machine",
+    "pri": ["triceps"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "kickback",
+    "en": "Triceps Kickback",
+    "ar": "ركلة خلفية للترايسبس",
+    "eq": "dumbbell",
+    "pri": ["triceps"],
+    "sec": [],
+    "pat": "isolation",
+    "lat": "unilateral-separate",
+    "rest": 60
+  },
+  {
+    "id": "jm-press",
+    "en": "JM Press",
+    "ar": "ضغط جي إم",
+    "eq": "barbell",
+    "pri": ["triceps"],
+    "sec": ["chest"],
+    "pat": "horizontal-push",
+    "rest": 120
+  },
+
+  {
+    "id": "barbell-wrist-curl",
+    "en": "Barbell Wrist Curl",
+    "ar": "ثني الرسغ بالبار",
+    "eq": "barbell",
+    "pri": ["forearms"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 60
+  },
+  {
+    "id": "barbell-reverse-wrist-curl",
+    "en": "Barbell Reverse Wrist Curl",
+    "ar": "مد الرسغ بالبار",
+    "eq": "barbell",
+    "pri": ["forearms"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 60
+  },
+  {
+    "id": "dumbbell-wrist-curl",
+    "en": "Dumbbell Wrist Curl",
+    "ar": "ثني الرسغ بالدمبل",
+    "eq": "dumbbell",
+    "pri": ["forearms"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 60
+  },
+  {
+    "id": "reverse-barbell-curl",
+    "en": "Reverse Barbell Curl",
+    "ar": "تبادل بقبضة علوية",
+    "eq": "ez-bar",
+    "pri": ["forearms", "biceps"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "farmers-walk",
+    "en": "Farmer's Walk",
+    "ar": "مشية المزارع",
+    "eq": "dumbbell",
+    "pri": ["forearms"],
+    "sec": ["upper-back", "abs", "full-body"],
+    "pat": "carry",
+    "load": "external",
+    "alias": ["carry", "حمل"],
+    "rest": 120
+  },
+  {
+    "id": "plate-pinch-hold",
+    "en": "Plate Pinch Hold",
+    "ar": "تثبيت الأوزان بالأصابع",
+    "eq": "plate",
+    "pri": ["forearms"],
+    "sec": [],
+    "pat": "carry",
+    "load": "time",
+    "rest": 60
+  },
+  {
+    "id": "dead-hang",
+    "en": "Dead Hang",
+    "ar": "التعلق بالبار",
+    "eq": "pull-up-bar",
+    "pri": ["forearms"],
+    "sec": ["lats"],
+    "pat": "carry",
+    "load": "time",
+    "rest": 60
+  },
+  {
+    "id": "cable-wrist-curl",
+    "en": "Cable Wrist Curl",
+    "ar": "ثني الرسغ بالكابل",
+    "eq": "cable",
+    "pri": ["forearms"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 60
+  },
+  {
+    "id": "wrist-roller",
+    "en": "Wrist Roller",
+    "ar": "لفّاف الرسغ",
+    "eq": "other",
+    "pri": ["forearms"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 60
+  },
+  {
+    "id": "behind-the-back-wrist-curl",
+    "en": "Behind-the-Back Wrist Curl",
+    "ar": "ثني الرسغ خلف الظهر",
+    "eq": "barbell",
+    "pri": ["forearms"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 60
+  },
+  {
+    "id": "towel-pull-up-hold",
+    "en": "Towel Pull-Up Hold",
+    "ar": "تعلق بالمنشفة",
+    "eq": "pull-up-bar",
+    "pri": ["forearms"],
+    "sec": ["lats", "biceps"],
+    "pat": "carry",
+    "load": "time",
+    "rest": 90
+  }
+]

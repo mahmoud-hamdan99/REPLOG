@@ -1,0 +1,198 @@
+[
+  {
+    "id": "plank",
+    "en": "Plank",
+    "ar": "البلانك",
+    "eq": "bodyweight",
+    "pri": ["abs"],
+    "sec": ["obliques", "front-delts"],
+    "pat": "carry",
+    "load": "time",
+    "alias": ["بلانك"],
+    "rest": 60,
+    "steps": {
+      "en": [
+        "Rest on your forearms with your elbows under your shoulders.",
+        "Set your body in a straight line from head to heels.",
+        "Squeeze your glutes and tuck your ribs down so your lower back stays flat.",
+        "Hold, breathing normally, and stop when the line breaks."
+      ],
+      "ar": [
+        "استند على ساعديك والمرفقان تحت الكتفين مباشرة.",
+        "اجعل جسمك على خط مستقيم من الرأس إلى الكعبين.",
+        "اعصر المؤخرة وأنزل القفص الصدري ليبقى أسفل الظهر مستويًا.",
+        "استمر مع تنفّس طبيعي وتوقف عندما يختل الخط المستقيم."
+      ]
+    }
+  },
+  {
+    "id": "hanging-leg-raise",
+    "en": "Hanging Leg Raise",
+    "ar": "رفع الأرجل معلقًا",
+    "eq": "pull-up-bar",
+    "pri": ["abs"],
+    "sec": ["forearms"],
+    "pat": "isolation",
+    "load": "bodyweight-plus",
+    "alias": ["رفع أرجل"],
+    "rest": 90
+  },
+  {
+    "id": "hanging-knee-raise",
+    "en": "Hanging Knee Raise",
+    "ar": "رفع الركبتين معلقًا",
+    "eq": "pull-up-bar",
+    "pri": ["abs"],
+    "sec": [],
+    "pat": "isolation",
+    "load": "bodyweight-plus",
+    "rest": 75
+  },
+  {
+    "id": "cable-crunch",
+    "en": "Cable Crunch",
+    "ar": "طحن بالكابل",
+    "eq": "cable",
+    "pri": ["abs"],
+    "sec": [],
+    "pat": "isolation",
+    "alias": ["كرنش"],
+    "rest": 75
+  },
+  {
+    "id": "crunch",
+    "en": "Crunch",
+    "ar": "تمرين البطن",
+    "eq": "bodyweight",
+    "pri": ["abs"],
+    "sec": [],
+    "pat": "isolation",
+    "load": "bodyweight-plus",
+    "rest": 60
+  },
+  {
+    "id": "sit-up",
+    "en": "Sit-Up",
+    "ar": "الجلوس من الرقود",
+    "eq": "bodyweight",
+    "pri": ["abs"],
+    "sec": ["quadriceps"],
+    "pat": "isolation",
+    "load": "bodyweight-plus",
+    "rest": 60
+  },
+  {
+    "id": "ab-wheel-rollout",
+    "en": "Ab Wheel Rollout",
+    "ar": "عجلة البطن",
+    "eq": "other",
+    "pri": ["abs"],
+    "sec": ["lats", "lower-back"],
+    "pat": "isolation",
+    "load": "bodyweight-plus",
+    "alias": ["rollout", "عجلة"],
+    "rest": 90
+  },
+  {
+    "id": "machine-crunch",
+    "en": "Machine Crunch",
+    "ar": "طحن على الجهاز",
+    "eq": "machine",
+    "pri": ["abs"],
+    "sec": [],
+    "pat": "isolation",
+    "rest": 75
+  },
+  {
+    "id": "decline-sit-up",
+    "en": "Decline Sit-Up",
+    "ar": "الجلوس على بنش مائل",
+    "eq": "bench",
+    "pri": ["abs"],
+    "sec": [],
+    "pat": "isolation",
+    "load": "bodyweight-plus",
+    "rest": 75
+  },
+  {
+    "id": "dead-bug",
+    "en": "Dead Bug",
+    "ar": "تمرين الحشرة الميتة",
+    "eq": "bodyweight",
+    "pri": ["abs"],
+    "sec": [],
+    "pat": "isolation",
+    "load": "bodyweight",
+    "rest": 45
+  },
+  {
+    "id": "russian-twist",
+    "en": "Russian Twist",
+    "ar": "اللف الروسي",
+    "eq": "medicine-ball",
+    "pri": ["obliques"],
+    "sec": ["abs"],
+    "pat": "rotation",
+    "mech": "isolation",
+    "rest": 60
+  },
+  {
+    "id": "side-plank",
+    "en": "Side Plank",
+    "ar": "البلانك الجانبي",
+    "eq": "bodyweight",
+    "pri": ["obliques"],
+    "sec": ["abs", "adductors"],
+    "pat": "carry",
+    "lat": "unilateral-separate",
+    "load": "time",
+    "rest": 45
+  },
+  {
+    "id": "cable-woodchop",
+    "en": "Cable Woodchop",
+    "ar": "قطع الحطب بالكابل",
+    "eq": "cable",
+    "pri": ["obliques"],
+    "sec": ["abs"],
+    "pat": "rotation",
+    "mech": "isolation",
+    "lat": "unilateral-separate",
+    "rest": 75
+  },
+  {
+    "id": "pallof-press",
+    "en": "Pallof Press",
+    "ar": "ضغط بالوف",
+    "eq": "cable",
+    "pri": ["obliques"],
+    "sec": ["abs"],
+    "pat": "rotation",
+    "mech": "isolation",
+    "lat": "unilateral-separate",
+    "rest": 60
+  },
+  {
+    "id": "mountain-climber",
+    "en": "Mountain Climber",
+    "ar": "تسلق الجبل",
+    "eq": "bodyweight",
+    "pri": ["abs"],
+    "sec": ["front-delts", "quadriceps"],
+    "pat": "other",
+    "mech": "compound",
+    "load": "time",
+    "rest": 45
+  },
+  {
+    "id": "hollow-body-hold",
+    "en": "Hollow Body Hold",
+    "ar": "ثبات الجسم المقعّر",
+    "eq": "bodyweight",
+    "pri": ["abs"],
+    "sec": [],
+    "pat": "carry",
+    "load": "time",
+    "rest": 60
+  }
+]

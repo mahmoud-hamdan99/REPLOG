@@ -156,11 +156,45 @@ export type MovementPattern =
   | 'isolation'
   | 'other';
 
+export const EXERCISE_TYPES: readonly ExerciseType[] = [
+  'strength',
+  'bodyweight',
+  'machine',
+  'cable',
+  'cardio',
+  'stretch',
+  'olympic',
+  'plyometric',
+];
+
+export const MOVEMENT_PATTERNS: readonly MovementPattern[] = [
+  'horizontal-push',
+  'vertical-push',
+  'horizontal-pull',
+  'vertical-pull',
+  'squat',
+  'hinge',
+  'lunge',
+  'carry',
+  'rotation',
+  'isolation',
+  'other',
+];
+
 export type Mechanics = 'compound' | 'isolation';
 export type ForceVector = 'push' | 'pull' | 'static';
 
+export const MECHANICS: readonly Mechanics[] = ['compound', 'isolation'];
+export const FORCE_VECTORS: readonly ForceVector[] = ['push', 'pull', 'static'];
+
 /** `unilateral-separate` splits set logging per side. */
 export type Laterality = 'bilateral' | 'unilateral-alternating' | 'unilateral-separate';
+
+export const LATERALITIES: readonly Laterality[] = [
+  'bilateral',
+  'unilateral-alternating',
+  'unilateral-separate',
+];
 
 /**
  * Decides which inputs the tracker shows and how volume and estimated 1RM are
@@ -169,6 +203,15 @@ export type Laterality = 'bilateral' | 'unilateral-alternating' | 'unilateral-se
  */
 export type LoadType =
   'external' | 'bodyweight' | 'bodyweight-plus' | 'assisted' | 'time' | 'distance';
+
+export const LOAD_TYPES: readonly LoadType[] = [
+  'external',
+  'bodyweight',
+  'bodyweight-plus',
+  'assisted',
+  'time',
+  'distance',
+];
 
 /** Only `working` and `backoff` count toward volume and personal records. */
 export type SetType = 'warmup' | 'working' | 'dropset' | 'failure' | 'backoff';

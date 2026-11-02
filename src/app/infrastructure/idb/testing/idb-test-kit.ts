@@ -1,8 +1,9 @@
 import 'fake-indexeddb/auto';
 
 import { TestBed } from '@angular/core/testing';
+import { provideDataLayer } from '../../../app.providers';
 import { CLOCK, type Clock } from '../../../data/clock';
-import { DB_EVENTS, type DbChange } from '../../../data/db-events';
+import type { DbChange } from '../../../data/db-events';
 import type { Repository } from '../../../data/repository';
 import type { EntityStoreName, StoreEntityMap } from '../../../data/stores';
 import type { UnitOfWork } from '../../../data/unit-of-work';
@@ -64,10 +65,10 @@ export async function setupIdb(): Promise<IdbHarness> {
 
   TestBed.resetTestingModule();
   TestBed.configureTestingModule({
-    providers: [
-      { provide: CLOCK, useValue: clock },
-      { provide: DB_EVENTS, useExisting: IdbDbEvents },
-    ],
+    // The application's own wiring, with only the clock swapped. A separate
+    // test-only provider list would drift from app.config and quietly stop
+    // testing what actually ships.
+    providers: provideDataLayer({ clock: { provide: CLOCK, useValue: clock } }),
   });
 
   const db = TestBed.inject(IdbDatabase);
