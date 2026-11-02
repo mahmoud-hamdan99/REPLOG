@@ -294,12 +294,14 @@ git remote add origin https://github.com/USERNAME/REPLOG.git; git push -u origin
 
 ### Acceptance criteria
 
-- [ ] A plan with 4 routines and 24 exercises can be built, reordered, duplicated, and archived without data loss
-- [ ] Duplicating a plan produces a fully independent copy (asserted by mutating the copy and re-reading the original)
-- [ ] Flexible routines are creatable without a plan and appear in the Train picker
-- [ ] A routine assigned to Monday and Thursday appears on both days on the dashboard
-- [ ] Reordering 20 exercises is a single write per move and survives a reload
-- [ ] Editing a routine does not alter any existing workout record (asserted with a seeded prior workout)
+- [x] A plan with 4 routines and 24 exercises builds, reorders, duplicates and archives without loss — *verified* end to end in one test.
+- [x] Duplicating a plan produces a fully independent copy — *verified* the hard way: the copy is mutated thoroughly, then the original is re-read and found untouched. A copy sharing ids would pass a shallow check and fail here.
+- [x] Flexible routines are creatable with no plan — *verified*, including that they never appear on a weekday.
+- [x] A routine assigned to Monday and Thursday appears on both — *verified* in tests and by hand in the browser, including that the selection survives a reload.
+- [x] Reordering is a single write per move and survives a reload — *verified*. Plans and routines use sparse indices so one move writes one record; the other records' `rev` is asserted unchanged. A routine's exercises are embedded in its document, so reordering them is one write by construction.
+- [x] Editing a routine does not alter an existing workout record — *verified* against a seeded prior workout: after renaming the routine, adding an exercise and changing its weekdays, the workout's name, snapshot, revision and `rev` are all unchanged.
+
+**Two deviations worth stating.** There is no unsaved-changes guard (task 12): the editor writes every change through immediately, so no work exists only in memory for a guard to protect — the safer design on a phone that can be backgrounded at any moment. And exercise reordering is **move up/down buttons only**; drag-and-drop is outstanding. The accessible alternative the spec requires is the one that shipped.
 
 ---
 

@@ -18,7 +18,27 @@
 
   /* Clear the home indicator. */
   padding-block-end: calc(var(--safe-b) + var(--sp-4));
-  animation: sheet-in var(--dur-sheet) var(--ease-emphasized);
+
+  /* The resting position, and a transition into it — deliberately not a
+     keyframe animation. A keyframe animation that never advances (a tab that
+     is not painting, a throttled or interrupted frame) holds its first frame,
+     which for a slide-up means the sheet sits one full viewport below the fold
+     and the app looks broken with nothing to interact with. A transition has
+     no such failure mode: if it never runs, the element is simply already in
+     its correct place. */
+  translate: 0 0;
+  transition:
+    translate var(--dur-sheet) var(--ease-emphasized),
+    display var(--dur-sheet) allow-discrete,
+    overlay var(--dur-sheet) allow-discrete;
+}
+
+/* Entry state. Where @starting-style is unsupported the sheet appears in place
+   without the slide, which is correct and usable. */
+@starting-style {
+  .sheet[open] {
+    translate: 0 100%;
+  }
 }
 
 .sheet--full {
@@ -43,14 +63,4 @@
 .sheet__body {
   padding-inline: var(--gutter);
   padding-block-end: var(--sp-2);
-}
-
-@keyframes sheet-in {
-  from {
-    transform: translateY(100%);
-  }
-
-  to {
-    transform: translateY(0);
-  }
 }

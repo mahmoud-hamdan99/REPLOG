@@ -1,0 +1,60 @@
+.plan {
+  margin-block-end: var(--sp-3);
+}
+
+.plan--archived {
+  opacity: 0.7;
+}
+
+.plan__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text-1);
+  text-decoration: none;
+}
+
+.plan__meta {
+  margin-block: var(--sp-1) var(--sp-3);
+}
+
+.plan__days {
+  display: flex;
+  gap: var(--sp-1);
+  margin-block-end: var(--sp-3);
+}
+
+.plan__day {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  border-radius: var(--r-sm);
+  padding-block: var(--sp-1);
+  background: var(--surface-2);
+  color: var(--text-3);
+  font-size: var(--t-micro);
+  text-align: center;
+}
+
+/* A day with a workout is marked by fill and weight, not colour alone. */
+.plan__day--on {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-weight: var(--fw-semibold);
+}
+
+.plan__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.plan__move {
+  display: grid;
+  place-items: center;
+  inline-size: var(--target-min);
+  block-size: var(--target-min);
+  border-radius: var(--r-full);
+  color: var(--text-2);
+  transform: rotate(-90deg);
+}

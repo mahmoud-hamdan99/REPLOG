@@ -27,17 +27,19 @@ export const routes: Routes = [
   // Planner
   {
     path: 'plans',
-    loadComponent: placeholder,
+    loadComponent: () => import('./features/planner/plans.page').then((m) => m.PlansPage),
     data: { titleKey: 'page.plans.title', navTab: 'plans' },
   },
   {
     path: 'plans/:planId',
-    loadComponent: placeholder,
+    loadComponent: () =>
+      import('./features/planner/plan-detail.page').then((m) => m.PlanDetailPage),
     data: { titleKey: 'page.plans.title', navTab: 'plans', showBack: true },
   },
   {
     path: 'plans/:planId/routines/:routineId',
-    loadComponent: placeholder,
+    loadComponent: () =>
+      import('./features/planner/routine-editor.page').then((m) => m.RoutineEditorPage),
     data: { titleKey: 'page.plans.title', navTab: 'plans', showBack: true },
   },
 

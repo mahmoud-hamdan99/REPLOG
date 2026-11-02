@@ -2,6 +2,7 @@ import { inject, type Provider } from '@angular/core';
 import { APP_META_STORE } from './data/app-meta';
 import { CLOCK } from './data/clock';
 import { DB_EVENTS } from './data/db-events';
+import { ID_FACTORY } from './data/ids';
 import { PHOTO_BLOB_STORE } from './data/photo-blobs';
 import { PREFS_STORE } from './data/prefs';
 import { ENTITY_STORE_NAMES } from './data/stores';
@@ -15,6 +16,7 @@ import { UNIT_OF_WORK } from './data/unit-of-work';
 import { IdbPhotoBlobStore } from './infrastructure/blobs/idb-photo-blob-store';
 import { IdbAppMetaStore } from './infrastructure/idb/idb-app-meta';
 import { IdbDbEvents } from './infrastructure/idb/idb-db-events';
+import { IdbEnvironment } from './infrastructure/idb/idb-environment';
 import { IdbRepository } from './infrastructure/idb/idb-repository';
 import { IdbUnitOfWork, StandaloneRepoContext } from './infrastructure/idb/idb-unit-of-work';
 import { LocalStoragePrefs } from './infrastructure/prefs/local-storage-prefs';
@@ -39,6 +41,7 @@ export function provideDataLayer(options: { clock?: Provider } = {}): Provider[]
     { provide: DB_EVENTS, useExisting: IdbDbEvents },
     { provide: UNIT_OF_WORK, useExisting: IdbUnitOfWork },
     { provide: APP_META_STORE, useExisting: IdbAppMetaStore },
+    { provide: ID_FACTORY, useExisting: IdbEnvironment },
     { provide: PHOTO_BLOB_STORE, useExisting: IdbPhotoBlobStore },
     ...repositories,
   ];

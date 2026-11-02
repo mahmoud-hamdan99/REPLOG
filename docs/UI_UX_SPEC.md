@@ -545,7 +545,7 @@ Grouped list rows with values on the trailing side:
 | `rl-stat-tile` | single · 2-up · with-sparkline | Eyebrow label + hero number + delta chip + footnote |
 | `rl-delta-chip` | up · down · flat · none | Arrow + value + optional label; never colour-only |
 | `rl-chip` | filter · choice · removable | 32 px tall, `--r-full` |
-| `rl-sheet` | half · full | Built on the native `<dialog>` with `showModal()`, so the focus trap, Escape handling, background inerting and `::backdrop` come from the platform instead of hand-rolled ARIA. Drag-to-dismiss is still outstanding. |
+| `rl-sheet` | half · full | Built on the native `<dialog>` with `showModal()`, so the focus trap, Escape handling, background inerting and `::backdrop` come from the platform instead of hand-rolled ARIA. Entry uses a `@starting-style` transition rather than a keyframe animation: a keyframe animation that never advances holds its *first* frame, which for a slide-up leaves the sheet a full viewport below the fold, whereas an unrun transition simply leaves the element already in its correct place. Drag-to-dismiss is still outstanding. |
 | `rl-dialog` | confirm · destructive-confirm · typed-confirm | Native `<dialog>`, as above. Destructive variants require a distinct action label (never "OK"), state the consequence, and put the destructive action on the trailing side |
 | `rl-toast` | info · success · undo · error | Bottom-anchored above the nav, max 2 stacked, 5 s (undo 7 s), swipe to dismiss |
 | `rl-segmented` | 2–4 segments | Theme/mode pickers; roving tabindex |

@@ -1,0 +1,71 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin-block-end: var(--sp-5);
+  color: var(--text-2);
+}
+
+.field__input {
+  min-block-size: var(--target-min);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding-inline: var(--sp-3);
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+.week {
+  display: flex;
+  gap: var(--sp-1);
+  margin-block-end: var(--sp-6);
+}
+
+.week__day {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.week__label {
+  color: var(--text-3);
+}
+
+.week__chip {
+  inline-size: 100%;
+  border-radius: var(--r-sm);
+  padding-block: var(--sp-1);
+  padding-inline: 2px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-size: var(--t-micro);
+  font-weight: var(--fw-semibold);
+  text-align: center;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.week__rest {
+  color: var(--text-3);
+}
+
+.routine {
+  margin-block-end: var(--sp-2);
+}
+
+.routine__head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--text-1);
+  text-decoration: none;
+}
+
+.note {
+  margin-block-start: var(--sp-6);
+}
