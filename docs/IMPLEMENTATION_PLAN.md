@@ -366,15 +366,21 @@ Build it in the order below; each step is independently demonstrable.
 4. `Repeat this workout` → a new session with the same structure and no committed loads.
 5. Edit a past workout (corrections) with an edit marker, and PR recomputation afterwards.
 6. Delete a workout: confirm, soft delete, 30-day recovery in Settings → Data; rollups and PRs recomputed.
-7. Per-exercise history view: every session's sets for one exercise, newest first.
+7. Per-exercise history view: every session's sets for one exercise, newest first. Built on the documented `/progress/exercise/:exerciseId` route rather than a new one, so Phase 10 adds its chart above an existing screen instead of building a second.
 8. Tests: paging correctness, snapshot rendering after the source routine is deleted, PR recomputation after an edit or delete.
 
 ### Acceptance criteria
 
-- [ ] 500 seeded workouts page smoothly with no full-store scan
-- [ ] Deleting the routine a workout came from leaves the workout fully readable
-- [ ] Editing a historical set updates PRs deterministically (a rebuild produces the same table)
-- [ ] A deleted workout is recoverable within 30 days and its PRs are restored with it
+- [x] 500 seeded workouts page smoothly with no full-store scan — paging is keyset, not offset: each page asks for "everything before the last instant I saw". Tested by *counting index rows*, not by timing: walking to page ten reads about ten pages' worth, where offset paging would have read 2 750 rows. A stopwatch would have measured the machine; the row count measures the access path.
+- [x] Deleting the routine a workout came from leaves the workout fully readable — proved in the store suite against real IndexedDB: the routine is removed, and the detail still renders its name, its exercises and every set from the snapshot, annotated "this workout day no longer exists". Driving the planner UI to reach the same state in Playwright was brittle and tested the plumbing rather than the claim, so it is covered here instead.
+- [x] Editing a historical set updates rollups deterministically — rollups are recomputed from the surviving set logs rather than adjusted, so a correction and a full rebuild agree; a test applies the same edit twice and asserts the totals match. **PR recomputation itself is a no-op until Phase 7**: the `PR_DETECTOR.recompute` seam is called from inside the edit transaction with the affected variant keys, and a spy test pins down that it is called with the right ones, but nothing rebuilds a record table yet.
+- [x] A deleted workout is recoverable, with its sets — soft-deleted and restored through the store, verified in Playwright on all three browsers. Only children tombstoned *by that deletion* come back, so a set corrected away last week stays deleted. **The 30-day browsable list is Phase 11's** (Settings → Data); what ships here is the undo toast and the store operation behind it.
+
+### Carried forward
+
+* The 30-day "recently deleted" list in Settings → Data, and the purge that ends it (Phase 11).
+* Record recomputation after an edit or delete (Phase 7 fills the seam this phase calls).
+* Virtualised scrolling: the list pages at 50 and renders every loaded row, which is fine for hundreds and will not be for thousands.
 
 ---
 

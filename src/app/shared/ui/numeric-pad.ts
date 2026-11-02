@@ -9,9 +9,9 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { I18n } from '../../../core/i18n/i18n.service';
-import { Button } from '../../../shared/ui/button';
-import { Sheet } from '../../../shared/ui/sheet';
+import { I18n } from '../../core/i18n/i18n.service';
+import { Button } from './button';
+import { Sheet } from './sheet';
 
 type Field = 'weight' | 'reps';
 

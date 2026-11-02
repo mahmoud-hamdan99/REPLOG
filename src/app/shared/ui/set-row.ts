@@ -1,8 +1,8 @@
+import { DisplayFormat } from '../../core/format/display-format.service';
 import { Component, computed, inject, input, output, signal } from '@angular/core';
-import { I18n } from '../../../core/i18n/i18n.service';
-import type { SetLog } from '../../../domain/models/workout';
-import { Badge } from '../../../shared/ui/badge';
-import { TrackerFormat } from '../tracker-format.service';
+import { I18n } from '../../core/i18n/i18n.service';
+import type { SetLog } from '../../domain/models/workout';
+import { Badge } from './badge';
 
 /** Horizontal travel, in px, that counts as a deliberate swipe. */
 const SWIPE_THRESHOLD = 72;
@@ -28,7 +28,7 @@ const SWIPE_THRESHOLD = 72;
       [class.row--done]="set().isCompleted"
       [class.row--current]="isCurrent()"
       [class.row--warmup]="isWarmup()"
-      [class.row--noweight]="!showWeight()"
+      [style.grid-template-columns]="columns()"
       [style.translate]="offset() === 0 ? null : offset() + 'px'"
       (pointerdown)="onDown($event)"
       (pointermove)="onMove($event)"
@@ -49,7 +49,9 @@ const SWIPE_THRESHOLD = 72;
         }
       </button>
 
-      <span class="row__prev t-caption">{{ previousText() || '—' }}</span>
+      @if (showPrevious()) {
+        <span class="row__prev t-caption">{{ previousText() || '—' }}</span>
+      }
 
       @if (showWeight()) {
         <button
@@ -75,21 +77,23 @@ const SWIPE_THRESHOLD = 72;
         {{ format.number(set().reps) }}
       </button>
 
-      <button
-        type="button"
-        class="row__check"
-        [class.row__check--on]="set().isCompleted"
-        [attr.aria-pressed]="set().isCompleted"
-        [attr.aria-label]="
-          set().isCompleted
-            ? i18n.t('tracker.set.unconfirm', { index: label() })
-            : i18n.t('tracker.set.confirm', { index: label() })
-        "
-        [disabled]="readOnly()"
-        (click)="toggled.emit()"
-      >
-        <span aria-hidden="true">{{ set().isCompleted ? '✓' : '○' }}</span>
-      </button>
+      @if (showConfirm()) {
+        <button
+          type="button"
+          class="row__check"
+          [class.row__check--on]="set().isCompleted"
+          [attr.aria-pressed]="set().isCompleted"
+          [attr.aria-label]="
+            set().isCompleted
+              ? i18n.t('tracker.set.unconfirm', { index: label() })
+              : i18n.t('tracker.set.confirm', { index: label() })
+          "
+          [disabled]="readOnly()"
+          (click)="toggled.emit()"
+        >
+          <span aria-hidden="true">{{ set().isCompleted ? '✓' : '○' }}</span>
+        </button>
+      }
     </div>
 
     @if (isAdvanced() && set().isCompleted) {
@@ -112,7 +116,7 @@ const SWIPE_THRESHOLD = 72;
 })
 export class SetRow {
   protected readonly i18n = inject(I18n);
-  protected readonly format = inject(TrackerFormat);
+  protected readonly format = inject(DisplayFormat);
 
   readonly set = input.required<SetLog>();
   /** Position among working sets, 1-based; warm-ups show a badge instead. */
@@ -120,6 +124,15 @@ export class SetRow {
   readonly isCurrent = input(false);
   readonly isAdvanced = input(false);
   readonly showWeight = input(true);
+  /**
+   * Whether to show the previous-performance column.
+   *
+   * False where there is nothing to compare against. A history detail is a
+   * record of what happened, and a column of dashes beside it is noise.
+   */
+  readonly showPrevious = input(true);
+  /** False where every row is confirmed by definition, as in history. */
+  readonly showConfirm = input(true);
   readonly readOnly = input(false);
   /** Already-translated previous-performance text for this row. */
   readonly previousText = input<string>('');
@@ -133,6 +146,27 @@ export class SetRow {
 
   protected readonly offset = signal(0);
   protected readonly isWarmup = computed(() => this.set().setType === 'warmup');
+
+  /**
+   * The grid, built from the columns that are actually rendered.
+   *
+   * A style binding rather than a modifier class per combination: there are
+   * three independent toggles, and eight classes would be harder to read than
+   * one expression that says what it means. The flexible column moves onto the
+   * fields when there is no previous-performance column to take up the slack.
+   */
+  protected readonly columns = computed(() => {
+    const previous = this.showPrevious();
+    const flexible = previous ? '68px' : 'minmax(68px, 1fr)';
+
+    return [
+      '44px',
+      ...(previous ? ['1fr'] : []),
+      ...(this.showWeight() ? [flexible] : []),
+      previous ? '56px' : flexible,
+      ...(this.showConfirm() ? ['52px'] : []),
+    ].join(' ');
+  });
 
   /** For the aria labels: warm-ups are not numbered among working sets. */
   protected readonly label = computed(() =>

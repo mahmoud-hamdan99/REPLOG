@@ -415,6 +415,8 @@ Conventions:
 * `null` means "not loaded"; an empty array means "loaded, genuinely empty". The UI renders different states for each (UI_UX_SPEC §11).
 * Stores are declared with `@Service()`, Angular 22's auto-provided root singleton. `@Injectable({ providedIn: 'root' })` survives only where a class is bound to a token it does not own, such as the `ErrorHandler` and the router strategies. `WorkoutSessionStore` is root-scoped but explicitly `reset()`-able.
 
+Formatting and unit conversion live in `core/format` (`DisplayFormat`), not in a feature: history, the tracker and the summary all render the same masses, clocks and counts, and three copies of `toDisplayMass` is how a screen ends up showing pounds under a "kg" label. `rl-set-row` and `rl-numeric-pad` live in `shared/ui` for the same reason — the component inventory always listed them as shared, and history reuses both to correct a past set.
+
 ### 8.2 Store inventory
 
 | Store | Owns | Lifetime |
@@ -424,6 +426,8 @@ Conventions:
 | `PlannerStore` | Plans, routines, active plan, editor draft | App |
 | `WorkoutSessionStore` | The one active session, timers, per-set edit state | App, resettable |
 | `HistoryStore` | Paged completed workouts, per-exercise history cache | App |
+
+`HistoryStore` pages by **keyset**, never by offset: each page asks the index for everything before the last instant it delivered. Offset paging walks — and soft-delete-filters — every record it skips, so page ten of five hundred would read five hundred rows. The cursor bound is inclusive, because two sessions can share an instant and excluding the bound would drop the second; a delivered-id set is what stops the boundary row being listed twice.
 | `MeasurementsStore` | Measurements, custom definitions, series | App |
 | `PhotosStore` | Photo metadata, object-URL lifecycle, compare selection | Route |
 | `ProgressStore` | Analytics ranges, computed series, muscle distribution | Route |
@@ -452,7 +456,7 @@ Hash-free path routing with a GitHub Pages `404.html` fallback (§10.3).
 | `/history` | Chronological list | lazy |
 | `/history/:workoutId` | Workout detail (read-only snapshot) | lazy |
 | `/progress` | Analytics hub — tabs: Strength · Volume · Body · Photos · Records | lazy |
-| `/progress/exercise/:exerciseId` | Per-exercise progression | lazy |
+| `/progress/exercise/:exerciseId` | Per-exercise progression — the sets list ships with history in Phase 6, the chart in Phase 10 | lazy |
 | `/body` | Measurements list + entry | lazy |
 | `/settings` + `/settings/{profile,appearance,units,workout,data,about}` | Settings | lazy |
 | `**` | Not found page | A 404 screen rather than a silent redirect: a broken link should be visible, not swallowed |
@@ -654,3 +658,7 @@ Spec §13 requires distinguishing tested from untested functionality: the releas
 | D15 | PR detection behind a `PR_DETECTOR` token, no-op until Phase 7 | Write detection now, or call it after the finish transaction | Detection must run *inside* the finish transaction so a record bug rolls back instead of destroying a logged workout — the seam cannot be retrofitted, the implementation can |
 | D16 | Sheet entry transition finished in code when the timeline is frozen | Trust `@starting-style`; or drop the slide entirely | An unrun transition holds its starting style, which for a slide-up is a viewport below the fold. Checking costs one timer and converts "looks broken" into "no animation" |
 | D17 | Unconfirmed rows hard-deleted on finish | Keep them, or tombstone them | A row the user never confirmed is not history; a tombstone would let it be "recovered" into a session that never contained it. The count is stated before anything is removed |
+| D18 | History pages by keyset cursor | `offset`/`advance` on the index | Offset reads every record it skips through the soft-delete filter; keyset makes page ten cost what page one did |
+| D19 | `deletedAt` on a write is read by *presence*, not truthiness | `value.deletedAt ?? existing.deletedAt` | `??` treats an explicit `null` as "not supplied" and writes the tombstone straight back, which makes every undo in the app a no-op that looks like it worked |
+| D20 | A delete cascade tombstones the parent first | Children first, or a separate "deleted by" marker | Each write takes its own clock reading, so stamping the workout first is what lets a restore identify its own cascade by timestamp — and leave an earlier, unrelated deletion alone |
+| D21 | Shared components style their host with `:host` | Plain `.class` rules | Emulated encapsulation scopes a bare `.card` to the component's own template; a host carries `_nghost`, not `_ngcontent`, so the rule silently never matches |

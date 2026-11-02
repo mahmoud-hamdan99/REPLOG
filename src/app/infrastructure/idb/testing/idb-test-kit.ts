@@ -17,14 +17,26 @@ import { DB_NAME } from '../schema';
 
 /** A clock the test drives, so every timestamp in an assertion is predictable. */
 export class FakeClock implements Clock {
+  /**
+   * Milliseconds to advance on every reading.
+   *
+   * Zero by default, which makes assertions on exact instants easy. Set it to
+   * 1 to give every write its own distinct timestamp — the real clock does
+   * that, and code that compares two timestamps written moments apart can only
+   * be tested honestly against a clock that moves.
+   */
+  tickMs = 0;
+
   constructor(private current = Date.UTC(2026, 2, 2, 18, 0, 0)) {}
 
   now(): number {
-    return this.current;
+    const reading = this.current;
+    this.current += this.tickMs;
+    return reading;
   }
 
   nowIso(): string {
-    return new Date(this.current).toISOString();
+    return new Date(this.now()).toISOString();
   }
 
   timezoneOffsetMinutes(): number {

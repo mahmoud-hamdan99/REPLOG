@@ -324,6 +324,7 @@ describe('TrackerStore', () => {
 
       const exploding: PrDetector = {
         detect: () => Promise.reject(new Error('PR detection blew up')),
+        recompute: () => Promise.resolve(),
       };
       const broken = await reload({ providers: [{ provide: PR_DETECTOR, useValue: exploding }] });
       await broken.loadActive();
@@ -347,6 +348,7 @@ describe('TrackerStore', () => {
 
     it('reports the records a detector wrote', async () => {
       const detector: PrDetector = {
+        recompute: () => Promise.resolve(),
         detect: async (tx, context) => [
           await tx.repo('personalRecords').put({
             exerciseId: 'bench',
@@ -676,11 +678,18 @@ describe('TrackerStore', () => {
       const victim = card?.sets[1];
       if (!card || !victim) throw new Error('no row');
 
+      const sets = TestBed.inject(SET_LOGS_REPO);
+
       await store.deleteSet(victim.id);
       expect(store.cards()[0]?.sets).toHaveLength(1);
+      expect(await sets.get(victim.id)).toBeUndefined();
 
       await store.restoreSet(victim.id);
       expect(store.cards()[0]?.sets).toHaveLength(2);
+      // On disk as well as on screen. Asserting only the signal would pass
+      // even with the tombstone still in place, which is how an undo that
+      // never actually restored anything could look fine.
+      expect((await sets.get(victim.id))?.deletedAt).toBeNull();
     });
 
     it('un-confirms a row without discarding what was typed', async () => {

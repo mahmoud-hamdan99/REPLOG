@@ -1,4 +1,5 @@
-.badge {
+/* Styled through :host; see the note in card.css. */
+:host {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-1);
@@ -11,29 +12,29 @@
   white-space: nowrap;
 }
 
-.badge--neutral {
+:host(.badge--neutral) {
   background: var(--surface-3);
   color: var(--text-2);
 }
 
-.badge--pr {
+:host(.badge--pr) {
   background: var(--accent-soft);
   color: var(--accent-ink);
 }
 
 /* Estimates read as information, never as achievement. */
-.badge--estimate {
+:host(.badge--estimate) {
+  border: 1px dashed var(--info);
   background: none;
   color: var(--info);
-  border: 1px dashed var(--info);
 }
 
-.badge--warmup {
+:host(.badge--warmup) {
   background: var(--surface-3);
   color: var(--text-3);
 }
 
-.badge--count {
+:host(.badge--count) {
   background: var(--surface-2);
   color: var(--text-2);
   font-variant-numeric: tabular-nums;

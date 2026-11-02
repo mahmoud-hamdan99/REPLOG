@@ -1,0 +1,89 @@
+.det__name {
+  margin-block: 0 var(--sp-1);
+}
+
+.det__badges {
+  margin-block: var(--sp-2) 0;
+}
+
+.det__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-3);
+  margin-block: var(--sp-4);
+}
+
+.det__stats > :first-child {
+  grid-column: 1 / -1;
+}
+
+.det__note {
+  margin-block: 0 var(--sp-2);
+}
+
+.det__editing {
+  margin-block: var(--sp-3);
+  padding: var(--sp-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+.ex {
+  display: block;
+  margin-block-end: var(--sp-3);
+}
+
+.ex__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-2);
+}
+
+.ex__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent-ink);
+  font-family: var(--font-ui);
+  text-align: start;
+  cursor: pointer;
+}
+
+.ex__link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.det__notes {
+  margin-block: 0 var(--sp-4);
+  color: var(--text-2);
+}
+
+.det__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-5);
+}
+
+/* The same column shape the set rows use with no previous-performance and no
+   confirm column, so the labels line up with the values under them. */
+.ex__cols {
+  display: grid;
+  grid-template-columns: 44px minmax(68px, 1fr) minmax(68px, 1fr);
+  gap: var(--sp-2);
+  padding-block-end: var(--sp-1);
+}
+
+.ex__cols--noweight {
+  grid-template-columns: 44px minmax(68px, 1fr);
+}
+
+.ex__cols > span:not(:first-child) {
+  text-align: center;
+}

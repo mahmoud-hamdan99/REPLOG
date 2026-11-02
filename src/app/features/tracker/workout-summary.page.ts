@@ -1,3 +1,4 @@
+import { DisplayFormat } from '../../core/format/display-format.service';
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppHeader } from '../../core/nav/app-header';
@@ -21,7 +22,6 @@ import { Chip } from '../../shared/ui/chip';
 import { EmptyState } from '../../shared/ui/empty-state';
 import { SectionHeader } from '../../shared/ui/section-header';
 import { StatTile } from '../../shared/ui/stat-tile';
-import { TrackerFormat } from './tracker-format.service';
 import { TrackerStore } from './tracker.store';
 
 const FEELINGS: readonly Feeling[] = ['great', 'good', 'ok', 'rough'];
@@ -136,7 +136,7 @@ const FEELINGS: readonly Feeling[] = ['great', 'good', 'ok', 'rough'];
 })
 export class WorkoutSummaryPage {
   protected readonly i18n = inject(I18n);
-  protected readonly format = inject(TrackerFormat);
+  protected readonly format = inject(DisplayFormat);
   private readonly workouts = inject(WORKOUTS_REPO);
   private readonly exercisesRepo = inject(WORKOUT_EXERCISES_REPO);
   private readonly setsRepo = inject(SET_LOGS_REPO);

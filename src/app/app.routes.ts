@@ -97,12 +97,13 @@ export const routes: Routes = [
   // History
   {
     path: 'history',
-    loadComponent: placeholder,
+    loadComponent: () => import('./features/history/history.page').then((m) => m.HistoryPage),
     data: { titleKey: 'page.history.title', navTab: 'home' },
   },
   {
     path: 'history/:workoutId',
-    loadComponent: placeholder,
+    loadComponent: () =>
+      import('./features/history/workout-detail.page').then((m) => m.WorkoutDetailPage),
     data: { titleKey: 'page.history.title', navTab: 'home', showBack: true },
   },
 
@@ -113,9 +114,12 @@ export const routes: Routes = [
     data: { titleKey: 'page.progress.title', navTab: 'progress' },
   },
   {
+    // The sets list ships with history in Phase 6; Phase 10 adds the chart
+    // above it on this same route rather than inventing a second one.
     path: 'progress/exercise/:exerciseId',
-    loadComponent: placeholder,
-    data: { titleKey: 'page.progress.title', navTab: 'progress', showBack: true },
+    loadComponent: () =>
+      import('./features/history/exercise-history.page').then((m) => m.ExerciseHistoryPage),
+    data: { titleKey: 'exerciseHistory.title', navTab: 'progress', showBack: true },
   },
   {
     path: 'body',

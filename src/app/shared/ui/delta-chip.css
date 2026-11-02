@@ -10,14 +10,15 @@
   direction: ltr;
 }
 
-/* Up and down are directions, not verdicts. Both stay neutral. */
-.delta--up,
-.delta--down,
-.delta--flat {
+/* Up and down are directions, not verdicts. Both stay neutral.
+   Through :host, because the state class is on the host; see card.css. */
+:host(.delta--up),
+:host(.delta--down),
+:host(.delta--flat) {
   color: var(--text-2);
 }
 
-.delta--none {
+:host(.delta--none) {
   color: var(--text-3);
 }
 

@@ -693,6 +693,8 @@ Three-stage, with the user in control at every step:
 
 Forward compatibility: a file with a *lower* `formatVersion` is upgraded by the same migration chain as the database. A *higher* version is refused with "this backup was made by a newer version of REPLOG".
 
+**Cascade ordering.** A workout deletion tombstones the workout first and its children after, so every child carries a `deletedAt` at or after its parent's. Restoring reverses exactly that set: a child tombstoned *earlier* was deleted on its own and stays deleted. This is why the order is load-bearing rather than cosmetic.
+
 ### 9.3 Destructive-action policy
 
 | Action | Guard |

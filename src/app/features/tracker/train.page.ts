@@ -1,3 +1,4 @@
+import { DisplayFormat } from '../../core/format/display-format.service';
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppHeader } from '../../core/nav/app-header';
@@ -18,7 +19,6 @@ import { SectionHeader } from '../../shared/ui/section-header';
 import { Sheet } from '../../shared/ui/sheet';
 import { ExerciseLibraryStore } from '../exercises/exercise-library.store';
 import { PlannerStore } from '../planner/planner.store';
-import { TrackerFormat } from './tracker-format.service';
 import { TrackerStore } from './tracker.store';
 import { TrainOverview } from './train-overview.service';
 
@@ -161,7 +161,7 @@ import { TrainOverview } from './train-overview.service';
 })
 export class TrainPage {
   protected readonly i18n = inject(I18n);
-  protected readonly format = inject(TrackerFormat);
+  protected readonly format = inject(DisplayFormat);
   protected readonly tracker = inject(TrackerStore);
   protected readonly overview = inject(TrainOverview);
   private readonly planner = inject(PlannerStore);

@@ -1,11 +1,11 @@
+import { DisplayFormat } from '../../../core/format/display-format.service';
 import { Component, computed, inject, input, output } from '@angular/core';
 import { I18n } from '../../../core/i18n/i18n.service';
 import type { SetLog } from '../../../domain/models/workout';
 import type { PreviousPerformance } from '../previous-performance.service';
 import type { SessionCard } from '../tracker.store';
-import { TrackerFormat } from '../tracker-format.service';
 import { PrevPerformance } from './prev-performance';
-import { SetRow } from './set-row';
+import { SetRow } from '../../../shared/ui/set-row';
 
 /**
  * One exercise inside a session.
@@ -108,7 +108,7 @@ import { SetRow } from './set-row';
 })
 export class ExerciseCard {
   protected readonly i18n = inject(I18n);
-  protected readonly format = inject(TrackerFormat);
+  protected readonly format = inject(DisplayFormat);
 
   readonly card = input.required<SessionCard>();
   readonly position = input.required<number>();
@@ -158,7 +158,7 @@ export class ExerciseCard {
       return {
         set,
         workingIndex: working,
-        previousText: match ? this.format.previousSet(match) : '',
+        previousText: match ? this.format.setSummary(match) : '',
       };
     });
   });

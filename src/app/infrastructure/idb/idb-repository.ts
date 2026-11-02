@@ -160,18 +160,26 @@ export class IdbRepository<T extends Entity> implements Repository<T> {
   /**
    * Applies the envelope. `createdAt` is preserved across a replace and `rev`
    * always increments, so no caller can reset either by accident.
+   *
+   * `deletedAt` is read by *presence*, not by truthiness. `??` would treat an
+   * explicit `null` as "not supplied" and fall back to the stored tombstone,
+   * which makes undeleting impossible: `put({ ...tombstoned, deletedAt: null })`
+   * would write the tombstone straight back. Omitting the key still inherits
+   * whatever is on disk, so an ordinary write is unaffected.
    */
   private async stamp(store: IdbStoreLike, value: Draft<T>): Promise<T> {
     const now = this.ctx.nowIso();
     const id = value.id ?? this.ctx.newId();
     const existing = (await store.get(id)) as T | undefined;
+    const deletedAt =
+      'deletedAt' in value ? (value.deletedAt ?? null) : (existing?.deletedAt ?? null);
 
     return {
       ...(value as object),
       id,
       createdAt: existing?.createdAt ?? now,
       updatedAt: now,
-      deletedAt: value.deletedAt ?? existing?.deletedAt ?? null,
+      deletedAt,
       rev: (existing?.rev ?? 0) + 1,
       origin: this.ctx.origin(),
     } as T;

@@ -1,7 +1,7 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
+import { DisplayFormat } from '../../../core/format/display-format.service';
 import { I18n } from '../../../core/i18n/i18n.service';
 import type { PreviousPerformance } from '../previous-performance.service';
-import { TrackerFormat } from '../tracker-format.service';
 
 /**
  * "Last time · 12 Feb" with that session's sets.
@@ -23,7 +23,7 @@ import { TrackerFormat } from '../tracker-format.service';
         <p class="prev__when t-micro">
           {{ i18n.t('tracker.prev.title', { date: format.shortDate(last.performedAt) }) }}
         </p>
-        <p class="prev__sets t-caption">{{ format.previousSets(last) }}</p>
+        <p class="prev__sets t-caption">{{ sets() }}</p>
       </div>
     } @else {
       <p class="prev prev--none t-caption">{{ i18n.t('tracker.prev.none') }}</p>
@@ -32,7 +32,15 @@ import { TrackerFormat } from '../tracker-format.service';
 })
 export class PrevPerformance {
   protected readonly i18n = inject(I18n);
-  protected readonly format = inject(TrackerFormat);
+  protected readonly format = inject(DisplayFormat);
 
   readonly previous = input<PreviousPerformance | null>(null);
+
+  /** Working sets only: a warm-up is not something to compare against. */
+  protected readonly sets = computed(() =>
+    (this.previous()?.sets ?? [])
+      .filter((set) => set.setType !== 'warmup')
+      .map((set) => this.format.setSummary(set))
+      .join('   '),
+  );
 }

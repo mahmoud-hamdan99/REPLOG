@@ -492,7 +492,7 @@ Tapping an exercise opens a configuration sheet: target sets (stepper), rep rang
 
 ### 5.8 History (`/history`, `/history/:id`)
 
-Grouped by month with a sticky month header. Each row: routine name, weekday + date, duration, set count, volume, PR badge count. Filters: date range, routine, exercise. Row tap → detail.
+Grouped by month with a sticky month header. Each row: routine name as recorded, weekday + date, duration, set count, volume, and badges for records and for an after-the-fact correction. Filters: date range, routine, exercise — the exercise filter is driven from `workoutExercises.by_exerciseId_startedAt` rather than by reading workouts and asking what was in them. Paging is a **Load more** button, not an infinite scroll: a list you can reach the end of is one you can trust, and an infinite one fights scroll restoration on the way back from a detail. Row tap → detail.
 
 Detail is strictly read-only and renders **from the snapshot**: plan/routine name as recorded (with "this routine has since changed" or "no longer exists" notes where applicable), the exercise list with every logged set including warm-ups and RPE/RIR, session notes, body weight at the time, and rollups. Actions: `Repeat this workout` (creates a new session with the same structure, no loads prefilled as committed), `Edit` (corrections, with an edit marker on the record), `Delete` (confirm + soft delete).
 
@@ -562,7 +562,7 @@ Grouped list rows with values on the trailing side:
 
 | Component | Responsibility |
 |---|---|
-| `rl-set-row` | The single most-used control: set index/type badge, previous-performance text, weight field, reps field, optional RPE/RIR, complete button, swipe-to-delete |
+| `rl-set-row` | The single most-used control: set index/type badge, previous-performance text, weight field, reps field, optional RPE/RIR, complete button, swipe-to-delete. Columns are opt-out — history drops previous-performance and the complete button, because neither means anything once a session is in the past — and the grid is built from the columns that are actually rendered |
 | `rl-exercise-card` | Collapsed/expanded states, superset bracket, menu, skip state |
 | `rl-prev-performance` | "Last time · date" block with per-set values; renders a "no history yet" line rather than nothing |
 | `rl-suggestion-hint` | Ghost-text suggestion with reason and `⌁`; tap to accept, never auto-applied |

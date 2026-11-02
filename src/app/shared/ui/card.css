@@ -1,20 +1,20 @@
+/* Styled through :host, because the classes live on the host element. A
+   plain `.card` rule is scoped to this component's own template by emulated
+   encapsulation and never matches the host it is written for. */
 :host {
   display: block;
-}
-
-.card {
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   background: var(--surface-1);
   box-shadow: var(--elev-1);
 }
 
-.card--inset {
+:host(.card--inset) {
   padding: var(--sp-4);
 }
 
 /* Logical border so the accent edge sits on the leading side in both
    directions: inline-start is the left edge in LTR, the right in RTL. */
-.card--accent {
+:host(.card--accent) {
   border-inline-start: 3px solid var(--accent);
 }

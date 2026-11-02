@@ -1,16 +1,15 @@
 import { computed, inject, Service } from '@angular/core';
-import { I18n } from '../../core/i18n/i18n.service';
-import { SettingsStore } from '../../core/settings/settings.store';
+import { I18n } from '../i18n/i18n.service';
+import { SettingsStore } from '../settings/settings.store';
 import type { SetLog } from '../../domain/models/workout';
 import { durationParts } from '../../domain/time/duration';
 import { displayIncrement, toCanonicalMass, toDisplayMass } from '../../domain/units/convert';
-import type { PreviousPerformance, PreviousSet } from './previous-performance.service';
 
 /** Shown where a value exists but is not yet entered. */
 const BLANK = '—';
 
 /**
- * Formatting and unit conversion for the tracker's views.
+ * Formatting and unit conversion for every view.
  *
  * One place, for two reasons. Conversion is a *presentation* concern — storage
  * is always canonical kilograms (docs/ARCHITECTURE.md section 5.5) — and
@@ -20,7 +19,7 @@ const BLANK = '—';
  * `String(value)`.
  */
 @Service()
-export class TrackerFormat {
+export class DisplayFormat {
   private readonly i18n = inject(I18n);
   private readonly settings = inject(SettingsStore);
 
@@ -94,27 +93,28 @@ export class TrackerFormat {
     return `${this.mass(set.weightKg)} × ${this.number(set.reps)}`;
   }
 
-  /** The same, for one set of a past performance. */
-  previousSet(set: PreviousSet): string {
-    return this.setSummary({ weightKg: set.weightKg, reps: set.reps });
-  }
-
-  /** Every working set of a past performance, space separated. */
-  previousSets(previous: PreviousPerformance): string {
-    return previous.sets
-      .filter((set) => set.setType !== 'warmup')
-      .map((set) => this.previousSet(set))
-      .join('   ');
-  }
-
   /** "12 Feb" — a day and month, which is all a comparison needs. */
   shortDate(iso: string): string {
+    return this.date(iso, { day: 'numeric', month: 'short' });
+  }
+
+  /**
+   * "Mon, 12 Feb" — with the weekday.
+   *
+   * A history row needs it: "Monday" is how people remember which session a
+   * date was, and scanning a month of bare numbers does not tell you that.
+   */
+  weekdayDate(iso: string): string {
+    return this.date(iso, { weekday: 'short', day: 'numeric', month: 'short' });
+  }
+
+  private date(iso: string, options: Intl.DateTimeFormatOptions): string {
     const parsed = Date.parse(iso);
     if (Number.isNaN(parsed)) return BLANK;
-    return new Intl.DateTimeFormat(`${this.i18n.locale()}-u-nu-${this.settings.numerals()}`, {
-      day: 'numeric',
-      month: 'short',
-    }).format(new Date(parsed));
+    return new Intl.DateTimeFormat(
+      `${this.i18n.locale()}-u-nu-${this.settings.numerals()}`,
+      options,
+    ).format(new Date(parsed));
   }
 
   /**

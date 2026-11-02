@@ -1,3 +1,4 @@
+import { DisplayFormat } from '../../core/format/display-format.service';
 import { Component, computed, DestroyRef, DOCUMENT, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { I18n } from '../../core/i18n/i18n.service';
@@ -15,10 +16,9 @@ import { Segmented, type SegmentedOption } from '../../shared/ui/segmented';
 import { Sheet } from '../../shared/ui/sheet';
 import { ExerciseLibraryStore } from '../exercises/exercise-library.store';
 import { ExerciseCard } from './components/exercise-card';
-import { NumericPad, type PadValue } from './components/numeric-pad';
+import { NumericPad, type PadValue } from '../../shared/ui/numeric-pad';
 import { RestPill, RestTimer } from './components/rest-timer';
 import type { PreviousPerformance } from './previous-performance.service';
-import { TrackerFormat } from './tracker-format.service';
 import { TrackerStore, type SessionBlock } from './tracker.store';
 
 const SET_TYPES: readonly SetType[] = ['warmup', 'working', 'dropset', 'failure', 'backoff'];
@@ -413,7 +413,7 @@ interface WakeLockLike {
 })
 export class ActiveWorkoutPage {
   protected readonly i18n = inject(I18n);
-  protected readonly format = inject(TrackerFormat);
+  protected readonly format = inject(DisplayFormat);
   protected readonly store = inject(TrackerStore);
   protected readonly library = inject(ExerciseLibraryStore);
   private readonly settings = inject(SettingsStore);
@@ -496,7 +496,7 @@ export class ActiveWorkoutPage {
 
     const working = previous.sets.filter((candidate) => candidate.setType !== 'warmup');
     const match = working[set.setIndex] ?? working.at(-1);
-    return match ? this.format.previousSet(match) : null;
+    return match ? this.format.setSummary(match) : null;
   });
 
   protected readonly sheetSet = computed(() => {

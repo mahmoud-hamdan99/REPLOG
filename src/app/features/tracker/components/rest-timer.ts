@@ -1,3 +1,4 @@
+import { DisplayFormat } from '../../../core/format/display-format.service';
 import { Component, computed, inject, input, model, output } from '@angular/core';
 import { I18n } from '../../../core/i18n/i18n.service';
 import { SettingsStore } from '../../../core/settings/settings.store';
@@ -5,7 +6,6 @@ import { REST_ADJUST_SEC } from '../../../domain/tracker/rest';
 import { Button } from '../../../shared/ui/button';
 import { ProgressRing } from '../../../shared/ui/progress-ring';
 import { Sheet } from '../../../shared/ui/sheet';
-import { TrackerFormat } from '../tracker-format.service';
 
 /**
  * Rest timer sheet.
@@ -66,7 +66,7 @@ import { TrackerFormat } from '../tracker-format.service';
 })
 export class RestTimer {
   protected readonly i18n = inject(I18n);
-  protected readonly format = inject(TrackerFormat);
+  protected readonly format = inject(DisplayFormat);
   protected readonly settings = inject(SettingsStore);
   protected readonly step = REST_ADJUST_SEC;
 
@@ -129,7 +129,7 @@ export class RestTimer {
 })
 export class RestPill {
   protected readonly i18n = inject(I18n);
-  protected readonly format = inject(TrackerFormat);
+  protected readonly format = inject(DisplayFormat);
 
   readonly remainingSec = input.required<number>();
   readonly isDone = input(false);

@@ -1,8 +1,6 @@
+/* Styled through :host; see the note in card.css. */
 :host {
   display: block;
-}
-
-.skeleton {
   border-radius: var(--r-sm);
   background: linear-gradient(
     90deg,
@@ -14,17 +12,17 @@
   animation: skeleton-shimmer 1.4s var(--ease-standard) infinite;
 }
 
-.skeleton--line {
+:host(.skeleton--line) {
   block-size: 1em;
   inline-size: 100%;
 }
 
-.skeleton--card {
+:host(.skeleton--card) {
   block-size: 96px;
   border-radius: var(--r-lg);
 }
 
-.skeleton--chart {
+:host(.skeleton--chart) {
   block-size: 180px;
   border-radius: var(--r-lg);
 }

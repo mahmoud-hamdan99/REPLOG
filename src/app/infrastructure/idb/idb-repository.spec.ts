@@ -94,6 +94,34 @@ describe('IdbRepository', () => {
       expect(afterSecond?.rev).toBe(afterFirst?.rev);
     });
 
+    it('clears the tombstone when a put supplies a null deletedAt', async () => {
+      // How every undo in the app restores a record. `??` on the envelope
+      // would read the explicit null as "not supplied" and write the tombstone
+      // straight back, leaving a restore that looks like it worked.
+      const repo = h.repo('exercises');
+      const created = await repo.put(exerciseDraft() as never);
+      await repo.remove(created.id);
+
+      const tombstoned = await repo.get(created.id, { includeDeleted: true });
+      expect(tombstoned?.deletedAt).not.toBeNull();
+
+      await repo.put({ ...(tombstoned as object), deletedAt: null } as never);
+
+      expect((await repo.get(created.id))?.deletedAt).toBeNull();
+      expect(await repo.list()).toHaveLength(1);
+    });
+
+    it('keeps an existing tombstone when a put does not mention it', async () => {
+      const repo = h.repo('exercises');
+      const created = await repo.put(exerciseDraft() as never);
+      await repo.remove(created.id);
+
+      await repo.put({ ...exerciseDraft({ nameEn: 'Renamed' }), id: created.id } as never);
+
+      expect(await repo.get(created.id)).toBeUndefined();
+      expect((await repo.get(created.id, { includeDeleted: true }))?.deletedAt).not.toBeNull();
+    });
+
     it('hard delete destroys the record entirely', async () => {
       const repo = h.repo('exercises');
       const created = await repo.put(exerciseDraft() as never);
