@@ -112,7 +112,7 @@ export class PlanDetailPage {
     if (minutes > 0) {
       parts.push(this.i18n.t('planner.routine.estimate', { minutes }));
     }
-    return parts.join(' · ');
+    return this.i18n.join(parts);
   }
 
   protected async rename(name: string): Promise<void> {

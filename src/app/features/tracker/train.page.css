@@ -1,0 +1,117 @@
+.live {
+  display: block;
+  margin-block-end: var(--sp-4);
+}
+
+.live__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.live__time {
+  font-variant-numeric: tabular-nums;
+}
+
+.live__actions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-3);
+}
+
+.live__actions > * {
+  flex: 1;
+}
+
+.day {
+  display: block;
+  margin-block-end: var(--sp-3);
+}
+
+.day__btn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  inline-size: 100%;
+  min-block-size: var(--target-gym);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-1);
+  text-align: start;
+  font-family: var(--font-ui);
+  cursor: pointer;
+}
+
+.day__btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.day__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.starters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-5);
+}
+
+/* ------------------------------------------------------------- pre-flight */
+
+.pre__title {
+  margin-block: var(--sp-2) var(--sp-1);
+}
+
+.pre__hint {
+  margin-block: 0 var(--sp-3);
+}
+
+.pre__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pre__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  inline-size: 100%;
+  min-block-size: var(--target-gym);
+  padding-inline: var(--sp-3);
+  border: 0;
+  border-block-end: 1px solid var(--border);
+  background: none;
+  color: var(--text-1);
+  text-align: start;
+  font-family: var(--font-ui);
+  cursor: pointer;
+}
+
+.pre__item--off .pre__name {
+  color: var(--text-3);
+  text-decoration: line-through;
+}
+
+.pre__item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.pre__name {
+  flex: 1;
+}
+
+.pre__actions {
+  position: sticky;
+  inset-block-end: 0;
+  padding-block: var(--sp-4);
+  background: var(--surface-1);
+}

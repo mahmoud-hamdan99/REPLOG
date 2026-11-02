@@ -2,7 +2,8 @@
   display: inline-flex;
 }
 
-:host([full]) {
+/* Set by a host class binding, not an attribute: see button.ts. */
+:host(.rl-full) {
   display: flex;
 }
 

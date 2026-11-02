@@ -378,7 +378,7 @@ Tapping a routine opens a **pre-flight sheet**: exercise list with planned sets 
 | Un-confirm | Tap a solid `✓` | Reverts to pending; keeps values; logged in the same transaction |
 | Add a set | `+ Set` | Appends a row prefilled with the previous set's load, uncommitted |
 | Add a warm-up | `+ Warm-up` | Inserts a `W` row above set 1 at ~50 % of the first working load (clearly a suggestion) |
-| Delete a set | Swipe the row toward the inline end | Reveals Delete; soft-deletes with a 5 s undo toast |
+| Delete a set | Swipe the row toward the inline start | Soft-deletes directly, with a 7 s undo toast; the set-index badge opens a sheet with the same Delete, which is the accessible path. One gesture rather than swipe-to-reveal-then-tap, because the undo already makes it safe |
 | Reorder exercises | Long-press the card header + drag, or `⋯ → Move` | Persists immediately; accessible alternative always provided via the menu |
 | Skip an exercise | `⋯ → Skip for today` | Marks `isSkipped`, collapses, stays visible |
 | Swap an exercise | `⋯ → Replace` | Opens the library filtered to the same muscle group; history is attributed to the exercise actually performed |
@@ -414,7 +414,8 @@ Presented as a **bottom sheet** (half-height, dismissible by drag) so the set gr
 
 * Derived from `startedAt + targetSec` (ARCHITECTURE §7.3), so backgrounding and screen lock never desynchronise it.
 * At 0: the ring flashes to `--positive`, an optional short tone plays, the sheet auto-dismisses after 2 s, and an `aria-live="assertive"` region announces "Rest complete".
-* The sheet can be dismissed while the timer keeps running; a compact pill appears in the action bar (`Rest 0:48`).
+* The sheet opens with the rest, including one a confirmed set starts automatically, and dismisses itself two seconds after the rest completes. It can be dismissed early while the timer keeps running; a compact pill then appears in the action bar (`Rest 0:48`) and reopens it.
+* The completion tone is synthesised with Web Audio rather than shipped as an asset, and is best-effort: iOS only allows audio after a user gesture, which the confirmed set provides, and failure is silent.
 * **Stated limitation** (spec §9): no alert fires while the app is backgrounded or the screen is locked. The sheet says so once, next to the Keep-screen-awake toggle, and the toggle is hidden entirely where Wake Lock is unavailable rather than offered as a lie.
 
 ### 5.5 Workout summary (`/train/summary/:id`)
@@ -545,7 +546,7 @@ Grouped list rows with values on the trailing side:
 | `rl-stat-tile` | single · 2-up · with-sparkline | Eyebrow label + hero number + delta chip + footnote |
 | `rl-delta-chip` | up · down · flat · none | Arrow + value + optional label; never colour-only |
 | `rl-chip` | filter · choice · removable | 32 px tall, `--r-full` |
-| `rl-sheet` | half · full | Built on the native `<dialog>` with `showModal()`, so the focus trap, Escape handling, background inerting and `::backdrop` come from the platform instead of hand-rolled ARIA. Entry uses a `@starting-style` transition rather than a keyframe animation: a keyframe animation that never advances holds its *first* frame, which for a slide-up leaves the sheet a full viewport below the fold, whereas an unrun transition simply leaves the element already in its correct place. Drag-to-dismiss is still outstanding. |
+| `rl-sheet` | half · full | Built on the native `<dialog>` with `showModal()`, so the focus trap, Escape handling, background inerting and `::backdrop` come from the platform instead of hand-rolled ARIA. Entry uses a `@starting-style` transition. **That alone is not enough**: a transition advances on the document timeline, and a document that is not painting does not advance it, so an unrun transition holds its `@starting-style` value exactly as an unrun keyframe animation holds its first frame — for a slide-up, a full viewport below the fold. The component therefore checks rather than assumes: one sheet-duration after opening, any entry transition still at exactly zero has its timeline frozen and is finished outright. `dismissible="false"` blocks Escape for a sheet that exists to collect an answer, so a prompt something is waiting on cannot be closed without choosing. Drag-to-dismiss is still outstanding. |
 | `rl-dialog` | confirm · destructive-confirm · typed-confirm | Native `<dialog>`, as above. Destructive variants require a distinct action label (never "OK"), state the consequence, and put the destructive action on the trailing side |
 | `rl-toast` | info · success · undo · error | Bottom-anchored above the nav, max 2 stacked, 5 s (undo 7 s), swipe to dismiss |
 | `rl-segmented` | 2–4 segments | Theme/mode pickers; roving tabindex |
@@ -615,7 +616,7 @@ The native iOS keyboard is the wrong tool for logging a set: it covers half the 
 * `.` is disabled on the reps field and replaced by `00` (no fractional reps).
 * Decimal separator follows the locale, but `.` and `,` are both accepted as input.
 * Quick-adjust buttons derive from `exercises.weightIncrementKg` and respect the display unit (in lb mode they become −5 / +5 / +10).
-* On desktop/tablet with a hardware keyboard, the pad is still used for layout but accepts real keystrokes; `Tab` moves between fields, `Enter` = Done.
+* On desktop/tablet with a hardware keyboard, the pad is still used for layout but accepts real keystrokes: digits, `.`, `,`, `Backspace` and `Enter` = Done. `Tab` is left to the browser rather than remapped to field switching — the fields and every key are focusable, so native tabbing already reaches them, and intercepting `Tab` would fight the focus trap the native `<dialog>` provides.
 * Accessibility: a real `role="dialog"` with a labelled group of `role="button"` keys, plus a hidden `<input inputmode="decimal">` that screen-reader and keyboard users can use directly. The pad is a convenience layer, never the only path.
 
 ---

@@ -1,0 +1,22 @@
+.prev {
+  padding-inline: var(--sp-3);
+  padding-block: var(--sp-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-1);
+}
+
+.prev__when {
+  margin: 0;
+}
+
+.prev__sets {
+  margin-block: var(--sp-1) 0;
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+
+.prev--none {
+  margin: 0;
+}

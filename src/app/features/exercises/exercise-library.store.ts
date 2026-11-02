@@ -248,6 +248,17 @@ export class ExerciseLibraryStore {
   }
 
   /**
+   * The name in the reading language.
+   *
+   * Public because every surface that lists exercises needs it — the library,
+   * the planner's picker, the tracker — and three copies of
+   * `isArabic ? nameAr : nameEn` is three places to forget one.
+   */
+  displayName(exercise: Exercise): string {
+    return this.primaryName(exercise, this.i18n.locale());
+  }
+
+  /**
    * Sorts by the name the user is actually reading.
    *
    * Ordering every locale by the English key puts an Arabic list in English

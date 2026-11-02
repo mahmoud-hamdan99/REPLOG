@@ -80,6 +80,7 @@ IndexedDB has no foreign keys. Rules the data layer enforces instead:
 | `deviceId` | string | UUID generated once; becomes `origin` on every write |
 | `activeWorkoutId` | string \| null | Pointer to the in-progress session (ARCHITECTURE §7.1) |
 | `activeTab` | `{ tabId, heartbeatAt }` \| null | Multi-tab guard |
+| `activeRest` | `{ startedAtMs, targetSec, exerciseId, setId }` \| null | Running rest timer, so a three-minute rest survives an iOS tab purge (ARCHITECTURE §7.3) |
 | `activePlanId` | string \| null | Plan whose weekday schedule drives the dashboard |
 | `builtInCatalogVersion` | number | Version of the seeded exercise catalog; drives re-seed logic (§6) |
 | `lastExportAt` | string \| null | Drives the backup reminder |

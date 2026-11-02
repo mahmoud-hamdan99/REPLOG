@@ -24,6 +24,7 @@ const ex = (uid: string, orderIndex: number, overrides: Partial<RoutineExercise>
     ...newRoutineExercise({ uid, exerciseId: `e-${uid}`, nameSnapshot: uid, orderIndex }),
     ...overrides,
   }) as RoutineExercise;
+const byUid = (uid: string) => (exercise: RoutineExercise) => exercise.uid === uid;
 
 const routine = (overrides: Partial<Routine> = {}): Routine =>
   ({
@@ -146,7 +147,7 @@ describe('ordering', () => {
 
 describe('supersets', () => {
   it('groups an exercise with the one after it', () => {
-    const grouped = groupWithNext([ex('a', 1000), ex('b', 2000), ex('c', 3000)], 'a');
+    const grouped = groupWithNext([ex('a', 1000), ex('b', 2000), ex('c', 3000)], byUid('a'));
 
     expect(grouped[0]?.supersetGroup).toBe('A');
     expect(grouped[1]?.supersetGroup).toBe('A');
@@ -156,15 +157,15 @@ describe('supersets', () => {
   });
 
   it('extends an existing group rather than starting a new one', () => {
-    let list = groupWithNext([ex('a', 1000), ex('b', 2000), ex('c', 3000)], 'a');
-    list = groupWithNext(list, 'b');
+    let list = groupWithNext([ex('a', 1000), ex('b', 2000), ex('c', 3000)], byUid('a'));
+    list = groupWithNext(list, byUid('b'));
 
     expect(list.map((e) => e.supersetGroup)).toEqual(['A', 'A', 'A']);
     expect(list.map((e) => e.supersetOrder)).toEqual([0, 1, 2]);
   });
 
   it('does nothing when there is nothing after it', () => {
-    const list = groupWithNext([ex('a', 1000)], 'a');
+    const list = groupWithNext([ex('a', 1000)], byUid('a'));
     expect(list[0]?.supersetGroup).toBeNull();
   });
 
@@ -173,16 +174,16 @@ describe('supersets', () => {
    * around a single exercise.
    */
   it('dissolves a group that drops to one member', () => {
-    const grouped = groupWithNext([ex('a', 1000), ex('b', 2000)], 'a');
-    const after = ungroup(grouped, 'b');
+    const grouped = groupWithNext([ex('a', 1000), ex('b', 2000)], byUid('a'));
+    const after = ungroup(grouped, byUid('b'));
 
     expect(after.every((e) => e.supersetGroup === null)).toBe(true);
   });
 
   it('keeps a group of three when one member leaves', () => {
-    let list = groupWithNext([ex('a', 1000), ex('b', 2000), ex('c', 3000)], 'a');
-    list = groupWithNext(list, 'b');
-    const after = ungroup(list, 'c');
+    let list = groupWithNext([ex('a', 1000), ex('b', 2000), ex('c', 3000)], byUid('a'));
+    list = groupWithNext(list, byUid('b'));
+    const after = ungroup(list, byUid('c'));
 
     expect(after.map((e) => e.supersetGroup)).toEqual(['A', 'A', null]);
   });
@@ -211,7 +212,7 @@ describe('supersets', () => {
   });
 
   it('builds display blocks', () => {
-    const list = groupWithNext([ex('a', 1000), ex('b', 2000), ex('c', 3000)], 'a');
+    const list = groupWithNext([ex('a', 1000), ex('b', 2000), ex('c', 3000)], byUid('a'));
     const blocks = supersetBlocks(list);
 
     expect(blocks).toHaveLength(2);

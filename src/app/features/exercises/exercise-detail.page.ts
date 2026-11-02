@@ -240,7 +240,7 @@ export class ExerciseDetailPage {
       const rolled = MUSCLE_ROLLUP[muscle as keyof typeof MUSCLE_ROLLUP];
       if (rolled) seen.add(rolled);
     }
-    return [...seen].map((filter) => this.i18n.t(`muscle.${filter}`)).join(' · ');
+    return this.i18n.join([...seen].map((filter) => this.i18n.t(`muscle.${filter}`)));
   }
 
   protected toggleFavorite(): void {

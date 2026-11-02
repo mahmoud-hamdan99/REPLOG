@@ -1,11 +1,31 @@
 import { inject, Service } from '@angular/core';
 import { DB_EVENTS, type DbChange } from '../../data/db-events';
 import type { EntityStoreName, StoreEntityMap, StoreName } from '../../data/stores';
-import type { TxScope, UnitOfWork } from '../../data/unit-of-work';
+import type { TxAppMeta, TxScope, UnitOfWork } from '../../data/unit-of-work';
 import type { Repository } from '../../data/repository';
-import { IdbDatabase, type AnyTransaction } from './idb-database';
+import { APP_META_DEFAULTS, type AppMeta, type AppMetaKey } from '../../domain/models/system';
+import { IdbDatabase, storeOf, type AnyTransaction } from './idb-database';
 import { IdbEnvironment } from './idb-environment';
 import { IdbRepository, type RepoContext } from './idb-repository';
+
+/**
+ * `appMeta` access that joins the ambient transaction.
+ *
+ * Mirrors `IdbAppMetaStore`'s default-merging read, so a pointer that has never
+ * been written reads as its default here too rather than as `undefined`.
+ */
+function boundAppMeta(tx: AnyTransaction): TxAppMeta {
+  const store = storeOf(tx, 'appMeta');
+  return {
+    get: async <K extends AppMetaKey>(key: K): Promise<AppMeta[K]> => {
+      const row = (await store.get(key)) as { value: unknown } | undefined;
+      return (row?.value === undefined ? APP_META_DEFAULTS[key] : row.value) as AppMeta[K];
+    },
+    set: async <K extends AppMetaKey>(key: K, value: AppMeta[K]): Promise<void> => {
+      await store.put({ key, value });
+    },
+  };
+}
 
 /**
  * Repository context for a *standalone* operation: each call gets its own
@@ -63,6 +83,7 @@ export class IdbUnitOfWork implements UnitOfWork {
       const scope: TxScope = {
         repo: <N extends EntityStoreName>(store: N): Repository<StoreEntityMap[N]> =>
           new IdbRepository<StoreEntityMap[N]>(store, context),
+        appMeta: () => boundAppMeta(tx),
         onCommit: (fn) => {
           commitHooks.push(fn);
         },

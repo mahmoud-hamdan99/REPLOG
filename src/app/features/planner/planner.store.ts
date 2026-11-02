@@ -377,13 +377,17 @@ export class PlannerStore {
   async groupExerciseWithNext(routineId: string, uid: string): Promise<void> {
     const routine = this.routineById(routineId);
     if (!routine) return;
-    await this.saveRoutine(routineId, { exercises: groupWithNext(routine.exercises, uid) });
+    await this.saveRoutine(routineId, {
+      exercises: groupWithNext(routine.exercises, (exercise) => exercise.uid === uid),
+    });
   }
 
   async ungroupExercise(routineId: string, uid: string): Promise<void> {
     const routine = this.routineById(routineId);
     if (!routine) return;
-    await this.saveRoutine(routineId, { exercises: ungroup(routine.exercises, uid) });
+    await this.saveRoutine(routineId, {
+      exercises: ungroup(routine.exercises, (exercise) => exercise.uid === uid),
+    });
   }
 
   // ---------------------------------------------------------------- private

@@ -19,13 +19,13 @@
   /* Clear the home indicator. */
   padding-block-end: calc(var(--safe-b) + var(--sp-4));
 
-  /* The resting position, and a transition into it — deliberately not a
-     keyframe animation. A keyframe animation that never advances (a tab that
-     is not painting, a throttled or interrupted frame) holds its first frame,
-     which for a slide-up means the sheet sits one full viewport below the fold
-     and the app looks broken with nothing to interact with. A transition has
-     no such failure mode: if it never runs, the element is simply already in
-     its correct place. */
+  /* The resting position, and a transition into it.
+     A transition is easier to interrupt and reverse than a keyframe animation,
+     but it is NOT immune to a frozen timeline: an unrun transition holds its
+     @starting-style value exactly as an unrun animation holds its first
+     keyframe, leaving the sheet a viewport below the fold. The component
+     guarantees the resting position instead of the stylesheet assuming it —
+     see settleEntry() in sheet.ts. */
   translate: 0 0;
   transition:
     translate var(--dur-sheet) var(--ease-emphasized),
@@ -34,7 +34,8 @@
 }
 
 /* Entry state. Where @starting-style is unsupported the sheet appears in place
-   without the slide, which is correct and usable. */
+   without the slide, which is correct and usable; where the timeline is frozen
+   the component finishes the transition rather than leaving it here. */
 @starting-style {
   .sheet[open] {
     translate: 0 100%;

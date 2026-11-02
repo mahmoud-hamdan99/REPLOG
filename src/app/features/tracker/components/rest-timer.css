@@ -1,0 +1,90 @@
+.rest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-block: var(--sp-4) var(--sp-2);
+}
+
+.rest__ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.rest__time {
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+.rest__label {
+  display: block;
+  text-align: center;
+}
+
+.rest__next {
+  margin: 0;
+  text-align: center;
+  color: var(--text-2);
+}
+
+.rest__controls {
+  display: flex;
+  gap: var(--sp-2);
+  inline-size: 100%;
+}
+
+.rest__controls > * {
+  flex: 1;
+}
+
+.rest__awake {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--target-min);
+  inline-size: 100%;
+}
+
+.rest__awake input {
+  inline-size: 24px;
+  block-size: 24px;
+  accent-color: var(--accent);
+}
+
+.rest__note {
+  margin: 0;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- the pill */
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: var(--target-gym);
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-family: var(--font-ui);
+  font-size: var(--t-body);
+  cursor: pointer;
+}
+
+.pill--done {
+  border-color: var(--positive);
+  color: var(--positive);
+}
+
+.pill:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.pill__time {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,82 @@
+.pick__title {
+  margin-block: var(--sp-2) var(--sp-3);
+}
+
+.pick__search {
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  padding-inline: var(--sp-4);
+  padding-block: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+
+  /* 16px floor: anything smaller makes iOS zoom the page on focus. */
+  font-size: var(--t-body);
+  font-family: var(--font-ui);
+}
+
+.pick__search:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.pick__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-block-start: var(--sp-3);
+
+  /* Leaves room for the sticky action bar below. */
+  padding-block-end: var(--sp-2);
+}
+
+.pick__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  inline-size: 100%;
+  min-block-size: var(--target-gym);
+  padding-inline: var(--sp-3);
+  padding-block: var(--sp-2);
+  border: 0;
+  border-block-end: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--text-1);
+  text-align: start;
+  font-family: var(--font-ui);
+  cursor: pointer;
+}
+
+.pick__item--on {
+  background: var(--accent-soft);
+}
+
+.pick__item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.pick__name {
+  flex: 1;
+}
+
+.pick__tick {
+  color: var(--accent-ink);
+  font-weight: var(--fw-bold);
+}
+
+.pick__actions {
+  position: sticky;
+  inset-block-end: 0;
+  padding-block: var(--sp-3);
+  background: var(--surface-1);
+}
+
+.pick__loading {
+  padding-block: var(--sp-6);
+  text-align: center;
+  color: var(--text-2);
+}

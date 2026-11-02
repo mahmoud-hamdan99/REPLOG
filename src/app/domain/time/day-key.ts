@@ -23,6 +23,19 @@ export function dayKey(date: Date): DayKey {
   return `${pad(date.getFullYear(), 4)}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
+/**
+ * Local calendar day of an epoch instant, given a UTC offset in minutes.
+ *
+ * The clock-driven form of `dayKey`: `Clock.timezoneOffsetMinutes()` supplies
+ * the offset, so a test can pin the zone instead of inheriting whatever the
+ * machine running it happens to be in. Shifting the instant and then reading
+ * UTC fields gives the same answer as local getters, without depending on them.
+ */
+export function dayKeyAt(epochMs: number, offsetMinutes: number): DayKey {
+  const shifted = new Date(epochMs + offsetMinutes * 60_000);
+  return `${pad(shifted.getUTCFullYear(), 4)}-${pad(shifted.getUTCMonth() + 1)}-${pad(shifted.getUTCDate())}`;
+}
+
 /** Local calendar month of an instant. */
 export function monthKey(date: Date): MonthKey {
   return `${pad(date.getFullYear(), 4)}-${pad(date.getMonth() + 1)}`;

@@ -1,5 +1,6 @@
 import { isDevMode } from '@angular/core';
 import type { Routes } from '@angular/router';
+import { canLeaveActiveWorkout } from './features/tracker/active-workout.guard';
 
 /**
  * Route map. Mirrors docs/ARCHITECTURE.md section 9.
@@ -72,20 +73,25 @@ export const routes: Routes = [
   // Training
   {
     path: 'train',
-    loadComponent: placeholder,
+    loadComponent: () => import('./features/tracker/train.page').then((m) => m.TrainPage),
     data: { titleKey: 'page.train.title', navTab: 'train', preload: true },
   },
   {
     path: 'train/active',
-    loadComponent: placeholder,
-    // No tab bar: leaving an active session must be a deliberate choice, not a
-    // stray tab tap. The CanDeactivate guard arrives with Phase 5.
+    loadComponent: () =>
+      import('./features/tracker/active-workout.page').then((m) => m.ActiveWorkoutPage),
+    // No tab bar, and a guard on the way out: leaving an active session must be
+    // a deliberate choice, not a stray tab tap.
+    // Statically imported, and free: the guard's only import of the page is a
+    // type import, so it adds no runtime dependency to the initial bundle.
+    canDeactivate: [canLeaveActiveWorkout],
     data: { titleKey: 'page.trainActive.title', hideNav: true, preload: true },
   },
   {
     path: 'train/summary/:workoutId',
-    loadComponent: placeholder,
-    data: { titleKey: 'page.trainActive.title', navTab: 'train' },
+    loadComponent: () =>
+      import('./features/tracker/workout-summary.page').then((m) => m.WorkoutSummaryPage),
+    data: { titleKey: 'summary.title', navTab: 'train', showBack: true },
   },
 
   // History

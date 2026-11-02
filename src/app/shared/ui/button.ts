@@ -13,6 +13,11 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
 @Component({
   selector: 'rl-button',
   styleUrl: './button.css',
+  // A host *class*, not an attribute. `[full]="true"` sets a property and
+  // leaves the DOM attribute absent, so a `:host([full])` rule never matched
+  // and a full-width button stayed shrink-to-fit wherever its parent did not
+  // happen to stretch it.
+  host: { '[class.rl-full]': 'full()' },
   template: `
     <button
       [attr.type]="type()"

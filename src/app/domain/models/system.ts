@@ -1,3 +1,4 @@
+import type { RestState } from '../tracker/rest';
 import type { Entity } from './entity';
 import type { ExperienceLevel, Sex, TrainingGoal } from './enums';
 
@@ -27,6 +28,14 @@ export interface AppMeta {
   /** Pointer to the in-progress session. See ARCHITECTURE section 7.1. */
   activeWorkoutId: string | null;
   activeTab: { tabId: string; heartbeatAt: string } | null;
+  /**
+   * The running rest timer, as a timestamp and a target rather than a count.
+   *
+   * Stored so a rest survives an iOS tab purge: a three-minute squat rest is
+   * long enough for Safari to evict the page, and coming back to a dead timer
+   * is the difference between a tool and a toy. See ARCHITECTURE section 7.3.
+   */
+  activeRest: RestState | null;
   activePlanId: string | null;
   /** Drives the re-seed reconciliation in DATABASE_SPEC section 6.2. */
   builtInCatalogVersion: number;
@@ -44,6 +53,7 @@ export const APP_META_DEFAULTS: Readonly<AppMeta> = Object.freeze({
   deviceId: '',
   activeWorkoutId: null,
   activeTab: null,
+  activeRest: null,
   activePlanId: null,
   builtInCatalogVersion: 0,
   lastExportAt: null,

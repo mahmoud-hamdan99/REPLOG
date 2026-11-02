@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto';
 
+import type { Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideDataLayer } from '../../../app.providers';
 import { CLOCK, type Clock } from '../../../data/clock';
@@ -58,17 +59,42 @@ export interface IdbHarness {
  * behaviours these tests exist to pin down, and a fake that reimplemented them
  * would only prove the fake works.
  */
-export async function setupIdb(): Promise<IdbHarness> {
+export async function setupIdb(options: HarnessOptions = {}): Promise<IdbHarness> {
   await deleteDatabase();
+  return buildHarness(options);
+}
 
-  const clock = new FakeClock();
+/**
+ * A fresh injector over the **same** database, without deleting it.
+ *
+ * The test equivalent of a reload, or of a second tab: new store instances,
+ * new tab id, same data on disk. The reliability suite in Phase 5 is built on
+ * this — "does a confirmed set survive a kill" is only a real question if the
+ * test can actually kill something.
+ */
+export async function reopenIdb(options: HarnessOptions = {}): Promise<IdbHarness> {
+  return buildHarness(options);
+}
+
+export interface HarnessOptions {
+  /** Carried over by `reopenIdb`, so time does not jump back on a reload. */
+  clock?: FakeClock;
+  /** Extra providers, appended so they override the defaults. */
+  providers?: Provider[];
+}
+
+async function buildHarness(options: HarnessOptions): Promise<IdbHarness> {
+  const clock = options.clock ?? new FakeClock();
 
   TestBed.resetTestingModule();
   TestBed.configureTestingModule({
     // The application's own wiring, with only the clock swapped. A separate
     // test-only provider list would drift from app.config and quietly stop
     // testing what actually ships.
-    providers: provideDataLayer({ clock: { provide: CLOCK, useValue: clock } }),
+    providers: [
+      ...provideDataLayer({ clock: { provide: CLOCK, useValue: clock } }),
+      ...(options.providers ?? []),
+    ],
   });
 
   const db = TestBed.inject(IdbDatabase);

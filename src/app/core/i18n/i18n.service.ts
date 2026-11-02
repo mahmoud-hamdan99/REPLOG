@@ -83,7 +83,21 @@ export class I18n {
     }
 
     const template = typeof entry === 'string' ? entry : this.selectPlural(entry, params);
-    return template === undefined ? key : interpolate(template, params);
+    return template === undefined
+      ? key
+      : interpolate(template, params, (value) => this.formatNumber(value));
+  }
+
+  /**
+   * Joins fragments with the locale's own separator.
+   *
+   * English uses a middle dot. Arabic cannot: `·` is visually identical to the
+   * Arabic-Indic zero `٠`, so "· ٢" reads as "٢٠" — a date of the 2nd becomes
+   * the 20th. Arabic gets its own comma instead, and every surface that builds
+   * a list in code goes through here so there is one place to be right.
+   */
+  join(parts: readonly (string | null | undefined)[]): string {
+    return parts.filter((part): part is string => !!part).join(this.t('common.separator'));
   }
 
   /** Formats a number in the active locale and numeral system. */
@@ -119,12 +133,26 @@ export class I18n {
   }
 }
 
-function interpolate(template: string, params?: TranslateParams): string {
+/**
+ * Fills `{name}` placeholders.
+ *
+ * A numeric parameter goes through the locale's number formatter rather than
+ * `String()`. Without that, "{count} sets" renders "6 مجموعات" — the noun in
+ * Arabic and the numeral in Latin digits — which is exactly the kind of
+ * half-translated surface the numeral preference exists to prevent. Plural
+ * selection already happened on the raw value, so formatting here is safe.
+ */
+function interpolate(
+  template: string,
+  params: TranslateParams | undefined,
+  formatNumber: (value: number) => string,
+): string {
   if (!params) {
     return template;
   }
   return template.replace(/\{(\w+)\}/g, (match, name: string) => {
     const value = params[name];
-    return value === undefined ? match : String(value);
+    if (value === undefined) return match;
+    return typeof value === 'number' ? formatNumber(value) : value;
   });
 }

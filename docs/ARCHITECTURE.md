@@ -249,6 +249,11 @@ export interface TxScope {
   // scoped to a fixed set of stores, and a `StoreEntityMap` gives the same
   // type safety without threading an Injector through a transaction.
   repo<N extends EntityStoreName>(store: N): Repository<StoreEntityMap[N]>;
+  // appMeta is not an Entity store, but some of its pointers must move
+  // atomically with the records they point at: clearing `activeWorkoutId` is
+  // part of finishing a workout, and a pointer cleared by a transaction that
+  // then rolls back would orphan a live session.
+  appMeta(): TxAppMeta;
   /** Registered callbacks fire only after the transaction commits. */
   onCommit(fn: () => void): void;
 }
@@ -333,7 +338,7 @@ The active session is **not** a separate shadow format. It is a normal `workouts
 | Set confirmed (the user taps the check) | **Immediate, synchronous-to-the-user** `setLogs.put` inside a UoW; the row shows a committed state only after `onCommit` |
 | Field typing (weight/reps mid-edit) | Debounced 400 ms draft write to the same record with `isCompleted: false` |
 | Add/remove/reorder exercise, superset change | Immediate |
-| Rest timer start/stop | Immediate (timestamps, see §7.3) |
+| Rest timer start/stop | Immediate, to `appMeta.activeRest` (timestamps, see §7.3) |
 | Notes, RPE/RIR | Debounced 600 ms |
 | Pause/resume | Immediate, appended to `pauses[]` |
 | Any mutation | `workouts.updatedAt` bumped; `durationSec`/`totalVolumeKg` recomputed in memory, persisted on pause/finish |
@@ -344,7 +349,7 @@ Writes are queued through a serial write lane so a burst of taps cannot interlea
 
 iOS throttles and suspends JavaScript timers in background tabs; a decrementing counter would drift or freeze. Therefore:
 
-* The rest timer stores `startedAt` (epoch ms) and `targetSec`. The UI renders `targetSec - (now - startedAt)` on every animation frame (or every 250 ms when hidden).
+* The rest timer stores `startedAt` (epoch ms) and `targetSec`, in `appMeta.activeRest` so a long rest survives a tab purge. The UI re-reads the clock every 250 ms while resting and every second otherwise — intervals rather than animation frames, because a frame is exactly what a throttled tab stops delivering. A rest that elapsed while the app was closed is restored already acknowledged: a cue for something that finished hours ago is noise, not information.
 * Workout duration = `(now - startedAt) - Σ(pause durations)`, computed on read.
 * On `visibilitychange → visible`, recompute everything from timestamps. Elapsed-while-backgrounded is therefore always correct.
 * **Honest limitation to document in-app (spec §9):** when the PWA is backgrounded or the screen is locked, iOS gives no reliable way to fire a rest-timer alert. The app offers Screen Wake Lock where available (`'wakeLock' in navigator`, iOS 16.4+) and an in-app audible/visual cue while foregrounded; it does not promise background notifications.
@@ -355,8 +360,10 @@ iOS throttles and suspends JavaScript timers in background tabs; a decrementing 
 * **`beforeunload`** handler armed only while an active session has uncommitted drafts. Safari's dialog is non-customisable; treat it as a backstop, not the primary protection.
 * **`visibilitychange → hidden`**: flush all pending debounces immediately.
 * **`pagehide`**: final flush; on iOS this is the last reliable hook before eviction.
-* **Cold start**: `AppInitializer` reads `activeWorkoutId`. If present, the shell routes to a *Resume workout* prompt showing elapsed time and completed sets, offering Resume / Finish now / Discard. Never silently resumes, never silently discards.
-* **Second tab**: the store writes `{ tabId, heartbeatAt }` to the session. Another tab opening the same session shows a read-only banner ("This workout is open in another tab") rather than racing writes.
+* **Cold start**: the tracker reads `activeWorkoutId` when it loads. If it finds a session *it did not start*, it shows a non-dismissible *Resume workout* prompt with elapsed time and completed sets, offering Resume / Finish now / Discard. Never silently resumes, never silently discards. "Did not start" is the load-bearing part: the Train screen loads in the background while the user starts a workout, and without that check a slow device lands them on "Resume your workout?" for the one they just began.
+  * Implemented on the tracker screen rather than in the shell, as the plan first sketched. The behaviour is the same and the mechanism is local to the feature, which keeps tracker code out of the eagerly loaded shell bundle.
+* **Second tab**: the store writes `{ tabId, heartbeatAt }` to the session. Another tab opening the same session shows a read-only banner ("This workout is open in another tab") rather than racing writes. A heartbeat older than 45 s means that tab is gone and ownership can be claimed, so a crash does not lock the user out of their own session.
+* **Tab identity** comes from `sessionStorage` (`TAB_IDENTITY`), not from a fresh id per load. It has exactly the lifetime wanted: scoped to one tab, surviving that tab's reload, absent in a newly opened one. A generated-per-load id would make every refresh look like a second tab and lock the user out of their own workout for the heartbeat window.
 
 ### 7.5 Finishing a workout
 
@@ -365,11 +372,13 @@ One `UnitOfWork.run(['workouts','workoutExercises','setLogs','personalRecords','
 1. Drop empty/uncompleted trailing sets (with a count shown in the summary — nothing deleted silently).
 2. Compute `durationSec`, `totalVolumeKg`, `totalSets`, `totalReps`.
 3. Set `status: 'completed'`, `finishedAt`.
-4. Run PR detection over the session's working sets; upsert `personalRecords` with `previousValue` retained so history reads as a progression, not an overwrite.
+4. Run PR detection over the session's working sets through the `PR_DETECTOR` contract; upsert `personalRecords` with `previousValue` retained so history reads as a progression, not an overwrite. Detection itself is Phase 7 work, so the token is bound to a no-op until then — but it is declared and called from inside the transaction now, because that is the part that cannot be retrofitted.
 5. Clear `appMeta.activeWorkoutId`.
 6. `onCommit` → navigate to the summary screen, announce new PRs.
 
-If step 4 throws, the whole transaction rolls back and the session stays active and intact. PR detection is never allowed to destroy a logged workout.
+If step 4 throws, the whole transaction rolls back and the session stays active and intact. PR detection is never allowed to destroy a logged workout, and a test with a deliberately exploding detector pins that down.
+
+Rows that were never confirmed are hard-deleted rather than tombstoned: a row the user did not log is not history, and a tombstone would leave it to be "recovered" into a session that never contained it. The count is stated in the finish confirmation before anything is removed, and again on the summary.
 
 ### 7.6 Template-vs-history immutability
 
@@ -641,3 +650,7 @@ Spec §13 requires distinguishing tested from untested functionality: the releas
 | D11 | `404.html` fallback for Pages routing | Hash routing | Clean shareable URLs, better PWA `start_url` behaviour |
 | D12 | Timestamp-derived timers | Interval counters | iOS background throttling |
 | D13 | No background notifications promised | Web Push on iOS 16.4+ | Requires a push service and user permission; out of scope and unreliable for rest timers; spec §9 forbids over-claiming |
+| D14 | Tab identity in `sessionStorage` | A fresh id per page load | Must survive a reload of the same tab and differ between tabs; a per-load id makes every refresh look like a second tab and locks the user out of their own workout |
+| D15 | PR detection behind a `PR_DETECTOR` token, no-op until Phase 7 | Write detection now, or call it after the finish transaction | Detection must run *inside* the finish transaction so a record bug rolls back instead of destroying a logged workout — the seam cannot be retrofitted, the implementation can |
+| D16 | Sheet entry transition finished in code when the timeline is frozen | Trust `@starting-style`; or drop the slide entirely | An unrun transition holds its starting style, which for a slide-up is a viewport below the fold. Checking costs one timer and converts "looks broken" into "no animation" |
+| D17 | Unconfirmed rows hard-deleted on finish | Keep them, or tombstone them | A row the user never confirmed is not history; a tombstone would let it be "recovered" into a session that never contained it. The count is stated before anything is removed |

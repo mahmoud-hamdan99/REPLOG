@@ -4,7 +4,9 @@ import { CLOCK } from './data/clock';
 import { DB_EVENTS } from './data/db-events';
 import { ID_FACTORY } from './data/ids';
 import { PHOTO_BLOB_STORE } from './data/photo-blobs';
+import { NO_PR_DETECTION, PR_DETECTOR } from './data/pr-detector';
 import { PREFS_STORE } from './data/prefs';
+import { TAB_IDENTITY } from './data/tab-id';
 import { ENTITY_STORE_NAMES } from './data/stores';
 import { REPOSITORY_TOKENS } from './data/tokens';
 import { UNIT_OF_WORK } from './data/unit-of-work';
@@ -20,6 +22,7 @@ import { IdbEnvironment } from './infrastructure/idb/idb-environment';
 import { IdbRepository } from './infrastructure/idb/idb-repository';
 import { IdbUnitOfWork, StandaloneRepoContext } from './infrastructure/idb/idb-unit-of-work';
 import { LocalStoragePrefs } from './infrastructure/prefs/local-storage-prefs';
+import { SessionTabIdentity } from './infrastructure/platform/session-tab-identity';
 import { SystemClock } from './infrastructure/platform/system-clock';
 
 /**
@@ -42,7 +45,10 @@ export function provideDataLayer(options: { clock?: Provider } = {}): Provider[]
     { provide: UNIT_OF_WORK, useExisting: IdbUnitOfWork },
     { provide: APP_META_STORE, useExisting: IdbAppMetaStore },
     { provide: ID_FACTORY, useExisting: IdbEnvironment },
+    { provide: TAB_IDENTITY, useExisting: SessionTabIdentity },
     { provide: PHOTO_BLOB_STORE, useExisting: IdbPhotoBlobStore },
+    // Phase 7 replaces this with the real detector. See data/pr-detector.ts.
+    { provide: PR_DETECTOR, useValue: NO_PR_DETECTION },
     ...repositories,
   ];
 }

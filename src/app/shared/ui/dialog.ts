@@ -36,13 +36,13 @@ import { Button } from './button';
       #dialogRef
       class="dlg"
       [attr.aria-labelledby]="titleId"
-      [attr.aria-describedby]="bodyKey() ? bodyId : null"
+      [attr.aria-describedby]="body() ? bodyId : null"
       (close)="open.set(false)"
     >
       <h2 class="t-h2 dlg__title" [id]="titleId">{{ i18n.t(titleKey()) }}</h2>
 
-      @if (bodyKey()) {
-        <p class="t-body dlg__body" [id]="bodyId">{{ i18n.t(bodyKey()!) }}</p>
+      @if (body(); as text) {
+        <p class="t-body dlg__body" [id]="bodyId">{{ text }}</p>
       }
 
       @if (typedConfirmPhrase()) {
@@ -83,6 +83,8 @@ export class Dialog {
   readonly open = model(false);
   readonly titleKey = input.required<string>();
   readonly bodyKey = input<string | undefined>(undefined);
+  /** Already-translated body, for a message with interpolated values. */
+  readonly bodyText = input<string | undefined>(undefined);
   readonly confirmKey = input('common.confirm');
   readonly cancelKey = input('common.cancel');
   readonly destructive = input(false);
@@ -95,6 +97,11 @@ export class Dialog {
   protected readonly titleId = `dlg-title-${nextId()}`;
   protected readonly bodyId = `dlg-body-${nextId()}`;
   protected readonly typed = signal('');
+
+  protected readonly body = computed(() => {
+    const key = this.bodyKey();
+    return this.bodyText() ?? (key === undefined ? null : this.i18n.t(key));
+  });
 
   protected readonly canConfirm = computed(() => {
     const phrase = this.typedConfirmPhrase();

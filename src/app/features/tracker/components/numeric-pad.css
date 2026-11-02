@@ -1,0 +1,134 @@
+.pad {
+  padding-block-end: var(--sp-2);
+}
+
+.pad__title {
+  margin-block: var(--sp-2) var(--sp-3);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.pad__fields {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.pad__field {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-block-size: 64px;
+  padding-inline: var(--sp-3);
+  padding-block: var(--sp-2);
+  border: 1px solid var(--border);
+
+  /* The active field is underlined in the accent, not only coloured: colour
+     alone would carry the state. */
+  border-block-end: 3px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+  text-align: start;
+  font-family: var(--font-ui);
+  cursor: pointer;
+}
+
+.pad__field--active {
+  border-block-end-color: var(--accent);
+  background: var(--surface-3);
+}
+
+.pad__field:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.pad__value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-1);
+}
+
+.pad__unit {
+  color: var(--text-3);
+}
+
+.pad__prev {
+  margin-block: var(--sp-2) 0;
+}
+
+.pad__quick {
+  display: flex;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-3);
+}
+
+.pad__step {
+  flex: 1;
+  min-block-size: var(--target-min);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-family: var(--font-num);
+  font-size: var(--t-body);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.pad__step:active {
+  scale: 0.98;
+}
+
+.pad__step:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.pad__keys {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-3);
+}
+
+.pad__key {
+  min-block-size: 56px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-family: var(--font-num);
+  font-size: var(--t-h2);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.pad__key--wide {
+  font-family: var(--font-ui);
+  font-size: var(--t-body);
+}
+
+.pad__key:active {
+  background: var(--surface-3);
+  scale: 0.98;
+}
+
+.pad__key:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.pad__done {
+  margin-block-start: var(--sp-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pad__key:active,
+  .pad__step:active {
+    scale: 1;
+  }
+}

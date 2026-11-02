@@ -1,0 +1,200 @@
+/* Sticky header. No back button and no tab bar: leaving is a deliberate
+   choice made through the menu, not a stray tap. */
+.bar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding-inline: var(--gutter);
+  padding-block-start: var(--safe-t);
+  min-block-size: var(--header-h);
+  border-block-end: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.bar__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--target-min);
+  min-block-size: var(--target-min);
+  border: 0;
+  border-radius: var(--r-full);
+  background: none;
+  color: var(--text-1);
+  font-size: var(--t-h3);
+  cursor: pointer;
+}
+
+.bar__btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.bar__btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.bar__main {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.bar__name {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bar__meta {
+  margin: 0;
+}
+
+.bar__time {
+  font-variant-numeric: tabular-nums;
+}
+
+.progress {
+  position: sticky;
+  inset-block-start: var(--header-h);
+  z-index: 2;
+  block-size: 4px;
+  background: var(--surface-3);
+}
+
+.progress__fill {
+  display: block;
+  block-size: 100%;
+  background: var(--accent);
+  transition: inline-size var(--dur-fast) var(--ease-standard);
+}
+
+.notice {
+  margin-inline: var(--gutter);
+  margin-block-start: var(--sp-3);
+  padding: var(--sp-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+.notice p {
+  margin: 0;
+}
+
+.notice p + p {
+  margin-block-start: var(--sp-1);
+}
+
+.notice rl-button {
+  display: block;
+  margin-block-start: var(--sp-3);
+}
+
+.page--tracker {
+  /* Clear the fixed action bar plus the home indicator. */
+  padding-block-end: calc(var(--target-gym) + var(--safe-b) + var(--sp-8));
+}
+
+.block {
+  margin-block-end: var(--sp-3);
+}
+
+.block--superset {
+  padding-inline-start: var(--sp-2);
+
+  /* A bracket on the inline start, so grouped exercises read as one unit.
+     Logical so it mirrors in RTL. */
+  border-inline-start: 2px solid var(--accent-dim);
+}
+
+.block--superset rl-exercise-card + rl-exercise-card {
+  display: block;
+  margin-block-start: var(--sp-2);
+}
+
+.block__label {
+  margin-block: 0 var(--sp-2);
+  color: var(--accent-ink);
+}
+
+.note {
+  margin-block-start: var(--sp-4);
+}
+
+/* Action bar, above the safe area. The two things reachable with a thumb. */
+.actions {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline: 0;
+  z-index: 3;
+  display: flex;
+  gap: var(--sp-2);
+  padding-inline: var(--gutter);
+  padding-block: var(--sp-3);
+  padding-block-end: calc(var(--safe-b) + var(--sp-3));
+  max-inline-size: var(--content-max);
+  margin-inline: auto;
+  border-block-start: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.actions > * {
+  flex: 1;
+}
+
+.sheet__title {
+  margin-block: var(--sp-2) var(--sp-3);
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-4);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.field {
+  display: block;
+  margin-block: var(--sp-3);
+}
+
+.field__label {
+  margin-block: var(--sp-4) var(--sp-2);
+}
+
+.field__input {
+  inline-size: 100%;
+  margin-block-start: var(--sp-2);
+  padding-inline: var(--sp-3);
+  padding-block: var(--sp-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-family: var(--font-ui);
+
+  /* 16px floor, or iOS zooms the page when the field takes focus. */
+  font-size: var(--t-body);
+}
+
+.field__input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress__fill {
+    transition: none;
+  }
+}

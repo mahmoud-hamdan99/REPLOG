@@ -1,6 +1,20 @@
 import { InjectionToken } from '@angular/core';
+import type { AppMeta, AppMetaKey } from '../domain/models/system';
 import type { Repository } from './repository';
 import type { EntityStoreName, StoreEntityMap, StoreName } from './stores';
+
+/**
+ * App-local pointers inside a transaction.
+ *
+ * The same key/value table `AppMetaStore` exposes standalone, reachable here
+ * because some pointers must move atomically with the records they point at:
+ * clearing `activeWorkoutId` is part of finishing a workout, and a pointer
+ * cleared by a transaction that then rolls back would orphan a live session.
+ */
+export interface TxAppMeta {
+  get<K extends AppMetaKey>(key: K): Promise<AppMeta[K]>;
+  set<K extends AppMetaKey>(key: K, value: AppMeta[K]): Promise<void>;
+}
 
 /**
  * A transaction scope.
@@ -13,6 +27,9 @@ import type { EntityStoreName, StoreEntityMap, StoreName } from './stores';
  */
 export interface TxScope {
   repo<N extends EntityStoreName>(store: N): Repository<StoreEntityMap[N]>;
+
+  /** Requires `'appMeta'` in the transaction's store list. */
+  appMeta(): TxAppMeta;
 
   /**
    * Runs after the transaction commits.

@@ -221,7 +221,7 @@ export class ExercisesPage {
       muscle ? this.i18n.t(`muscle.${MUSCLE_ROLLUP[muscle]}`) : '',
       this.i18n.t(`equipment.${exercise.equipment}`),
     ];
-    return parts.filter(Boolean).join(' · ');
+    return this.i18n.join(parts);
   }
 
   protected reload(): void {

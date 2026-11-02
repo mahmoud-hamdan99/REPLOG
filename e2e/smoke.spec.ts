@@ -99,6 +99,9 @@ test('bottom navigation moves between destinations', async ({ page }) => {
 
 test('hides the tab bar on the active workout screen', async ({ page }) => {
   await page.goto('/train/active');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Workout');
+  // With no session in progress the screen says so rather than rendering a
+  // tracker over nothing; either way the tab bar stays hidden, because leaving
+  // a workout must be a deliberate choice and not a stray tab tap.
+  await expect(page.getByText('No workout in progress')).toBeVisible();
   await expect(page.locator('.tab')).toHaveCount(0);
 });

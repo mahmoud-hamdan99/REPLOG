@@ -1,6 +1,7 @@
 import {
   addDays,
   dayKey,
+  dayKeyAt,
   dayKeysBetween,
   daysBetween,
   monthKey,
@@ -131,6 +132,23 @@ describe('calendar keys', () => {
 
     it('counts across a year boundary', () => {
       expect(daysBetween('2025-12-31', '2026-01-01')).toBe(1);
+    });
+  });
+
+  describe('dayKeyAt', () => {
+    it('reads the day in the offset the clock reports, not the machine zone', () => {
+      const instant = Date.UTC(2026, 2, 2, 22, 30, 0);
+
+      expect(dayKeyAt(instant, 0)).toBe('2026-03-02');
+      // UTC+3: 01:30 the next morning is already the next day there.
+      expect(dayKeyAt(instant, 180)).toBe('2026-03-03');
+      // UTC−5: still the afternoon of the same day.
+      expect(dayKeyAt(instant, -300)).toBe('2026-03-02');
+    });
+
+    it('keeps a late-evening session on its own evening', () => {
+      expect(dayKeyAt(Date.UTC(2026, 2, 2, 23, 30, 0), 0)).toBe('2026-03-02');
+      expect(dayKeyAt(Date.UTC(2026, 2, 3, 0, 10, 0), 0)).toBe('2026-03-03');
     });
   });
 });
