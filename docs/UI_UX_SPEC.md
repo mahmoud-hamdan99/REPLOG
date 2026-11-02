@@ -500,6 +500,8 @@ Detail is strictly read-only and renders **from the snapshot**: plan/routine nam
 
 Tabs: **Strength · Volume · Body · Photos · Records**. A shared time-range selector (7d · 30d · 3m · 6m · 1y · All) sits under the tabs and persists per tab.
 
+Phase 7 ships **Records** on this route on its own, without the tabs; Phase 10 builds the hub around it. The screen leads with the most recently earned records that still stand — derived from the current set rather than queried by date, so a superseded achievement never appears beside the one that beat it.
+
 * **Strength** — exercise picker (recently trained first) → line chart of best set e1RM and top-set weight over time, with a second series toggle. Below: best-set table per session, and a "data points: 14" footnote so a sparse chart is never mistaken for a dense one.
 * **Volume** — bar chart per week/month (bucket follows the range), stacked by muscle group, with a total line. A footnote states that warm-up sets and time/distance work are excluded.
 * **Body** — weight line chart with a 7-day moving average (labelled as a calculated average), plus per-measurement charts behind a selector; measurement list with edit/delete.
@@ -565,7 +567,7 @@ Grouped list rows with values on the trailing side:
 | `rl-set-row` | The single most-used control: set index/type badge, previous-performance text, weight field, reps field, optional RPE/RIR, complete button, swipe-to-delete. Columns are opt-out — history drops previous-performance and the complete button, because neither means anything once a session is in the past — and the grid is built from the columns that are actually rendered |
 | `rl-exercise-card` | Collapsed/expanded states, superset bracket, menu, skip state |
 | `rl-prev-performance` | "Last time · date" block with per-set values; renders a "no history yet" line rather than nothing |
-| `rl-suggestion-hint` | Ghost-text suggestion with reason and `⌁`; tap to accept, never auto-applied |
+| `rl-suggestion-hint` | Ghost-text suggestion with reason and `⌁`; tap to accept, never auto-applied. Dashed `--info` border, the same language every estimate uses, so it cannot be mistaken for a logged value. Accepting fills the current row as an **unconfirmed draft** — the set still has to be confirmed |
 | `rl-rest-timer-sheet` / `rl-rest-pill` | Timestamp-driven countdown |
 | `rl-exercise-picker` | Search + filters + multi-select, reused by planner, tracker, and replace flows |
 | `rl-weekday-picker` | 7 toggles, locale-aware week start, RTL order |

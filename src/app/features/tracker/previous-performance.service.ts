@@ -16,6 +16,13 @@ export interface PreviousPerformance {
   /** When that session started, for the "Last time · 12 Feb" line. */
   performedAt: string;
   sets: PreviousSet[];
+  /**
+   * How many earlier sessions of this variant were found.
+   *
+   * Capped at the lookback window, which is all the suggestion engine needs:
+   * it only distinguishes one session from two from several.
+   */
+  sessionCount: number;
 }
 
 /** How far back to look for a session of the same variant before giving up. */
@@ -81,6 +88,10 @@ export class PreviousPerformanceLookup {
       limit: LOOKBACK,
     });
 
+    const matching = candidates.filter(
+      (candidate) => candidate.variantKey === variantKey && !candidate.isSkipped,
+    ).length;
+
     for (const candidate of candidates) {
       if (candidate.variantKey !== variantKey || candidate.isSkipped) continue;
 
@@ -96,6 +107,7 @@ export class PreviousPerformanceLookup {
       return {
         workoutId: candidate.workoutId,
         performedAt: candidate.startedAt,
+        sessionCount: matching,
         sets: sets.map((set) => ({
           setType: set.setType,
           side: set.side,

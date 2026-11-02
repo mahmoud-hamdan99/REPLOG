@@ -82,15 +82,17 @@ const FEELINGS: readonly Feeling[] = ['great', 'good', 'ok', 'rough'];
             <rl-card class="pr">
               <div class="pr__head">
                 <span class="t-body-strong">{{ record.nameSnapshot }}</span>
-                <rl-badge [kind]="record.isEstimate ? 'estimate' : 'pr'">
-                  {{
-                    record.previousValue === null
-                      ? i18n.t('summary.firstRecord')
-                      : i18n.t('summary.newRecord')
-                  }}
+                <rl-badge [kind]="record.previousValue === null ? 'count' : 'pr'">
+                  {{ format.recordDelta(record) }}
                 </rl-badge>
               </div>
-              <p class="t-caption">{{ recordText(record) }}</p>
+              <p class="rec__type t-caption">{{ format.recordType(record) }}</p>
+              <p class="rec__value">
+                <span class="t-body-strong">{{ format.recordValue(record) }}</span>
+                @if (record.isEstimate) {
+                  <rl-badge kind="estimate">{{ format.recordFormula(record) }}</rl-badge>
+                }
+              </p>
             </rl-card>
           }
         }
@@ -258,24 +260,6 @@ export class WorkoutSummaryPage {
     this._exercises.set(exercises);
     this._sets.set(sets);
     this._records.set(achieved.filter((record) => record.workoutId === workout.id));
-  }
-
-  protected recordText(record: PersonalRecord): string {
-    const value =
-      record.prType === 'maxRepsAtWeight'
-        ? this.i18n.formatNumber(record.value)
-        : this.format.massWithUnit(record.value);
-
-    if (record.previousValue === null) {
-      return value;
-    }
-
-    const previous =
-      record.prType === 'maxRepsAtWeight'
-        ? this.i18n.formatNumber(record.previousValue)
-        : this.format.massWithUnit(record.previousValue);
-
-    return this.i18n.join([value, this.i18n.t('summary.previousBest', { value: previous })]);
   }
 
   protected async saveNote(notes: string): Promise<void> {

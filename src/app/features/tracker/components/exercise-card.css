@@ -125,3 +125,8 @@
 .card__action:active {
   background: var(--surface-3);
 }
+
+.card__suggestion {
+  display: block;
+  margin-block-end: var(--sp-3);
+}

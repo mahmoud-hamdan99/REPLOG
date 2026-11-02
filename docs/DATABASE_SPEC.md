@@ -462,14 +462,15 @@ Expected sizes: full ~180–350 kB, thumb ~12–25 kB. Deleting a photo soft-del
 
 **Detection rules** (pure functions in `domain/strength/prs.ts`, run inside the finish-workout transaction):
 
-* Only `setType ∈ {working, backoff}`, `isCompleted: true`, `loadType === 'external'` (plus `bodyweight-plus`) sets are candidates.
-* `maxWeight`: strictly greater `weightKg` with `reps ≥ 1`.
+* Only `setType ∈ {working, backoff}`, `isCompleted: true`, `loadType ∈ {external, bodyweight-plus}` sets are candidates. A set whose `workoutExercise` is missing holds no record: the load type lives on the slot, and guessing it from the presence of a weight would turn a data error into an achievement.
+* `maxWeight`: strictly greater load with `reps ≥ 1`. The load is `weightKg` for external work and **`extraWeightKg` for bodyweight-plus** — a weighted pull-up is "+25 kg", it is the number the lifter chooses, and scoring the total would award a record whenever recorded body weight rose.
 * `maxRepsAtWeight`: bucketed by exact `weightKg`; a record exists per weight actually used, preventing "12 reps at 20 kg" from beating "5 reps at 100 kg".
-* `estimated1RM`: Epley, only for `reps ≤ 12`; flagged `isEstimate`, and the UI renders estimates in a visually distinct style (UI_UX_SPEC §9.5).
+* `estimated1RM`: the user's chosen formula, only for `reps ≤ 12` and only for `external` load — an estimated one-rep max derived from added weight has no referent. Flagged `isEstimate`, stored with its `formula`, and rendered in a visually distinct style that names the formula (UI_UX_SPEC §9.5).
 * `maxSetVolume` / `maxSessionVolume`: `Σ(effectiveWeight × reps)` for the set / the exercise within the session.
 * A first-ever qualifying set creates a record with `previousValue: null` and is labelled "First record", not "New PR" — the distinction matters for honesty.
 * Ties never create a record.
-* Recomputation: a full rebuild from `setLogs` is available in Settings → Data (used after an import and after editing historical sets). It is deterministic, so a rebuild must reproduce the same table.
+* Recomputation: detection and rebuilding are **the same operation** — a variant's whole table is recomputed from its set logs and the stored table reconciled against the result. Finishing a workout recomputes the variants it touched; a correction or deletion recomputes the variants it affected; Settings → Data recomputes everything. Determinism is therefore structural rather than maintained.
+* Reconciliation keeps a record's id where the achievement is unchanged, so a rebuild does not churn identities. An achievement the sets no longer support is **hard**-deleted: a record is a derived value, and a tombstone would preserve a claim the data has stopped making.
 
 ---
 

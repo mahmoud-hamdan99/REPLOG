@@ -1,0 +1,47 @@
+/* Dashed and tinted with --info, the same language estimates use elsewhere:
+   a suggestion must never be mistaken for something that was logged. */
+.hint {
+  padding-inline: var(--sp-3);
+  padding-block: var(--sp-2) var(--sp-3);
+  border: 1px dashed var(--info);
+  border-radius: var(--r-md);
+  background: none;
+}
+
+.hint__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.hint__value {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+
+.hint__reason {
+  margin-block: var(--sp-1) var(--sp-2);
+}
+
+.hint__apply {
+  min-block-size: var(--target-min);
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-family: var(--font-ui);
+  font-size: var(--t-label);
+  cursor: pointer;
+}
+
+.hint__apply:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.hint__apply:active {
+  background: var(--surface-3);
+}

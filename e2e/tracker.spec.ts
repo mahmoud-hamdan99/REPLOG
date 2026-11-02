@@ -132,8 +132,10 @@ test('finishing writes the session to history and shows measured totals', async 
   await expect(page.getByText('Workout complete')).toBeVisible();
 
   // 100 × 5 = 500, and the two rows that were never confirmed are reported
-  // rather than quietly dropped.
-  await expect(page.getByText('500')).toBeVisible();
+  // rather than quietly dropped. Scoped to the Volume tile: the records this
+  // session earned carry the same figure further down the screen.
+  const volume = page.locator('rl-stat-tile').filter({ hasText: 'Volume' });
+  await expect(volume).toContainText('500');
   await expect(page.getByText(/never confirmed|unconfirmed/)).toBeVisible();
 });
 

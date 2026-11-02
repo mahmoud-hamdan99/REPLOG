@@ -1,6 +1,7 @@
 import { computed, inject, Service } from '@angular/core';
 import { I18n } from '../i18n/i18n.service';
 import { SettingsStore } from '../settings/settings.store';
+import type { PersonalRecord } from '../../domain/models/records';
 import type { SetLog } from '../../domain/models/workout';
 import { durationParts } from '../../domain/time/duration';
 import { displayIncrement, toCanonicalMass, toDisplayMass } from '../../domain/units/convert';
@@ -91,6 +92,55 @@ export class DisplayFormat {
     if (set.weightKg === null) return `${this.number(set.reps)}`;
     if (set.reps === null) return this.mass(set.weightKg);
     return `${this.mass(set.weightKg)} × ${this.number(set.reps)}`;
+  }
+
+  // ------------------------------------------------------------- records
+
+  /**
+   * What kind of record this is.
+   *
+   * UI_UX_SPEC section 5.5 asks every record entry to state its type, value
+   * and previous best. Here rather than in a feature because two screens show
+   * records — the post-workout summary and the records list — and a type
+   * label that drifted between them would be two different claims about the
+   * same row.
+   */
+  recordType(record: Pick<PersonalRecord, 'prType' | 'repBucket'>): string {
+    if (record.prType === 'maxRepsAtWeight') {
+      return this.i18n.t('records.type.maxRepsAtWeight', {
+        weight: this.massWithUnit(record.repBucket),
+      });
+    }
+    return this.i18n.t(`records.type.${record.prType}`);
+  }
+
+  /** The value in the unit its type is measured in: reps are not kilograms. */
+  recordValue(record: Pick<PersonalRecord, 'prType' | 'value'>): string {
+    return record.prType === 'maxRepsAtWeight'
+      ? this.repCount(record.value)
+      : this.massWithUnit(record.value);
+  }
+
+  /**
+   * "First record", or what it improved on.
+   *
+   * Never both and never neither: `previousValue` is null exactly when there
+   * was nothing to beat, and starting is not the same as improving.
+   */
+  recordDelta(record: Pick<PersonalRecord, 'prType' | 'previousValue'>): string {
+    if (record.previousValue === null) {
+      return this.i18n.t('records.first');
+    }
+    return this.i18n.t('records.improved', {
+      value: this.recordValue({ prType: record.prType, value: record.previousValue }),
+    });
+  }
+
+  /** The formula behind an estimate, named rather than implied. */
+  recordFormula(record: Pick<PersonalRecord, 'formula'>): string {
+    return record.formula === null
+      ? ''
+      : this.i18n.t('records.formula', { formula: this.i18n.t(`formula.${record.formula}`) });
   }
 
   /** "12 Feb" — a day and month, which is all a comparison needs. */

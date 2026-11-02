@@ -393,7 +393,7 @@ Build it in the order below; each step is independently demonstrable.
 1. ~~`domain/strength/e1rm.ts`~~ — **built in Phase 5.** Epley and Brzycki, `null` above 12 reps, `{ value, formula, isEstimate }`. Pulled forward because the tracker's write path stores `setLogs.e1rmKg` at confirm time; leaving it null would have meant a backfill later.
 2. ~~`domain/strength/volume.ts`~~ — **built in Phase 5**, for the same reason: `volumeKg` and the session rollups are written by the finish transaction. Period aggregation is still Phase 10's.
 3. `domain/strength/prs.ts` — all five PR types, variant-key scoping, weight bucketing for `maxRepsAtWeight`, "First record" vs "New PR", `previousValue` retention, `isCurrent` flipping.
-4. PR detection inside the finish transaction; full rebuild-from-`setLogs` routine for Settings → Data.
+4. PR detection inside the finish transaction; full rebuild-from-`setLogs` routine for Settings → Data. Detection *is* the rebuild, scoped to the variants a session touched — see ARCHITECTURE D22.
 5. `domain/strength/progression.ts` — the suggestion rules in ARCHITECTURE §6.2 with a human-readable `reason`.
 6. `rl-prev-performance` and `rl-suggestion-hint`: ghost text, reason, `⌁` marker, tap to accept; **never auto-applied, never written into a plan** (spec §4.5).
 7. Records screen and dashboard "recent records" list, with the variant-scope explanation banner.
@@ -401,12 +401,24 @@ Build it in the order below; each step is independently demonstrable.
 
 ### Acceptance criteria
 
-- [ ] A dumbbell press PR never displaces a barbell press PR
-- [ ] A 12-rep set at 20 kg never registers as a rep PR against a 5-rep set at 100 kg
-- [ ] Every estimated value on screen carries the `⌁` marker and names its formula
-- [ ] No suggestion ever mutates a routine or commits a value without a tap
-- [ ] With one prior session, the suggestion is present and explained; with none, the UI says "No history yet" and offers nothing
-- [ ] A PR rebuild over 5 000 seeded sets reproduces the incrementally built table exactly
+- [x] A dumbbell press PR never displaces a barbell press PR — every record is scoped to a `variantKey`, and the engine recomputes one variant at a time. Tested both ways round: a heavier dumbbell session leaves the barbell record standing, and recomputing one variant leaves the other's records untouched down to their ids.
+- [x] A 12-rep set at 20 kg never registers as a rep PR against a 5-rep set at 100 kg — rep records are bucketed by the exact load, so the two are different records and both stand.
+- [x] Every estimated value on screen carries the `⌁` marker and names its formula — the estimate badge and "Epley formula" appear on the summary and on the records screen, checked in Playwright on both.
+- [x] No suggestion ever mutates a routine or commits a value without a tap — the hint is a dumb component that emits; accepting it writes an **unconfirmed draft** to the current row, so even after the tap nothing is logged until the set is confirmed. A Playwright test taps it and asserts the row's confirm button is still unpressed.
+- [x] With one prior session, the suggestion is present and explained; with none, the UI says "No history yet" and offers nothing — `suggestNext` returns `null` below one session, and the card falls through to the previous-performance block's own empty line.
+- [x] A PR rebuild over 5 000 seeded sets reproduces the incrementally built table exactly — **true by construction**: detection and rebuilding are the same call, so there is no incremental path that could drift. The test seeds 5 000 sets, rebuilds, and compares the persisted table against the pure function run independently over the same sets — a stronger check than rebuilding twice, which would only prove the engine repeats itself.
+
+### Deviations
+
+* **Bodyweight-plus records are scored on the added weight, not the total.** DATABASE_SPEC §3.13 listed it among the candidates without saying which number; scoring the total would hand out a record every time recorded body weight rose, which PRODUCT_SPEC §4.9 rules out. Volume still uses effective weight — total work done genuinely includes the body being moved. The records screen says so in a line.
+* **The dashboard "recent records" card is Phase 10's**, which is the phase that builds the dashboard (its task 8). `RecordsStore.recent` is ready for it; putting a card on a screen that does not exist yet would have been the wrong half of the work.
+* **The rebuild routine has no Settings → Data button yet.** `RecordsStore.rebuild()` exists and is tested; the screen that calls it is Phase 11's.
+* **The records screen lives on `/progress`** rather than a route of its own. Phase 10 turns that into the analytics hub with Records as one tab; a second route built now would only be moved then.
+
+### Carried forward
+
+* Record *history* per type — `RecordsStore.historyFor` is written and tested, but nothing links to it yet. It wants the per-exercise progression screen, which is Phase 10.
+* A record's `nameSnapshot` is frozen in the language the session was logged in, like every other snapshot. Consistent, and worth revisiting if it reads badly after a language switch.
 
 ---
 

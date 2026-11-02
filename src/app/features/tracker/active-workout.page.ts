@@ -6,6 +6,9 @@ import { SettingsStore } from '../../core/settings/settings.store';
 import { ToastService } from '../../core/toast/toast.service';
 import type { SetType } from '../../domain/models/enums';
 import { variantKey } from '../../domain/models/exercise';
+import { suggestNext, type Suggestion } from '../../domain/strength/progression';
+import type { MuscleGroup } from '../../domain/models/enums';
+import { MUSCLE_ROLLUP } from '../../domain/models/enums';
 import type { ExerciseFacts } from '../../domain/tracker/session';
 import { Button } from '../../shared/ui/button';
 import { Chip } from '../../shared/ui/chip';
@@ -27,6 +30,19 @@ const RPE_VALUES = [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10];
 const RIR_VALUES = [0, 1, 2, 3, 4, 5];
 /** How long the finished rest sheet stays up before dismissing itself. */
 const REST_DISMISS_MS = 2000;
+
+/** Filters whose default load jump is the bigger one. */
+const LOWER_BODY: readonly string[] = ['quadriceps', 'hamstrings', 'glutes', 'calves'];
+
+/**
+ * Whether an exercise's default progression step is the lower-body one.
+ *
+ * Decided from the rolled-up filter taxonomy rather than the fine-grained
+ * muscles, so adductors and abductors come along without a second list.
+ */
+function isLowerBody(primaryMuscles: readonly MuscleGroup[]): boolean {
+  return primaryMuscles.some((muscle) => LOWER_BODY.includes(MUSCLE_ROLLUP[muscle]));
+}
 
 interface WakeLockLike {
   release(): Promise<void>;
@@ -63,7 +79,13 @@ interface WakeLockLike {
     Sheet,
   ],
   template: `
-    @if (!store.hasSession()) {
+    @if (store.isLoading() && !store.hasSession()) {
+      <!-- "No workout in progress" is a claim, and it must not be made while
+           the answer is still being looked up. -->
+      <div class="page">
+        <p class="t-body" role="status">{{ i18n.t('state.loading.label') }}</p>
+      </div>
+    } @else if (!store.hasSession()) {
       <div class="page">
         <rl-empty-state
           titleKey="tracker.notFound.title"
@@ -157,6 +179,7 @@ interface WakeLockLike {
                 [isAdvanced]="store.isAdvanced()"
                 [readOnly]="store.isReadOnly()"
                 [previous]="previousFor(card.exercise.id)"
+                [suggestionText]="suggestionFor(card.exercise.id)"
                 (toggled)="toggleCard(card.exercise.id)"
                 (menuOpened)="openExerciseMenu(card.exercise.id)"
                 (setToggled)="toggleSet($event)"
@@ -166,6 +189,7 @@ interface WakeLockLike {
                 (setOpened)="openSetSheet($event)"
                 (setAdded)="store.addSet(card.exercise.id)"
                 (warmupAdded)="store.addWarmup(card.exercise.id)"
+                (suggestionAccepted)="applySuggestion(card.exercise.id)"
               />
             }
           </div>
@@ -449,6 +473,37 @@ export class ActiveWorkoutPage {
   /** Previous performance, fetched once per exercise and cached for the view. */
   private readonly previous = signal<ReadonlyMap<string, PreviousPerformance | null>>(new Map());
 
+  /**
+   * Suggestions, derived from previous performance and the plan's target.
+   *
+   * A computed rather than a second fetch: everything the rules need is
+   * already loaded, so a suggestion costs nothing beyond the arithmetic and
+   * cannot go stale against the history it was derived from.
+   */
+  private readonly suggestions = computed(() => {
+    const result = new Map<string, Suggestion>();
+
+    for (const card of this.store.cards()) {
+      const last = this.previous().get(card.exercise.id);
+      if (!last) continue;
+
+      const library = this.library.byId().get(card.exercise.exerciseId);
+      const target = card.exercise.targetSnapshot;
+      const suggestion = suggestNext({
+        lastSession: last.sets,
+        sessionCount: last.sessionCount,
+        targetRepsMin: target?.targetRepsMin ?? null,
+        targetRepsMax: target?.targetRepsMax ?? null,
+        incrementKg: library?.weightIncrementKg ?? 2.5,
+        isLowerBody: isLowerBody(library?.primaryMuscles ?? []),
+      });
+
+      if (suggestion) result.set(card.exercise.id, suggestion);
+    }
+
+    return result;
+  });
+
   private leaveResolver: ((leave: boolean) => void) | null = null;
   private wakeLock: WakeLockLike | null = null;
   private lastRestStart = 0;
@@ -565,11 +620,20 @@ export class ActiveWorkoutPage {
     });
   }
 
+  /**
+   * Finds the session first, and the library alongside it.
+   *
+   * Deliberately not sequential. The library is needed for the picker and for
+   * load increments, not to render a session — and on a first run its load
+   * includes seeding the whole catalog, measured at several seconds on WebKit.
+   * Waiting for that before even looking for the active workout left the one
+   * screen whose promise is "your session is safe" saying "No workout in
+   * progress" for the duration.
+   */
   private async init(): Promise<void> {
-    await this.library.load();
-    if (!this.store.hasSession()) {
-      await this.store.loadActive();
-    }
+    const session = this.store.hasSession() ? Promise.resolve(true) : this.store.loadActive();
+
+    await Promise.all([session, this.library.load()]);
   }
 
   // ------------------------------------------------------------------- views
@@ -584,6 +648,52 @@ export class ActiveWorkoutPage {
 
   protected previousFor(exerciseId: string): PreviousPerformance | null {
     return this.previous().get(exerciseId) ?? null;
+  }
+
+  /**
+   * The next-set suggestion for one exercise, formatted for display.
+   *
+   * `null` whenever there is nothing honest to say: the preference is off,
+   * there is no history, or the rules decline. The card then shows the
+   * previous-performance block's own "No history yet" and offers nothing.
+   */
+  protected suggestionFor(exerciseId: string): { value: string; reason: string } | null {
+    if (!this.settings.prefs().showSuggestions) return null;
+
+    const suggestion = this.suggestions().get(exerciseId);
+    if (!suggestion) return null;
+
+    const weight =
+      suggestion.suggestedWeightKg === null
+        ? null
+        : this.format.massWithUnit(suggestion.suggestedWeightKg);
+    const reps =
+      suggestion.suggestedReps === null ? null : this.format.repCount(suggestion.suggestedReps);
+
+    return {
+      value: this.i18n.join([weight, reps]),
+      reason: this.i18n.t(suggestion.reasonKey, suggestion.reasonParams),
+    };
+  }
+
+  /**
+   * Fills the current row from a suggestion. **A draft, never a commit.**
+   *
+   * The values land in the row as an unconfirmed edit exactly as if typed;
+   * the user still has to confirm the set. Nothing is written into the plan.
+   */
+  protected applySuggestion(exerciseId: string): void {
+    const suggestion = this.suggestions().get(exerciseId);
+    const card = this.store.cards().find((item) => item.exercise.id === exerciseId);
+    const target = card?.sets.find((set) => !set.isCompleted);
+    if (!suggestion || !target) return;
+
+    this.store.editSet(target.id, {
+      weightKg: suggestion.suggestedWeightKg,
+      reps: suggestion.suggestedReps,
+    });
+    this.store.focusSet(target.id);
+    this.toasts.show(this.i18n.t('suggest.applied'));
   }
 
   /**

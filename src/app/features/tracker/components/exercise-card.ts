@@ -4,6 +4,7 @@ import { I18n } from '../../../core/i18n/i18n.service';
 import type { SetLog } from '../../../domain/models/workout';
 import type { PreviousPerformance } from '../previous-performance.service';
 import type { SessionCard } from '../tracker.store';
+import { SuggestionHint } from '../../../shared/ui/suggestion-hint';
 import { PrevPerformance } from './prev-performance';
 import { SetRow } from '../../../shared/ui/set-row';
 
@@ -22,7 +23,7 @@ import { SetRow } from '../../../shared/ui/set-row';
 @Component({
   selector: 'rl-exercise-card',
   styleUrl: './exercise-card.css',
-  imports: [PrevPerformance, SetRow],
+  imports: [PrevPerformance, SetRow, SuggestionHint],
   host: { '[class.card--expanded]': 'expanded()' },
   template: `
     <div class="card" [class.card--skipped]="card().exercise.isSkipped">
@@ -60,6 +61,15 @@ import { SetRow } from '../../../shared/ui/set-row';
         <p class="card__sub t-caption">{{ targetText() }}</p>
 
         <rl-prev-performance class="card__prev" [previous]="previous()" />
+
+        @if (suggestionText(); as suggestion) {
+          <rl-suggestion-hint
+            class="card__suggestion"
+            [valueText]="suggestion.value"
+            [reasonText]="suggestion.reason"
+            (accepted)="suggestionAccepted.emit()"
+          />
+        }
 
         <div
           class="card__cols t-micro"
@@ -117,6 +127,13 @@ export class ExerciseCard {
   readonly isAdvanced = input(false);
   readonly readOnly = input(false);
   readonly previous = input<PreviousPerformance | null>(null);
+  /**
+   * The next-set suggestion, already formatted and translated.
+   *
+   * Passed in rather than computed here: the rules are a pure domain function
+   * and the numbers need unit conversion, neither of which belongs in a card.
+   */
+  readonly suggestionText = input<{ value: string; reason: string } | null>(null);
 
   readonly toggled = output<void>();
   readonly menuOpened = output<void>();
@@ -127,6 +144,7 @@ export class ExerciseCard {
   readonly setOpened = output<string>();
   readonly setAdded = output<void>();
   readonly warmupAdded = output<void>();
+  readonly suggestionAccepted = output<void>();
 
   /** Time and distance work has no load field to show. */
   protected readonly showWeight = computed(() => {

@@ -1,0 +1,78 @@
+.note {
+  margin-block: 0 var(--sp-4);
+}
+
+.rec {
+  display: block;
+  margin-block-end: var(--sp-2);
+}
+
+.rec__btn,
+.grp__row {
+  inline-size: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-1);
+  text-align: start;
+  font-family: var(--font-ui);
+  cursor: pointer;
+}
+
+.rec__btn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-block-size: var(--target-gym);
+}
+
+.rec__btn:focus-visible,
+.grp__row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.rec__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.rec__value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-1);
+}
+
+.rec__value .t-stat-sm {
+  font-variant-numeric: tabular-nums;
+}
+
+.grp {
+  display: block;
+  margin-block-end: var(--sp-3);
+}
+
+.grp__name {
+  margin-block: 0 var(--sp-2);
+}
+
+.grp__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  min-block-size: var(--target-min);
+  border-block-start: 1px solid var(--border);
+}
+
+.grp__value {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-variant-numeric: tabular-nums;
+}

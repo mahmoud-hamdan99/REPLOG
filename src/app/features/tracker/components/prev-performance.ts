@@ -36,11 +36,17 @@ export class PrevPerformance {
 
   readonly previous = input<PreviousPerformance | null>(null);
 
-  /** Working sets only: a warm-up is not something to compare against. */
+  /**
+   * Working sets only: a warm-up is not something to compare against.
+   *
+   * Joined with the locale's separator rather than spaces — "100 × 5 100 × 5"
+   * reads as one number running into the next.
+   */
   protected readonly sets = computed(() =>
-    (this.previous()?.sets ?? [])
-      .filter((set) => set.setType !== 'warmup')
-      .map((set) => this.format.setSummary(set))
-      .join('   '),
+    this.i18n.join(
+      (this.previous()?.sets ?? [])
+        .filter((set) => set.setType !== 'warmup')
+        .map((set) => this.format.setSummary(set)),
+    ),
   );
 }

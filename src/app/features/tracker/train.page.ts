@@ -221,9 +221,16 @@ export class TrainPage {
     void this.init();
   }
 
+  /**
+   * The in-progress session is looked for first, not behind the catalog.
+   *
+   * On a first run the library load seeds 168 exercises; holding the "workout
+   * in progress" card behind that would hide the most urgent thing on the
+   * screen for seconds.
+   */
   private async init(): Promise<void> {
-    await Promise.all([this.planner.load(), this.library.load()]);
-    await this.tracker.loadActive();
+    const session = this.tracker.loadActive();
+    await Promise.all([session, this.planner.load(), this.library.load()]);
     await this.overview.load((this.planner.routines() ?? []).map((routine) => routine.id));
   }
 

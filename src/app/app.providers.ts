@@ -4,7 +4,7 @@ import { CLOCK } from './data/clock';
 import { DB_EVENTS } from './data/db-events';
 import { ID_FACTORY } from './data/ids';
 import { PHOTO_BLOB_STORE } from './data/photo-blobs';
-import { NO_PR_DETECTION, PR_DETECTOR } from './data/pr-detector';
+import { PR_DETECTOR } from './data/pr-detector';
 import { PREFS_STORE } from './data/prefs';
 import { TAB_IDENTITY } from './data/tab-id';
 import { ENTITY_STORE_NAMES } from './data/stores';
@@ -21,6 +21,7 @@ import { IdbDbEvents } from './infrastructure/idb/idb-db-events';
 import { IdbEnvironment } from './infrastructure/idb/idb-environment';
 import { IdbRepository } from './infrastructure/idb/idb-repository';
 import { IdbUnitOfWork, StandaloneRepoContext } from './infrastructure/idb/idb-unit-of-work';
+import { PrEngine } from './features/records/pr-engine';
 import { LocalStoragePrefs } from './infrastructure/prefs/local-storage-prefs';
 import { SessionTabIdentity } from './infrastructure/platform/session-tab-identity';
 import { SystemClock } from './infrastructure/platform/system-clock';
@@ -47,8 +48,10 @@ export function provideDataLayer(options: { clock?: Provider } = {}): Provider[]
     { provide: ID_FACTORY, useExisting: IdbEnvironment },
     { provide: TAB_IDENTITY, useExisting: SessionTabIdentity },
     { provide: PHOTO_BLOB_STORE, useExisting: IdbPhotoBlobStore },
-    // Phase 7 replaces this with the real detector. See data/pr-detector.ts.
-    { provide: PR_DETECTOR, useValue: NO_PR_DETECTION },
+    // The seam Phase 5 declared, filled in by Phase 7. Bound here because
+    // this is the composition root; nothing in data/ or features/ reaches for
+    // the implementation directly.
+    { provide: PR_DETECTOR, useExisting: PrEngine },
     ...repositories,
   ];
 }

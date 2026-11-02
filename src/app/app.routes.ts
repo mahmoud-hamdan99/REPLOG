@@ -109,9 +109,11 @@ export const routes: Routes = [
 
   // Progress and body
   {
+    // Records in Phase 7. Phase 10 turns this into the analytics hub with
+    // Records as one of its tabs, rather than moving a second route then.
     path: 'progress',
-    loadComponent: placeholder,
-    data: { titleKey: 'page.progress.title', navTab: 'progress' },
+    loadComponent: () => import('./features/records/records.page').then((m) => m.RecordsPage),
+    data: { titleKey: 'page.records.title', navTab: 'progress' },
   },
   {
     // The sets list ships with history in Phase 6; Phase 10 adds the chart

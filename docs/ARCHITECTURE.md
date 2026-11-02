@@ -306,6 +306,8 @@ variantKey(exercise) = `${exercise.id}|${exercise.equipment}|${exercise.laterali
 
 PRs, "previous performance", and progression suggestions are all scoped to the variant key. When the UI shows a comparison that crosses variant keys (for example an exercise-family view), it is labelled as a family rollup and PR badges are suppressed.
 
+The records screen states the rule in a line of its own rather than leaving it implicit — a reader who does not know that a dumbbell press is scored separately would read the list wrongly, and that is the misreading §4.10 exists to prevent.
+
 ### 6.2 Suggestion engine rules
 
 ```
@@ -318,6 +320,8 @@ Produce: { suggestedWeightKg, suggestedReps, confidence, reason, isEstimate: tru
 * Otherwise → repeat last load, suggest +1 rep.
 * Fewer than 1 prior session → **no suggestion**, show "No history yet".
 * Suggestions are *never* written into a plan or prefilled as a committed value. They render as ghost text the user must accept (spec §4.5). Every suggestion surface shows the `reason` and an estimate marker.
+* Accepting one writes an **unconfirmed draft** to the current row. The user still confirms the set, so a tap on "Use this" fills a field and logs nothing.
+* The reason travels as a translation key with its numbers, not as a sentence. `domain/` stays free of language, and the view renders the words.
 
 ---
 
@@ -432,6 +436,8 @@ Formatting and unit conversion live in `core/format` (`DisplayFormat`), not in a
 | `PhotosStore` | Photo metadata, object-URL lifecycle, compare selection | Route |
 | `ProgressStore` | Analytics ranges, computed series, muscle distribution | Route |
 | `RecordsStore` | PR list and PR history | App |
+
+`RecordsStore` only reads. Records are written by `PrEngine` inside whichever transaction changed the history — the finish transaction, a correction, a deletion — because a record and the sets it is derived from have to move together or not at all.
 | `BackupStore` | Export/import progress, validation report | Route |
 
 `PhotosStore` must `URL.revokeObjectURL` on every replaced or discarded blob URL — tracked in a `Map<id, string>` released in `ngOnDestroy`/`DestroyRef`. Leaking object URLs pins blobs in memory and is a known iOS crash vector on photo-heavy galleries.
@@ -662,3 +668,6 @@ Spec §13 requires distinguishing tested from untested functionality: the releas
 | D19 | `deletedAt` on a write is read by *presence*, not truthiness | `value.deletedAt ?? existing.deletedAt` | `??` treats an explicit `null` as "not supplied" and writes the tombstone straight back, which makes every undo in the app a no-op that looks like it worked |
 | D20 | A delete cascade tombstones the parent first | Children first, or a separate "deleted by" marker | Each write takes its own clock reading, so stamping the workout first is what lets a restore identify its own cascade by timestamp — and leave an earlier, unrelated deletion alone |
 | D21 | Shared components style their host with `:host` | Plain `.class` rules | Emulated encapsulation scopes a bare `.card` to the component's own template; a host carries `_nghost`, not `_ngcontent`, so the rule silently never matches |
+| D22 | Record detection *is* the rebuild, scoped to the affected variants | Maintain an incremental path beside a rebuild | "A rebuild reproduces the incrementally built table" is then true by construction. Two implementations that must agree forever is a bug waiting for a quiet afternoon; the cost is one indexed range read per variant |
+| D23 | Bodyweight-plus records score the **added** weight | Score effective weight (body + belt) | A record that arrives because your recorded body weight rose is a record nobody earned. Volume still counts effective weight: total work done is a different question from what you chose to lift |
+| D24 | A suggestion is accepted into an **unconfirmed** row | Prefill the row as logged, or apply on accept | Tapping "Use this" is consent to see the number in the field, not a claim to have done the set |
