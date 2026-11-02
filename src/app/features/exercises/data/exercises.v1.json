@@ -6,9 +6,17 @@
       "nameEn": "Ab Wheel Rollout",
       "nameAr": "عجلة البطن",
       "isArTranslated": true,
-      "aliases": ["rollout", "عجلة"],
-      "primaryMuscles": ["abs"],
-      "secondaryMuscles": ["lats", "lower-back"],
+      "aliases": [
+        "rollout",
+        "عجلة"
+      ],
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "lats",
+        "lower-back"
+      ],
       "equipment": "other",
       "exerciseType": "strength",
       "movementPattern": "isolation",
@@ -32,7 +40,9 @@
       "nameAr": "تقريب الأرجل على الجهاز",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["adductors"],
+      "primaryMuscles": [
+        "adductors"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -56,9 +66,16 @@
       "nameEn": "Arnold Press",
       "nameAr": "ضغط أرنولد",
       "isArTranslated": true,
-      "aliases": ["أرنولد"],
-      "primaryMuscles": ["front-delts", "side-delts"],
-      "secondaryMuscles": ["triceps"],
+      "aliases": [
+        "أرنولد"
+      ],
+      "primaryMuscles": [
+        "front-delts",
+        "side-delts"
+      ],
+      "secondaryMuscles": [
+        "triceps"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "vertical-push",
@@ -82,8 +99,13 @@
       "nameAr": "الدراجة الهوائية المقاومة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["quadriceps", "cardio"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "cardio"
+      ],
       "equipment": "machine",
       "exerciseType": "cardio",
       "movementPattern": "other",
@@ -106,9 +128,16 @@
       "nameEn": "Back Extension",
       "nameAr": "تمديد الظهر",
       "isArTranslated": true,
-      "aliases": ["hyperextension"],
-      "primaryMuscles": ["lower-back"],
-      "secondaryMuscles": ["glutes", "hamstrings"],
+      "aliases": [
+        "hyperextension"
+      ],
+      "primaryMuscles": [
+        "lower-back"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "hinge",
@@ -131,9 +160,19 @@
       "nameEn": "Back Squat",
       "nameAr": "القرفصاء بالبار",
       "isArTranslated": true,
-      "aliases": ["squat", "سكوات", "قرفصاء"],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes", "lower-back", "adductors"],
+      "aliases": [
+        "squat",
+        "سكوات",
+        "قرفصاء"
+      ],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "lower-back",
+        "adductors"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "squat",
@@ -169,7 +208,9 @@
       "nameAr": "رفع السمانة بالمطاط",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["calves"],
+      "primaryMuscles": [
+        "calves"
+      ],
       "secondaryMuscles": [],
       "equipment": "bands",
       "exerciseType": "strength",
@@ -194,8 +235,12 @@
       "nameAr": "تبعيد الأرجل بالمطاط",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["abductors"],
-      "secondaryMuscles": ["glutes"],
+      "primaryMuscles": [
+        "abductors"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "equipment": "bands",
       "exerciseType": "strength",
       "movementPattern": "isolation",
@@ -219,7 +264,9 @@
       "nameAr": "ثني الأرجل بالمطاط",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["hamstrings"],
+      "primaryMuscles": [
+        "hamstrings"
+      ],
       "secondaryMuscles": [],
       "equipment": "bands",
       "exerciseType": "strength",
@@ -243,9 +290,19 @@
       "nameEn": "Barbell Bench Press",
       "nameAr": "ضغط البار المستوي",
       "isArTranslated": true,
-      "aliases": ["bench", "bench press", "bp", "بنش"],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["triceps", "front-delts"],
+      "aliases": [
+        "bench",
+        "bench press",
+        "bp",
+        "بنش"
+      ],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "front-delts"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "horizontal-push",
@@ -281,7 +338,9 @@
       "nameAr": "رفع السمانة بالبار",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["calves"],
+      "primaryMuscles": [
+        "calves"
+      ],
       "secondaryMuscles": [],
       "equipment": "barbell",
       "exerciseType": "strength",
@@ -305,9 +364,16 @@
       "nameEn": "Barbell Curl",
       "nameAr": "تبادل البار",
       "isArTranslated": true,
-      "aliases": ["bicep curl", "باي بار"],
-      "primaryMuscles": ["biceps"],
-      "secondaryMuscles": ["forearms"],
+      "aliases": [
+        "bicep curl",
+        "باي بار"
+      ],
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "isolation",
@@ -341,7 +407,9 @@
       "nameAr": "مد الرسغ بالبار",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["forearms"],
+      "primaryMuscles": [
+        "forearms"
+      ],
       "secondaryMuscles": [],
       "equipment": "barbell",
       "exerciseType": "strength",
@@ -365,9 +433,18 @@
       "nameEn": "Barbell Row",
       "nameAr": "تجديف بالبار",
       "isArTranslated": true,
-      "aliases": ["bent over row", "تجديف"],
-      "primaryMuscles": ["upper-back", "lats"],
-      "secondaryMuscles": ["biceps", "rear-delts"],
+      "aliases": [
+        "bent over row",
+        "تجديف"
+      ],
+      "primaryMuscles": [
+        "upper-back",
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "rear-delts"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "horizontal-pull",
@@ -400,9 +477,16 @@
       "nameEn": "Barbell Shrug",
       "nameAr": "هز الأكتاف بالبار",
       "isArTranslated": true,
-      "aliases": ["shrug", "تراب"],
-      "primaryMuscles": ["upper-back"],
-      "secondaryMuscles": ["forearms"],
+      "aliases": [
+        "shrug",
+        "تراب"
+      ],
+      "primaryMuscles": [
+        "upper-back"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "isolation",
@@ -426,7 +510,9 @@
       "nameAr": "ثني الرسغ بالبار",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["forearms"],
+      "primaryMuscles": [
+        "forearms"
+      ],
       "secondaryMuscles": [],
       "equipment": "barbell",
       "exerciseType": "strength",
@@ -451,8 +537,14 @@
       "nameAr": "حبال القتال",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["shoulders", "forearms", "cardio"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "shoulders",
+        "forearms",
+        "cardio"
+      ],
       "equipment": "other",
       "exerciseType": "cardio",
       "movementPattern": "other",
@@ -476,7 +568,9 @@
       "nameAr": "تبادل بالكابل خلف الجسم",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["biceps"],
+      "primaryMuscles": [
+        "biceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "cable",
       "exerciseType": "cable",
@@ -501,7 +595,9 @@
       "nameAr": "ثني الرسغ خلف الظهر",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["forearms"],
+      "primaryMuscles": [
+        "forearms"
+      ],
       "secondaryMuscles": [],
       "equipment": "barbell",
       "exerciseType": "strength",
@@ -526,8 +622,12 @@
       "nameAr": "غطس على البنش",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["triceps"],
-      "secondaryMuscles": ["front-delts"],
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "front-delts"
+      ],
       "equipment": "bench",
       "exerciseType": "strength",
       "movementPattern": "vertical-push",
@@ -551,8 +651,12 @@
       "nameAr": "رفرفة خلفية بالدمبل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["rear-delts"],
-      "secondaryMuscles": ["upper-back"],
+      "primaryMuscles": [
+        "rear-delts"
+      ],
+      "secondaryMuscles": [
+        "upper-back"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "isolation",
@@ -576,8 +680,12 @@
       "nameAr": "قرفصاء بوزن الجسم",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes"],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "squat",
@@ -601,8 +709,14 @@
       "nameAr": "القفز على الصندوق",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["quadriceps", "glutes", "calves"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "glutes",
+        "calves"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "plyometric",
       "movementPattern": "squat",
@@ -626,8 +740,13 @@
       "nameAr": "قرفصاء الصندوق",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes", "hamstrings"],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "squat",
@@ -650,9 +769,16 @@
       "nameEn": "Bulgarian Split Squat",
       "nameAr": "قرفصاء بلغاري",
       "isArTranslated": true,
-      "aliases": ["بلغاري"],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes", "adductors"],
+      "aliases": [
+        "بلغاري"
+      ],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "adductors"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "lunge",
@@ -675,9 +801,17 @@
       "nameEn": "Burpee",
       "nameAr": "البيربي",
       "isArTranslated": true,
-      "aliases": ["بيربي"],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["chest", "quadriceps", "abs"],
+      "aliases": [
+        "بيربي"
+      ],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "chest",
+        "quadriceps",
+        "abs"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "plyometric",
       "movementPattern": "other",
@@ -700,8 +834,13 @@
       "nameEn": "Cable Crossover",
       "nameAr": "تفتيح بالكابل",
       "isArTranslated": true,
-      "aliases": ["crossover", "كروس"],
-      "primaryMuscles": ["chest"],
+      "aliases": [
+        "crossover",
+        "كروس"
+      ],
+      "primaryMuscles": [
+        "chest"
+      ],
       "secondaryMuscles": [],
       "equipment": "cable",
       "exerciseType": "cable",
@@ -735,8 +874,12 @@
       "nameEn": "Cable Crunch",
       "nameAr": "طحن بالكابل",
       "isArTranslated": true,
-      "aliases": ["كرنش"],
-      "primaryMuscles": ["abs"],
+      "aliases": [
+        "كرنش"
+      ],
+      "primaryMuscles": [
+        "abs"
+      ],
       "secondaryMuscles": [],
       "equipment": "cable",
       "exerciseType": "cable",
@@ -761,8 +904,12 @@
       "nameAr": "تبادل بالكابل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["biceps"],
-      "secondaryMuscles": ["forearms"],
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
       "equipment": "cable",
       "exerciseType": "cable",
       "movementPattern": "isolation",
@@ -786,8 +933,12 @@
       "nameAr": "ركلة خلفية بالكابل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["glutes"],
-      "secondaryMuscles": ["hamstrings"],
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
       "equipment": "cable",
       "exerciseType": "cable",
       "movementPattern": "isolation",
@@ -811,7 +962,9 @@
       "nameAr": "رفرفة جانبية بالكابل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["side-delts"],
+      "primaryMuscles": [
+        "side-delts"
+      ],
       "secondaryMuscles": [],
       "equipment": "cable",
       "exerciseType": "cable",
@@ -836,8 +989,13 @@
       "nameAr": "سحب بين الساقين بالكابل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["hamstrings", "glutes"],
-      "secondaryMuscles": ["lower-back"],
+      "primaryMuscles": [
+        "hamstrings",
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "lower-back"
+      ],
       "equipment": "cable",
       "exerciseType": "cable",
       "movementPattern": "hinge",
@@ -861,8 +1019,12 @@
       "nameAr": "قطع الحطب بالكابل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["obliques"],
-      "secondaryMuscles": ["abs"],
+      "primaryMuscles": [
+        "obliques"
+      ],
+      "secondaryMuscles": [
+        "abs"
+      ],
       "equipment": "cable",
       "exerciseType": "cable",
       "movementPattern": "rotation",
@@ -886,7 +1048,9 @@
       "nameAr": "ثني الرسغ بالكابل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["forearms"],
+      "primaryMuscles": [
+        "forearms"
+      ],
       "secondaryMuscles": [],
       "equipment": "cable",
       "exerciseType": "cable",
@@ -910,9 +1074,17 @@
       "nameEn": "Chest Dip",
       "nameAr": "متوازي للصدر",
       "isArTranslated": true,
-      "aliases": ["dips", "متوازي"],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["triceps", "front-delts"],
+      "aliases": [
+        "dips",
+        "متوازي"
+      ],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "front-delts"
+      ],
       "equipment": "dip-bar",
       "exerciseType": "bodyweight",
       "movementPattern": "horizontal-push",
@@ -936,8 +1108,14 @@
       "nameAr": "تجديف بإسناد الصدر",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["upper-back"],
-      "secondaryMuscles": ["lats", "rear-delts", "biceps"],
+      "primaryMuscles": [
+        "upper-back"
+      ],
+      "secondaryMuscles": [
+        "lats",
+        "rear-delts",
+        "biceps"
+      ],
       "equipment": "machine",
       "exerciseType": "machine",
       "movementPattern": "horizontal-pull",
@@ -961,8 +1139,12 @@
       "nameAr": "عقلة بقبضة عكسية",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["lats"],
-      "secondaryMuscles": ["biceps"],
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps"
+      ],
       "equipment": "pull-up-bar",
       "exerciseType": "bodyweight",
       "movementPattern": "vertical-pull",
@@ -986,8 +1168,13 @@
       "nameAr": "النتر والضغط",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["shoulders", "quadriceps"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "shoulders",
+        "quadriceps"
+      ],
       "equipment": "barbell",
       "exerciseType": "olympic",
       "movementPattern": "vertical-push",
@@ -1010,9 +1197,16 @@
       "nameEn": "Close-Grip Bench Press",
       "nameAr": "ضغط بقبضة ضيقة",
       "isArTranslated": true,
-      "aliases": ["cgbp"],
-      "primaryMuscles": ["triceps"],
-      "secondaryMuscles": ["chest", "front-delts"],
+      "aliases": [
+        "cgbp"
+      ],
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "chest",
+        "front-delts"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "horizontal-push",
@@ -1036,8 +1230,12 @@
       "nameAr": "سحب أمامي بقبضة ضيقة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["lats"],
-      "secondaryMuscles": ["biceps"],
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps"
+      ],
       "equipment": "cable",
       "exerciseType": "cable",
       "movementPattern": "vertical-pull",
@@ -1061,7 +1259,9 @@
       "nameAr": "تبادل تركيز",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["biceps"],
+      "primaryMuscles": [
+        "biceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
@@ -1086,8 +1286,12 @@
       "nameAr": "بلانك كوبنهاجن",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["adductors"],
-      "secondaryMuscles": ["abs"],
+      "primaryMuscles": [
+        "adductors"
+      ],
+      "secondaryMuscles": [
+        "abs"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "carry",
@@ -1111,7 +1315,9 @@
       "nameAr": "تمرين البطن",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["abs"],
+      "primaryMuscles": [
+        "abs"
+      ],
       "secondaryMuscles": [],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
@@ -1136,8 +1342,13 @@
       "nameAr": "طعن متقاطع",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["glutes"],
-      "secondaryMuscles": ["quadriceps", "adductors"],
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "adductors"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "lunge",
@@ -1161,7 +1372,9 @@
       "nameAr": "تمرين الحشرة الميتة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["abs"],
+      "primaryMuscles": [
+        "abs"
+      ],
       "secondaryMuscles": [],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
@@ -1186,8 +1399,12 @@
       "nameAr": "التعلق بالبار",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["forearms"],
-      "secondaryMuscles": ["lats"],
+      "primaryMuscles": [
+        "forearms"
+      ],
+      "secondaryMuscles": [
+        "lats"
+      ],
       "equipment": "pull-up-bar",
       "exerciseType": "bodyweight",
       "movementPattern": "carry",
@@ -1210,9 +1427,20 @@
       "nameEn": "Deadlift",
       "nameAr": "الرفعة المميتة",
       "isArTranslated": true,
-      "aliases": ["conventional deadlift", "ديدليفت", "رفعة"],
-      "primaryMuscles": ["lower-back", "hamstrings"],
-      "secondaryMuscles": ["glutes", "upper-back", "forearms"],
+      "aliases": [
+        "conventional deadlift",
+        "ديدليفت",
+        "رفعة"
+      ],
+      "primaryMuscles": [
+        "lower-back",
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "upper-back",
+        "forearms"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "hinge",
@@ -1247,9 +1475,15 @@
       "nameEn": "Decline Barbell Bench Press",
       "nameAr": "ضغط البار العكسي",
       "isArTranslated": true,
-      "aliases": ["decline bench"],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["triceps"],
+      "aliases": [
+        "decline bench"
+      ],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "triceps"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "horizontal-push",
@@ -1273,7 +1507,9 @@
       "nameAr": "الجلوس على بنش مائل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["abs"],
+      "primaryMuscles": [
+        "abs"
+      ],
       "secondaryMuscles": [],
       "equipment": "bench",
       "exerciseType": "strength",
@@ -1298,8 +1534,12 @@
       "nameAr": "ضغط الماسة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["triceps"],
-      "secondaryMuscles": ["chest"],
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "chest"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "horizontal-push",
@@ -1323,7 +1563,9 @@
       "nameAr": "رفع السمانة منحنيًا",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["calves"],
+      "primaryMuscles": [
+        "calves"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -1347,9 +1589,17 @@
       "nameEn": "Dumbbell Bench Press",
       "nameAr": "ضغط الدمبل المستوي",
       "isArTranslated": true,
-      "aliases": ["db bench", "دمبل صدر"],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["triceps", "front-delts"],
+      "aliases": [
+        "db bench",
+        "دمبل صدر"
+      ],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "front-delts"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "horizontal-push",
@@ -1373,7 +1623,9 @@
       "nameAr": "رفع السمانة بالدمبل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["calves"],
+      "primaryMuscles": [
+        "calves"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
@@ -1397,9 +1649,15 @@
       "nameEn": "Dumbbell Curl",
       "nameAr": "تبادل بالدمبل",
       "isArTranslated": true,
-      "aliases": ["باي دمبل"],
-      "primaryMuscles": ["biceps"],
-      "secondaryMuscles": ["forearms"],
+      "aliases": [
+        "باي دمبل"
+      ],
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "isolation",
@@ -1422,8 +1680,13 @@
       "nameEn": "Dumbbell Fly",
       "nameAr": "تفتيح بالدمبل",
       "isArTranslated": true,
-      "aliases": ["fly", "تفتيح"],
-      "primaryMuscles": ["chest"],
+      "aliases": [
+        "fly",
+        "تفتيح"
+      ],
+      "primaryMuscles": [
+        "chest"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
@@ -1447,8 +1710,12 @@
       "nameEn": "Dumbbell Front Raise",
       "nameAr": "رفرفة أمامية بالدمبل",
       "isArTranslated": true,
-      "aliases": ["رفرفة أمامية"],
-      "primaryMuscles": ["front-delts"],
+      "aliases": [
+        "رفرفة أمامية"
+      ],
+      "primaryMuscles": [
+        "front-delts"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
@@ -1472,8 +1739,14 @@
       "nameEn": "Dumbbell Lateral Raise",
       "nameAr": "رفرفة جانبية بالدمبل",
       "isArTranslated": true,
-      "aliases": ["lateral raise", "side raise", "رفرفة جانبية"],
-      "primaryMuscles": ["side-delts"],
+      "aliases": [
+        "lateral raise",
+        "side raise",
+        "رفرفة جانبية"
+      ],
+      "primaryMuscles": [
+        "side-delts"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
@@ -1508,7 +1781,9 @@
       "nameAr": "تمديد الترايسبس بالدمبل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["triceps"],
+      "primaryMuscles": [
+        "triceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
@@ -1532,9 +1807,17 @@
       "nameEn": "Dumbbell Pullover",
       "nameAr": "بلوفر بالدمبل",
       "isArTranslated": true,
-      "aliases": ["pullover", "بلوفر"],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["lats", "triceps"],
+      "aliases": [
+        "pullover",
+        "بلوفر"
+      ],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "lats",
+        "triceps"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "isolation",
@@ -1558,8 +1841,12 @@
       "nameAr": "الرفعة الرومانية بالدمبل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["hamstrings"],
-      "secondaryMuscles": ["glutes"],
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "hinge",
@@ -1592,9 +1879,18 @@
       "nameEn": "Dumbbell Row",
       "nameAr": "تجديف بالدمبل",
       "isArTranslated": true,
-      "aliases": ["one arm row", "تجديف دمبل"],
-      "primaryMuscles": ["lats", "upper-back"],
-      "secondaryMuscles": ["biceps", "rear-delts"],
+      "aliases": [
+        "one arm row",
+        "تجديف دمبل"
+      ],
+      "primaryMuscles": [
+        "lats",
+        "upper-back"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "rear-delts"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "horizontal-pull",
@@ -1618,8 +1914,12 @@
       "nameAr": "هز الأكتاف بالدمبل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["upper-back"],
-      "secondaryMuscles": ["forearms"],
+      "primaryMuscles": [
+        "upper-back"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "isolation",
@@ -1643,7 +1943,9 @@
       "nameAr": "ثني الرسغ بالدمبل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["forearms"],
+      "primaryMuscles": [
+        "forearms"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
@@ -1668,8 +1970,13 @@
       "nameAr": "الجهاز الإهليلجي",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["cardio"],
-      "secondaryMuscles": ["quadriceps", "glutes"],
+      "primaryMuscles": [
+        "cardio"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "glutes"
+      ],
       "equipment": "machine",
       "exerciseType": "cardio",
       "movementPattern": "other",
@@ -1693,8 +2000,12 @@
       "nameAr": "تبادل البار المتعرج",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["biceps"],
-      "secondaryMuscles": ["forearms"],
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
       "equipment": "ez-bar",
       "exerciseType": "strength",
       "movementPattern": "isolation",
@@ -1717,9 +2028,15 @@
       "nameEn": "Face Pull",
       "nameAr": "سحب إلى الوجه",
       "isArTranslated": true,
-      "aliases": ["فيس بول"],
-      "primaryMuscles": ["rear-delts"],
-      "secondaryMuscles": ["upper-back"],
+      "aliases": [
+        "فيس بول"
+      ],
+      "primaryMuscles": [
+        "rear-delts"
+      ],
+      "secondaryMuscles": [
+        "upper-back"
+      ],
       "equipment": "cable",
       "exerciseType": "cable",
       "movementPattern": "horizontal-pull",
@@ -1752,9 +2069,18 @@
       "nameEn": "Farmer's Walk",
       "nameAr": "مشية المزارع",
       "isArTranslated": true,
-      "aliases": ["carry", "حمل"],
-      "primaryMuscles": ["forearms"],
-      "secondaryMuscles": ["upper-back", "abs", "full-body"],
+      "aliases": [
+        "carry",
+        "حمل"
+      ],
+      "primaryMuscles": [
+        "forearms"
+      ],
+      "secondaryMuscles": [
+        "upper-back",
+        "abs",
+        "full-body"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "carry",
@@ -1778,8 +2104,12 @@
       "nameAr": "مشية المزارع على الأطراف",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["calves"],
-      "secondaryMuscles": ["forearms"],
+      "primaryMuscles": [
+        "calves"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "carry",
@@ -1803,7 +2133,9 @@
       "nameAr": "جسر المؤخرة بالقدمين متقابلتين",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["glutes"],
+      "primaryMuscles": [
+        "glutes"
+      ],
       "secondaryMuscles": [],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
@@ -1828,8 +2160,14 @@
       "nameAr": "القرفصاء الأمامي",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes", "upper-back", "abs"],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "upper-back",
+        "abs"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "squat",
@@ -1853,8 +2191,12 @@
       "nameAr": "جسر المؤخرة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["glutes"],
-      "secondaryMuscles": ["hamstrings"],
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "hinge",
@@ -1878,8 +2220,13 @@
       "nameAr": "رفع المؤخرة والخلفية",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["hamstrings"],
-      "secondaryMuscles": ["glutes", "lower-back"],
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "lower-back"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "hinge",
@@ -1903,8 +2250,13 @@
       "nameAr": "قرفصاء بالدمبل أمام الصدر",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes", "abs"],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "abs"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "squat",
@@ -1928,8 +2280,13 @@
       "nameAr": "تمرين الانحناء بالبار",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["hamstrings"],
-      "secondaryMuscles": ["lower-back", "glutes"],
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "lower-back",
+        "glutes"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "hinge",
@@ -1952,9 +2309,15 @@
       "nameEn": "Hack Squat",
       "nameAr": "قرفصاء الهاك",
       "isArTranslated": true,
-      "aliases": ["هاك"],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes"],
+      "aliases": [
+        "هاك"
+      ],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "equipment": "machine",
       "exerciseType": "machine",
       "movementPattern": "squat",
@@ -1977,8 +2340,14 @@
       "nameEn": "Hammer Curl",
       "nameAr": "تبادل مطرقة",
       "isArTranslated": true,
-      "aliases": ["hammer", "مطرقة"],
-      "primaryMuscles": ["biceps", "forearms"],
+      "aliases": [
+        "hammer",
+        "مطرقة"
+      ],
+      "primaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
@@ -2003,8 +2372,13 @@
       "nameAr": "النتر من التعليق",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["hamstrings", "upper-back"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "upper-back"
+      ],
       "equipment": "barbell",
       "exerciseType": "olympic",
       "movementPattern": "hinge",
@@ -2028,7 +2402,9 @@
       "nameAr": "رفع الركبتين معلقًا",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["abs"],
+      "primaryMuscles": [
+        "abs"
+      ],
       "secondaryMuscles": [],
       "equipment": "pull-up-bar",
       "exerciseType": "bodyweight",
@@ -2052,9 +2428,15 @@
       "nameEn": "Hanging Leg Raise",
       "nameAr": "رفع الأرجل معلقًا",
       "isArTranslated": true,
-      "aliases": ["رفع أرجل"],
-      "primaryMuscles": ["abs"],
-      "secondaryMuscles": ["forearms"],
+      "aliases": [
+        "رفع أرجل"
+      ],
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
       "equipment": "pull-up-bar",
       "exerciseType": "bodyweight",
       "movementPattern": "isolation",
@@ -2078,8 +2460,12 @@
       "nameAr": "تبعيد الأرجل على الجهاز",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["abductors"],
-      "secondaryMuscles": ["glutes"],
+      "primaryMuscles": [
+        "abductors"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "equipment": "machine",
       "exerciseType": "machine",
       "movementPattern": "isolation",
@@ -2102,9 +2488,15 @@
       "nameEn": "Hip Thrust",
       "nameAr": "دفع الحوض بالبار",
       "isArTranslated": true,
-      "aliases": ["هيب ثراست"],
-      "primaryMuscles": ["glutes"],
-      "secondaryMuscles": ["hamstrings"],
+      "aliases": [
+        "هيب ثراست"
+      ],
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "hinge",
@@ -2138,7 +2530,9 @@
       "nameAr": "ثبات الجسم المقعّر",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["abs"],
+      "primaryMuscles": [
+        "abs"
+      ],
       "secondaryMuscles": [],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
@@ -2162,9 +2556,17 @@
       "nameEn": "Incline Barbell Bench Press",
       "nameAr": "ضغط البار المائل",
       "isArTranslated": true,
-      "aliases": ["incline bench", "مائل"],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["front-delts", "triceps"],
+      "aliases": [
+        "incline bench",
+        "مائل"
+      ],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "front-delts",
+        "triceps"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "horizontal-push",
@@ -2188,7 +2590,9 @@
       "nameAr": "تبادل بالدمبل على بنش مائل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["biceps"],
+      "primaryMuscles": [
+        "biceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
@@ -2213,8 +2617,12 @@
       "nameAr": "تفتيح بالدمبل المائل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["front-delts"],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "front-delts"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "isolation",
@@ -2237,9 +2645,16 @@
       "nameEn": "Incline Dumbbell Press",
       "nameAr": "ضغط الدمبل المائل",
       "isArTranslated": true,
-      "aliases": ["incline db"],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["front-delts", "triceps"],
+      "aliases": [
+        "incline db"
+      ],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "front-delts",
+        "triceps"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "horizontal-push",
@@ -2273,8 +2688,13 @@
       "nameAr": "تجديف مقلوب",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["upper-back"],
-      "secondaryMuscles": ["lats", "biceps"],
+      "primaryMuscles": [
+        "upper-back"
+      ],
+      "secondaryMuscles": [
+        "lats",
+        "biceps"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "horizontal-pull",
@@ -2298,8 +2718,12 @@
       "nameAr": "ضغط جي إم",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["triceps"],
-      "secondaryMuscles": ["chest"],
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "chest"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "horizontal-push",
@@ -2322,9 +2746,16 @@
       "nameEn": "Jump Rope",
       "nameAr": "نط الحبل",
       "isArTranslated": true,
-      "aliases": ["skipping", "حبل"],
-      "primaryMuscles": ["calves"],
-      "secondaryMuscles": ["cardio"],
+      "aliases": [
+        "skipping",
+        "حبل"
+      ],
+      "primaryMuscles": [
+        "calves"
+      ],
+      "secondaryMuscles": [
+        "cardio"
+      ],
       "equipment": "other",
       "exerciseType": "cardio",
       "movementPattern": "other",
@@ -2347,9 +2778,18 @@
       "nameEn": "Kettlebell Swing",
       "nameAr": "مرجحة الكيتل بيل",
       "isArTranslated": true,
-      "aliases": ["swing", "مرجحة"],
-      "primaryMuscles": ["hamstrings", "glutes"],
-      "secondaryMuscles": ["lower-back", "abs"],
+      "aliases": [
+        "swing",
+        "مرجحة"
+      ],
+      "primaryMuscles": [
+        "hamstrings",
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "lower-back",
+        "abs"
+      ],
       "equipment": "kettlebell",
       "exerciseType": "strength",
       "movementPattern": "hinge",
@@ -2373,7 +2813,9 @@
       "nameAr": "ركلة خلفية للترايسبس",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["triceps"],
+      "primaryMuscles": [
+        "triceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
@@ -2398,8 +2840,13 @@
       "nameAr": "ضغط لاندماين",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["front-delts"],
-      "secondaryMuscles": ["triceps", "chest"],
+      "primaryMuscles": [
+        "front-delts"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "chest"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "vertical-push",
@@ -2422,9 +2869,17 @@
       "nameEn": "Lat Pulldown",
       "nameAr": "سحب أمامي",
       "isArTranslated": true,
-      "aliases": ["pulldown", "سحب"],
-      "primaryMuscles": ["lats"],
-      "secondaryMuscles": ["biceps", "upper-back"],
+      "aliases": [
+        "pulldown",
+        "سحب"
+      ],
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "upper-back"
+      ],
       "equipment": "cable",
       "exerciseType": "cable",
       "movementPattern": "vertical-pull",
@@ -2447,8 +2902,12 @@
       "nameEn": "Leg Extension",
       "nameAr": "تمديد الأرجل",
       "isArTranslated": true,
-      "aliases": ["ليج إكستنشن"],
-      "primaryMuscles": ["quadriceps"],
+      "aliases": [
+        "ليج إكستنشن"
+      ],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -2472,9 +2931,17 @@
       "nameEn": "Leg Press",
       "nameAr": "ضغط الأرجل",
       "isArTranslated": true,
-      "aliases": ["ليج بريس", "ضغط أرجل"],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes", "hamstrings"],
+      "aliases": [
+        "ليج بريس",
+        "ضغط أرجل"
+      ],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings"
+      ],
       "equipment": "machine",
       "exerciseType": "machine",
       "movementPattern": "squat",
@@ -2498,7 +2965,9 @@
       "nameAr": "رفع السمانة على جهاز الضغط",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["calves"],
+      "primaryMuscles": [
+        "calves"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -2523,8 +2992,12 @@
       "nameAr": "تفتيح بالكابل من الأسفل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["front-delts"],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "front-delts"
+      ],
       "equipment": "cable",
       "exerciseType": "cable",
       "movementPattern": "isolation",
@@ -2547,9 +3020,16 @@
       "nameEn": "Lying Leg Curl",
       "nameAr": "ثني الأرجل مستلقيًا",
       "isArTranslated": true,
-      "aliases": ["leg curl", "ثني أرجل"],
-      "primaryMuscles": ["hamstrings"],
-      "secondaryMuscles": ["calves"],
+      "aliases": [
+        "leg curl",
+        "ثني أرجل"
+      ],
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "calves"
+      ],
       "equipment": "machine",
       "exerciseType": "machine",
       "movementPattern": "isolation",
@@ -2573,7 +3053,9 @@
       "nameAr": "تبادل على الجهاز",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["biceps"],
+      "primaryMuscles": [
+        "biceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -2598,8 +3080,13 @@
       "nameAr": "ضغط الصدر على الجهاز",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["triceps", "front-delts"],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "front-delts"
+      ],
       "equipment": "machine",
       "exerciseType": "machine",
       "movementPattern": "horizontal-push",
@@ -2623,7 +3110,9 @@
       "nameAr": "طحن على الجهاز",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["abs"],
+      "primaryMuscles": [
+        "abs"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -2648,8 +3137,12 @@
       "nameAr": "دفع الحوض على الجهاز",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["glutes"],
-      "secondaryMuscles": ["hamstrings"],
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
       "equipment": "machine",
       "exerciseType": "machine",
       "movementPattern": "hinge",
@@ -2673,7 +3166,9 @@
       "nameAr": "بلوفر على الجهاز",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["lats"],
+      "primaryMuscles": [
+        "lats"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -2698,7 +3193,9 @@
       "nameAr": "رفرفة جانبية على الجهاز",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["side-delts"],
+      "primaryMuscles": [
+        "side-delts"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -2723,8 +3220,13 @@
       "nameAr": "ضغط الكتف على الجهاز",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["front-delts", "shoulders"],
-      "secondaryMuscles": ["triceps"],
+      "primaryMuscles": [
+        "front-delts",
+        "shoulders"
+      ],
+      "secondaryMuscles": [
+        "triceps"
+      ],
       "equipment": "machine",
       "exerciseType": "machine",
       "movementPattern": "vertical-push",
@@ -2748,7 +3250,9 @@
       "nameAr": "تمديد الترايسبس على الجهاز",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["triceps"],
+      "primaryMuscles": [
+        "triceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -2773,8 +3277,13 @@
       "nameAr": "تسلق الجبل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["abs"],
-      "secondaryMuscles": ["front-delts", "quadriceps"],
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "front-delts",
+        "quadriceps"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "other",
@@ -2798,7 +3307,9 @@
       "nameAr": "ثني الأرجل النوردي",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["hamstrings"],
+      "primaryMuscles": [
+        "hamstrings"
+      ],
       "secondaryMuscles": [],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
@@ -2823,7 +3334,9 @@
       "nameAr": "تمديد الترايسبس من أعلى الرأس",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["triceps"],
+      "primaryMuscles": [
+        "triceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "cable",
       "exerciseType": "cable",
@@ -2847,9 +3360,19 @@
       "nameEn": "Overhead Press",
       "nameAr": "ضغط الكتف بالبار",
       "isArTranslated": true,
-      "aliases": ["ohp", "military press", "ضغط كتف"],
-      "primaryMuscles": ["front-delts", "shoulders"],
-      "secondaryMuscles": ["triceps", "upper-back"],
+      "aliases": [
+        "ohp",
+        "military press",
+        "ضغط كتف"
+      ],
+      "primaryMuscles": [
+        "front-delts",
+        "shoulders"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "upper-back"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "vertical-push",
@@ -2883,8 +3406,12 @@
       "nameAr": "ضغط بالوف",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["obliques"],
-      "secondaryMuscles": ["abs"],
+      "primaryMuscles": [
+        "obliques"
+      ],
+      "secondaryMuscles": [
+        "abs"
+      ],
       "equipment": "cable",
       "exerciseType": "cable",
       "movementPattern": "rotation",
@@ -2907,8 +3434,13 @@
       "nameEn": "Pec Deck Fly",
       "nameAr": "تفتيح على جهاز البيك ديك",
       "isArTranslated": true,
-      "aliases": ["pec deck", "بيك ديك"],
-      "primaryMuscles": ["chest"],
+      "aliases": [
+        "pec deck",
+        "بيك ديك"
+      ],
+      "primaryMuscles": [
+        "chest"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -2933,8 +3465,13 @@
       "nameAr": "تجديف بندلاي",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["upper-back"],
-      "secondaryMuscles": ["lats", "biceps"],
+      "primaryMuscles": [
+        "upper-back"
+      ],
+      "secondaryMuscles": [
+        "lats",
+        "biceps"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "horizontal-pull",
@@ -2958,8 +3495,12 @@
       "nameAr": "ضغط الكتف بوزن الجسم",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["front-delts"],
-      "secondaryMuscles": ["triceps"],
+      "primaryMuscles": [
+        "front-delts"
+      ],
+      "secondaryMuscles": [
+        "triceps"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "vertical-push",
@@ -2982,9 +3523,16 @@
       "nameEn": "Plank",
       "nameAr": "البلانك",
       "isArTranslated": true,
-      "aliases": ["بلانك"],
-      "primaryMuscles": ["abs"],
-      "secondaryMuscles": ["obliques", "front-delts"],
+      "aliases": [
+        "بلانك"
+      ],
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "obliques",
+        "front-delts"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "carry",
@@ -3018,7 +3566,9 @@
       "nameAr": "تثبيت الأوزان بالأصابع",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["forearms"],
+      "primaryMuscles": [
+        "forearms"
+      ],
       "secondaryMuscles": [],
       "equipment": "plate",
       "exerciseType": "strength",
@@ -3043,8 +3593,14 @@
       "nameAr": "الرفع للنتر",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["hamstrings", "glutes", "upper-back"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "glutes",
+        "upper-back"
+      ],
       "equipment": "barbell",
       "exerciseType": "olympic",
       "movementPattern": "hinge",
@@ -3067,8 +3623,12 @@
       "nameEn": "Preacher Curl",
       "nameAr": "تبادل على البريتشر",
       "isArTranslated": true,
-      "aliases": ["بريتشر"],
-      "primaryMuscles": ["biceps"],
+      "aliases": [
+        "بريتشر"
+      ],
+      "primaryMuscles": [
+        "biceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "ez-bar",
       "exerciseType": "strength",
@@ -3092,9 +3652,18 @@
       "nameEn": "Pull-Up",
       "nameAr": "العقلة",
       "isArTranslated": true,
-      "aliases": ["pullup", "عقلة"],
-      "primaryMuscles": ["lats"],
-      "secondaryMuscles": ["biceps", "upper-back", "forearms"],
+      "aliases": [
+        "pullup",
+        "عقلة"
+      ],
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "upper-back",
+        "forearms"
+      ],
       "equipment": "pull-up-bar",
       "exerciseType": "bodyweight",
       "movementPattern": "vertical-pull",
@@ -3128,8 +3697,14 @@
       "nameAr": "الضغط بالدفع",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["front-delts", "triceps", "quadriceps"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "front-delts",
+        "triceps",
+        "quadriceps"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "vertical-push",
@@ -3152,9 +3727,19 @@
       "nameEn": "Push-Up",
       "nameAr": "تمرين الضغط",
       "isArTranslated": true,
-      "aliases": ["pushup", "press up", "ضغط"],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["triceps", "front-delts", "abs"],
+      "aliases": [
+        "pushup",
+        "press up",
+        "ضغط"
+      ],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "front-delts",
+        "abs"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "horizontal-push",
@@ -3188,8 +3773,14 @@
       "nameAr": "سحب من الحامل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["upper-back", "lower-back"],
-      "secondaryMuscles": ["glutes", "forearms"],
+      "primaryMuscles": [
+        "upper-back",
+        "lower-back"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "forearms"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "hinge",
@@ -3213,7 +3804,10 @@
       "nameAr": "تبادل بقبضة علوية",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["forearms", "biceps"],
+      "primaryMuscles": [
+        "forearms",
+        "biceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "ez-bar",
       "exerciseType": "strength",
@@ -3238,8 +3832,13 @@
       "nameAr": "تمديد خلفي عكسي",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["glutes"],
-      "secondaryMuscles": ["hamstrings", "lower-back"],
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "lower-back"
+      ],
       "equipment": "machine",
       "exerciseType": "machine",
       "movementPattern": "hinge",
@@ -3263,8 +3862,12 @@
       "nameAr": "طعن للخلف",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes"],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "lunge",
@@ -3287,9 +3890,16 @@
       "nameEn": "Reverse Pec Deck",
       "nameAr": "رفرفة خلفية على الجهاز",
       "isArTranslated": true,
-      "aliases": ["reverse fly", "رفرفة خلفية"],
-      "primaryMuscles": ["rear-delts"],
-      "secondaryMuscles": ["upper-back"],
+      "aliases": [
+        "reverse fly",
+        "رفرفة خلفية"
+      ],
+      "primaryMuscles": [
+        "rear-delts"
+      ],
+      "secondaryMuscles": [
+        "upper-back"
+      ],
       "equipment": "machine",
       "exerciseType": "machine",
       "movementPattern": "isolation",
@@ -3312,9 +3922,17 @@
       "nameEn": "Romanian Deadlift",
       "nameAr": "الرفعة الرومانية",
       "isArTranslated": true,
-      "aliases": ["rdl", "روماني"],
-      "primaryMuscles": ["hamstrings", "lower-back"],
-      "secondaryMuscles": ["glutes"],
+      "aliases": [
+        "rdl",
+        "روماني"
+      ],
+      "primaryMuscles": [
+        "hamstrings",
+        "lower-back"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "hinge",
@@ -3338,7 +3956,9 @@
       "nameAr": "ضغط الترايسبس بالحبل",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["triceps"],
+      "primaryMuscles": [
+        "triceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "cable",
       "exerciseType": "cable",
@@ -3362,9 +3982,18 @@
       "nameEn": "Rowing Machine",
       "nameAr": "جهاز التجديف",
       "isArTranslated": true,
-      "aliases": ["rower", "تجديف"],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["upper-back", "quadriceps", "cardio"],
+      "aliases": [
+        "rower",
+        "تجديف"
+      ],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "upper-back",
+        "quadriceps",
+        "cardio"
+      ],
       "equipment": "machine",
       "exerciseType": "cardio",
       "movementPattern": "horizontal-pull",
@@ -3388,8 +4017,12 @@
       "nameAr": "اللف الروسي",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["obliques"],
-      "secondaryMuscles": ["abs"],
+      "primaryMuscles": [
+        "obliques"
+      ],
+      "secondaryMuscles": [
+        "abs"
+      ],
       "equipment": "medicine-ball",
       "exerciseType": "strength",
       "movementPattern": "rotation",
@@ -3412,9 +4045,18 @@
       "nameEn": "Seated Cable Row",
       "nameAr": "تجديف أرضي بالكابل",
       "isArTranslated": true,
-      "aliases": ["cable row", "تجديف أرضي"],
-      "primaryMuscles": ["upper-back", "lats"],
-      "secondaryMuscles": ["biceps", "rear-delts"],
+      "aliases": [
+        "cable row",
+        "تجديف أرضي"
+      ],
+      "primaryMuscles": [
+        "upper-back",
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "rear-delts"
+      ],
       "equipment": "cable",
       "exerciseType": "cable",
       "movementPattern": "horizontal-pull",
@@ -3438,7 +4080,9 @@
       "nameAr": "رفع السمانة جالسًا",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["calves"],
+      "primaryMuscles": [
+        "calves"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -3462,9 +4106,16 @@
       "nameEn": "Seated Dumbbell Shoulder Press",
       "nameAr": "ضغط الكتف بالدمبل جالسًا",
       "isArTranslated": true,
-      "aliases": ["db shoulder press"],
-      "primaryMuscles": ["front-delts", "shoulders"],
-      "secondaryMuscles": ["triceps"],
+      "aliases": [
+        "db shoulder press"
+      ],
+      "primaryMuscles": [
+        "front-delts",
+        "shoulders"
+      ],
+      "secondaryMuscles": [
+        "triceps"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "vertical-push",
@@ -3488,7 +4139,9 @@
       "nameAr": "ثني الأرجل جالسًا",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["hamstrings"],
+      "primaryMuscles": [
+        "hamstrings"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -3513,8 +4166,13 @@
       "nameAr": "البلانك الجانبي",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["obliques"],
-      "secondaryMuscles": ["abs", "adductors"],
+      "primaryMuscles": [
+        "obliques"
+      ],
+      "secondaryMuscles": [
+        "abs",
+        "adductors"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "carry",
@@ -3538,7 +4196,9 @@
       "nameAr": "رفع السمانة بقدم واحدة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["calves"],
+      "primaryMuscles": [
+        "calves"
+      ],
       "secondaryMuscles": [],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
@@ -3563,8 +4223,12 @@
       "nameAr": "دفع الحوض بقدم واحدة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["glutes"],
-      "secondaryMuscles": ["hamstrings"],
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "hinge",
@@ -3588,8 +4252,12 @@
       "nameAr": "الرفعة الرومانية بقدم واحدة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["hamstrings"],
-      "secondaryMuscles": ["glutes"],
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "hinge",
@@ -3613,7 +4281,9 @@
       "nameAr": "قرفصاء سيسي",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["quadriceps"],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
@@ -3638,8 +4308,12 @@
       "nameAr": "الجلوس من الرقود",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["abs"],
-      "secondaryMuscles": ["quadriceps"],
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "quadriceps"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "isolation",
@@ -3662,8 +4336,12 @@
       "nameEn": "Skull Crusher",
       "nameAr": "تمديد الترايسبس مستلقيًا",
       "isArTranslated": true,
-      "aliases": ["lying triceps extension"],
-      "primaryMuscles": ["triceps"],
+      "aliases": [
+        "lying triceps extension"
+      ],
+      "primaryMuscles": [
+        "triceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "ez-bar",
       "exerciseType": "strength",
@@ -3688,8 +4366,13 @@
       "nameAr": "سحب الزلاجة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["hamstrings", "upper-back"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "upper-back"
+      ],
       "equipment": "sled",
       "exerciseType": "strength",
       "movementPattern": "carry",
@@ -3713,8 +4396,14 @@
       "nameAr": "دفع الزلاجة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["quadriceps", "glutes", "calves"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "glutes",
+        "calves"
+      ],
       "equipment": "sled",
       "exerciseType": "strength",
       "movementPattern": "carry",
@@ -3738,8 +4427,12 @@
       "nameAr": "ثني الأرجل بالانزلاق",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["hamstrings"],
-      "secondaryMuscles": ["glutes"],
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
       "movementPattern": "isolation",
@@ -3763,8 +4456,13 @@
       "nameAr": "ضغط سميث للصدر",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["chest"],
-      "secondaryMuscles": ["triceps", "front-delts"],
+      "primaryMuscles": [
+        "chest"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "front-delts"
+      ],
       "equipment": "smith-machine",
       "exerciseType": "machine",
       "movementPattern": "horizontal-push",
@@ -3788,7 +4486,9 @@
       "nameAr": "رفع السمانة على سميث",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["calves"],
+      "primaryMuscles": [
+        "calves"
+      ],
       "secondaryMuscles": [],
       "equipment": "smith-machine",
       "exerciseType": "machine",
@@ -3813,8 +4513,12 @@
       "nameAr": "قرفصاء سميث",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes"],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "equipment": "smith-machine",
       "exerciseType": "machine",
       "movementPattern": "squat",
@@ -3838,8 +4542,14 @@
       "nameAr": "الخطف",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["shoulders", "hamstrings", "upper-back"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "shoulders",
+        "hamstrings",
+        "upper-back"
+      ],
       "equipment": "barbell",
       "exerciseType": "olympic",
       "movementPattern": "hinge",
@@ -3863,7 +4573,9 @@
       "nameAr": "تبادل العنكبوت",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["biceps"],
+      "primaryMuscles": [
+        "biceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
@@ -3888,8 +4600,14 @@
       "nameAr": "جهاز الدرج",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["cardio"],
-      "secondaryMuscles": ["glutes", "quadriceps", "calves"],
+      "primaryMuscles": [
+        "cardio"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "quadriceps",
+        "calves"
+      ],
       "equipment": "machine",
       "exerciseType": "cardio",
       "movementPattern": "other",
@@ -3912,8 +4630,13 @@
       "nameEn": "Standing Calf Raise",
       "nameAr": "رفع السمانة واقفًا",
       "isArTranslated": true,
-      "aliases": ["calf raise", "سمانة"],
-      "primaryMuscles": ["calves"],
+      "aliases": [
+        "calf raise",
+        "سمانة"
+      ],
+      "primaryMuscles": [
+        "calves"
+      ],
       "secondaryMuscles": [],
       "equipment": "machine",
       "exerciseType": "machine",
@@ -3948,8 +4671,12 @@
       "nameAr": "الدراجة الثابتة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["cardio"],
-      "secondaryMuscles": ["quadriceps"],
+      "primaryMuscles": [
+        "cardio"
+      ],
+      "secondaryMuscles": [
+        "quadriceps"
+      ],
       "equipment": "machine",
       "exerciseType": "cardio",
       "movementPattern": "other",
@@ -3973,8 +4700,12 @@
       "nameAr": "الصعود على الصندوق",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes"],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "lunge",
@@ -3998,8 +4729,13 @@
       "nameAr": "الرفعة المميتة بأرجل مستقيمة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["hamstrings"],
-      "secondaryMuscles": ["glutes", "lower-back"],
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "lower-back"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "hinge",
@@ -4023,8 +4759,12 @@
       "nameAr": "سحب بذراع ممدودة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["lats"],
-      "secondaryMuscles": ["triceps"],
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "triceps"
+      ],
       "equipment": "cable",
       "exerciseType": "cable",
       "movementPattern": "isolation",
@@ -4047,9 +4787,18 @@
       "nameEn": "Sumo Deadlift",
       "nameAr": "الرفعة المميتة سومو",
       "isArTranslated": true,
-      "aliases": ["سومو"],
-      "primaryMuscles": ["glutes", "quadriceps"],
-      "secondaryMuscles": ["adductors", "lower-back", "forearms"],
+      "aliases": [
+        "سومو"
+      ],
+      "primaryMuscles": [
+        "glutes",
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "adductors",
+        "lower-back",
+        "forearms"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "hinge",
@@ -4072,9 +4821,16 @@
       "nameEn": "T-Bar Row",
       "nameAr": "تجديف تي بار",
       "isArTranslated": true,
-      "aliases": ["tbar"],
-      "primaryMuscles": ["upper-back", "lats"],
-      "secondaryMuscles": ["biceps"],
+      "aliases": [
+        "tbar"
+      ],
+      "primaryMuscles": [
+        "upper-back",
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "horizontal-pull",
@@ -4098,8 +4854,13 @@
       "nameAr": "الثراستر",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["quadriceps", "shoulders"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "shoulders"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "vertical-push",
@@ -4123,7 +4884,9 @@
       "nameAr": "رفع مقدمة الساق",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["calves"],
+      "primaryMuscles": [
+        "calves"
+      ],
       "secondaryMuscles": [],
       "equipment": "bodyweight",
       "exerciseType": "bodyweight",
@@ -4148,8 +4911,13 @@
       "nameAr": "تعلق بالمنشفة",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["forearms"],
-      "secondaryMuscles": ["lats", "biceps"],
+      "primaryMuscles": [
+        "forearms"
+      ],
+      "secondaryMuscles": [
+        "lats",
+        "biceps"
+      ],
       "equipment": "pull-up-bar",
       "exerciseType": "bodyweight",
       "movementPattern": "carry",
@@ -4172,9 +4940,17 @@
       "nameEn": "Treadmill Run",
       "nameAr": "الجري على المشاية",
       "isArTranslated": true,
-      "aliases": ["running", "جري"],
-      "primaryMuscles": ["cardio"],
-      "secondaryMuscles": ["quadriceps", "calves"],
+      "aliases": [
+        "running",
+        "جري"
+      ],
+      "primaryMuscles": [
+        "cardio"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "calves"
+      ],
       "equipment": "machine",
       "exerciseType": "cardio",
       "movementPattern": "other",
@@ -4198,8 +4974,13 @@
       "nameAr": "متوازي للترايسبس",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["triceps"],
-      "secondaryMuscles": ["chest", "front-delts"],
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "chest",
+        "front-delts"
+      ],
       "equipment": "dip-bar",
       "exerciseType": "bodyweight",
       "movementPattern": "vertical-push",
@@ -4222,8 +5003,13 @@
       "nameEn": "Triceps Pushdown",
       "nameAr": "ضغط الترايسبس بالكابل",
       "isArTranslated": true,
-      "aliases": ["pushdown", "تراي كابل"],
-      "primaryMuscles": ["triceps"],
+      "aliases": [
+        "pushdown",
+        "تراي كابل"
+      ],
+      "primaryMuscles": [
+        "triceps"
+      ],
       "secondaryMuscles": [],
       "equipment": "cable",
       "exerciseType": "cable",
@@ -4258,8 +5044,14 @@
       "nameAr": "النهوض التركي",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["full-body"],
-      "secondaryMuscles": ["shoulders", "abs", "obliques"],
+      "primaryMuscles": [
+        "full-body"
+      ],
+      "secondaryMuscles": [
+        "shoulders",
+        "abs",
+        "obliques"
+      ],
       "equipment": "kettlebell",
       "exerciseType": "strength",
       "movementPattern": "other",
@@ -4283,8 +5075,13 @@
       "nameAr": "سحب عمودي",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["side-delts"],
-      "secondaryMuscles": ["upper-back", "biceps"],
+      "primaryMuscles": [
+        "side-delts"
+      ],
+      "secondaryMuscles": [
+        "upper-back",
+        "biceps"
+      ],
       "equipment": "barbell",
       "exerciseType": "strength",
       "movementPattern": "vertical-pull",
@@ -4307,9 +5104,17 @@
       "nameEn": "Walking Lunge",
       "nameAr": "طعن متحرك",
       "isArTranslated": true,
-      "aliases": ["lunge", "طعن"],
-      "primaryMuscles": ["quadriceps"],
-      "secondaryMuscles": ["glutes", "hamstrings"],
+      "aliases": [
+        "lunge",
+        "طعن"
+      ],
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings"
+      ],
       "equipment": "dumbbell",
       "exerciseType": "strength",
       "movementPattern": "lunge",
@@ -4333,7 +5138,9 @@
       "nameAr": "لفّاف الرسغ",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["forearms"],
+      "primaryMuscles": [
+        "forearms"
+      ],
       "secondaryMuscles": [],
       "equipment": "other",
       "exerciseType": "strength",
@@ -4358,7 +5165,10 @@
       "nameAr": "تبادل زوتمان",
       "isArTranslated": true,
       "aliases": [],
-      "primaryMuscles": ["biceps", "forearms"],
+      "primaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
       "secondaryMuscles": [],
       "equipment": "dumbbell",
       "exerciseType": "strength",
