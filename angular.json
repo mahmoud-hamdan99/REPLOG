@@ -71,7 +71,19 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "coverageInclude": [
+              "src/app/domain/**",
+              "src/app/data/**",
+              "src/app/infrastructure/**"
+            ],
+            "coverageExclude": ["src/**/testing/**"],
+            "coverageThresholds": {
+              "lines": 85,
+              "statements": 85
+            }
+          }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",

@@ -197,10 +197,13 @@ export interface Entity {
 
 ```ts
 // data/repository.ts
-export interface Query<T> {
-  index?: keyof T & string | string;   // named index on the store
-  range?: { lower?: IDBValidKey; upper?: IDBValidKey; lowerOpen?: boolean; upperOpen?: boolean };
-  equals?: IDBValidKey;
+/** Not IDBValidKey: a contract naming IndexedDB types is not replaceable. */
+export type IndexKey = string | number | readonly (string | number)[];
+
+export interface Query {
+  index?: string;                      // named index on the store
+  range?: { lower?: IndexKey; upper?: IndexKey; lowerOpen?: boolean; upperOpen?: boolean };
+  equals?: IndexKey;
   direction?: 'next' | 'prev';
   limit?: number;
   offset?: number;
@@ -208,7 +211,8 @@ export interface Query<T> {
 }
 
 export interface Repository<T extends Entity> {
-  get(id: string): Promise<T | undefined>;
+  /** Tombstoned records are hidden unless `includeDeleted` is passed. */
+  get(id: string, options?: { includeDeleted?: boolean }): Promise<T | undefined>;
   list(query?: Query<T>): Promise<T[]>;
   count(query?: Query<T>): Promise<number>;
   /** Insert or full replace. Stamps updatedAt/rev/origin. */
@@ -222,7 +226,7 @@ export interface Repository<T extends Entity> {
 }
 ```
 
-`Draft<T> = Omit<T, 'createdAt' | 'updatedAt' | 'rev' | 'origin'> & { id?: string }` — callers never hand-write envelope fields.
+`Draft<T> = Omit<T, 'createdAt' | 'updatedAt' | 'rev' | 'origin' | 'id' | 'deletedAt'> & { id?: string; deletedAt?: string | null }` — callers never hand-write envelope fields, and `deletedAt` is omitted too so an ordinary insert does not have to state that it is not deleted.
 
 One `InjectionToken<Repository<X>>` per aggregate lives in `data/tokens.ts`. Stores inject tokens, so tests provide in-memory fakes with no IndexedDB and no fake-indexeddb shim.
 
@@ -241,7 +245,10 @@ export interface UnitOfWork {
 }
 
 export interface TxScope {
-  repo<T extends Entity>(token: InjectionToken<Repository<T>>): Repository<T>;
+  // Keyed by store name rather than by DI token: the transaction is already
+  // scoped to a fixed set of stores, and a `StoreEntityMap` gives the same
+  // type safety without threading an Injector through a transaction.
+  repo<N extends EntityStoreName>(store: N): Repository<StoreEntityMap[N]>;
   /** Registered callbacks fire only after the transaction commits. */
   onCommit(fn: () => void): void;
 }
@@ -252,6 +259,8 @@ Rules:
 1. No `await` on anything other than `TxScope` calls inside `work` — awaiting a fetch or a `setTimeout` kills the transaction.
 2. Change notifications and toasts fire from `onCommit`, never mid-transaction.
 3. A failed transaction rolls back wholly; the application store keeps its previous snapshot and surfaces a retryable error.
+4. Every store a transaction will touch is declared when it opens. Asking a `TxScope` for an undeclared store throws immediately, which surfaces the mistake at the call that made it rather than at some later line.
+5. `tx.done`'s rejection is claimed as soon as the transaction opens. Aborting makes it reject, and an unclaimed rejection surfaces as an unhandled promise rejection that has nothing to do with the real failure.
 
 ### 5.4 Change notification
 

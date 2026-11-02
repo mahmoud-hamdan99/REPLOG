@@ -49,6 +49,7 @@ interface Entity {
 | Duration | `number`, **seconds** (integer) | Rest, workout duration |
 | Weekday | `number`, 0 = Sunday … 6 = Saturday | Matches `Date.getDay()`; the UI's week start is a display preference |
 | Enum | `string` literal union | Never numeric — readable in exports and DevTools |
+| Indexed boolean | `0 \| 1` (`Flag`) | **IndexedDB has no boolean key type.** `true` is not a valid key, so an index on a boolean field silently matches nothing. Every flag an index ranges over is stored as 0 or 1; flags with no index behind them stay plain booleans, since the ergonomic cost only buys something where there is a query |
 | Optional | `null`, never `undefined` | `undefined` keys vanish in structured clone and break `Object.keys` diffs during import |
 
 ### 2.3 Naming
@@ -142,9 +143,9 @@ Read as a map at boot; written individually. Not part of the sync envelope.
 | `illustration` | `{ kind: 'asset', path: string } \| { kind: 'blob', blobId: string } \| null` | | Built-ins use bundled SVG assets; customs may store a photo blob |
 | `defaultRestSec` | number \| null | | Falls back to the global preference |
 | `weightIncrementKg` | number | ✓ | 2.5 barbell, 1.0–2.5 dumbbell, machine-specific. Drives suggestion rounding |
-| `isCustom` | boolean | ✓ | |
-| `isArchived` | boolean | ✓ | Hidden from pickers, retained in history |
-| `isFavorite` | boolean | ✓ | |
+| `isCustom` | `Flag` | ✓ | Indexed (`by_isCustom`) |
+| `isArchived` | `Flag` | ✓ | Hidden from pickers, retained in history. Indexed with `nameNormEn` |
+| `isFavorite` | boolean | ✓ | Not indexed: filtered from the resident library cache |
 | `builtInVersion` | number \| null | ✓ for built-ins | Catalog revision this record came from |
 | `userEdited` | boolean | ✓ | `true` once the user edits a built-in → re-seeding must not overwrite it (§6.2) |
 | `notes` | string \| null | | User's own notes on the exercise |
@@ -165,7 +166,7 @@ Read as a map at boot; written individually. Not part of the sync envelope.
 | `goal` | same enum as profile \| null | | |
 | `weekStartsOn` | 0–6 | ✓ | Mirrors the display preference at creation |
 | `accentColor` | token name \| null | | From a fixed token set, not free hex — keeps theming coherent |
-| `isArchived` | boolean | ✓ | |
+| `isArchived` | `Flag` | ✓ | Indexed (`by_isArchived`) |
 | `orderIndex` | number | ✓ | Manual ordering; sparse integers (1000, 2000…) so reorder is a single write |
 | `durationWeeks` | number \| null | | Informational only; no program periodisation in V1 |
 | *envelope* | | ✓ | |
@@ -373,7 +374,7 @@ Every field is nullable: partial entries are normal ("today I only weighed mysel
 | `label` | string | ✓ | User-entered, single language |
 | `unitType` | `'length' \| 'mass' \| 'percent' \| 'count'` | ✓ | Decides canonical unit and display conversion |
 | `orderIndex` | number | ✓ | |
-| `isArchived` | boolean | ✓ | Archive keeps historical values readable |
+| `isArchived` | `Flag` | ✓ | Archive keeps historical values readable. Indexed with `orderIndex` |
 | *envelope* | | ✓ | |
 
 ---
@@ -402,7 +403,19 @@ Metadata is deliberately separate from pixels so the gallery can list 500 photos
 
 ### 3.12 `photoBlobs` — pixels
 
-**Key:** `id` · **Indexes:** none · **Value:** `{ id: string, blob: Blob, createdAt: string }`
+**Key:** `id` · **Indexes:** `by_byteSize` (`byteSize`)
+**Value:** `{ id: string, data: ArrayBuffer, mimeType: string, byteSize: number, createdAt: string }`
+
+**Stored as an `ArrayBuffer`, not a `Blob`.** iOS Safari — the primary target —
+has a long history of failing to persist Blobs in IndexedDB, and a lost progress
+photo cannot be recovered. An ArrayBuffer is a plain structured-cloneable value
+that every engine round-trips reliably. The `PhotoBlobStore` contract still
+speaks `Blob`, so callers hand one in and get one back; only the stored
+representation differs. The same choice makes the store testable, since
+`fake-indexeddb` also fails to clone a jsdom `Blob`.
+
+`byteSize` is denormalised and indexed so the storage meter can sum image sizes
+with a key-only cursor, without deserialising a single photo.
 
 **Processing pipeline on import** (all client-side, no uploads — spec §4.8):
 
