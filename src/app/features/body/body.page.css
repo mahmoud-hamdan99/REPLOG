@@ -1,0 +1,211 @@
+.hdr-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--target-min);
+  min-block-size: var(--target-min);
+  border: 0;
+  border-radius: var(--r-full);
+  background: none;
+  color: var(--text-2);
+  font-size: var(--t-h3);
+  cursor: pointer;
+}
+
+.hdr-action:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.top {
+  display: flex;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-4);
+}
+
+.top > * {
+  flex: 1;
+}
+
+.entry {
+  display: block;
+  margin-block-end: var(--sp-3);
+}
+
+.entry__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.entry__open {
+  flex: 1;
+  min-block-size: var(--target-min);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-1);
+  text-align: start;
+  font-family: var(--font-ui);
+  cursor: pointer;
+}
+
+.entry__open:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.entry__values {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-2) var(--sp-3);
+  margin-block: var(--sp-2) 0;
+}
+
+.entry__pair {
+  display: flex;
+  flex-direction: column;
+}
+
+.entry__pair dt,
+.entry__pair dd {
+  margin: 0;
+}
+
+.entry__pair dd {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+.entry__notes {
+  margin-block: var(--sp-3) 0;
+}
+
+/* ------------------------------------------------------------ entry sheet */
+
+.sheet__title {
+  margin-block: var(--sp-2) var(--sp-1);
+}
+
+.field {
+  display: block;
+  margin-block: var(--sp-3);
+}
+
+.field__input {
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  margin-block-start: var(--sp-2);
+  padding-inline: var(--sp-3);
+  padding-block: var(--sp-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-family: var(--font-ui);
+
+  /* 16px floor, or iOS zooms the page when the field takes focus. */
+  font-size: var(--t-body);
+}
+
+.field__input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.pair {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.pair__half {
+  flex: 1;
+}
+
+.more {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  margin-block: var(--sp-3);
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-family: var(--font-ui);
+  font-size: var(--t-body);
+  cursor: pointer;
+}
+
+.more:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-2);
+}
+
+/* Sticky so Save is always reachable in a long sheet; the border keeps it
+   from reading as part of whatever field happens to be behind it. */
+.sheet-actions {
+  position: sticky;
+  inset-block-end: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding-block: var(--sp-3);
+  border-block-start: 1px solid var(--border);
+  background: var(--surface-1);
+}
+
+/* --------------------------------------------------- definitions, compare */
+
+.def {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: var(--target-min);
+  border-block-end: 1px solid var(--border);
+}
+
+.def > :first-child {
+  flex: 1;
+}
+
+.cmp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2);
+  padding-block: var(--sp-2);
+  border-block-end: 1px solid var(--border);
+}
+
+.cmp > :first-child {
+  flex: 1;
+}
+
+.cmp__values {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+.cmp__delta {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+
+  /* A signed number is an LTR run in every locale (UI_UX_SPEC 10.2). */
+  direction: ltr;
+}
+
+.cmp__missing {
+  color: var(--text-3);
+}

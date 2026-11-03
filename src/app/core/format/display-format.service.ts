@@ -4,7 +4,17 @@ import { SettingsStore } from '../settings/settings.store';
 import type { PersonalRecord } from '../../domain/models/records';
 import type { SetLog } from '../../domain/models/workout';
 import { durationParts } from '../../domain/time/duration';
-import { displayIncrement, toCanonicalMass, toDisplayMass } from '../../domain/units/convert';
+import { parseDayKey } from '../../domain/time/day-key';
+import type { MeasurementUnitType } from '../../domain/models/enums';
+import {
+  displayIncrement,
+  toCanonicalLength,
+  toCanonicalMass,
+  toDisplayBodyLength,
+  toDisplayBodyMass,
+  toDisplayLength,
+  toDisplayMass,
+} from '../../domain/units/convert';
 
 /** Shown where a value exists but is not yet entered. */
 const BLANK = '—';
@@ -56,6 +66,84 @@ export class DisplayFormat {
 
   number(value: number | null): string {
     return value === null ? BLANK : this.i18n.formatNumber(value);
+  }
+
+  // -------------------------------------------------------------- lengths
+
+  readonly lengthUnit = computed(() => this.settings.lengthUnit());
+  readonly lengthUnitShort = computed(() => this.i18n.t(`unit.short.${this.lengthUnit()}`));
+
+  /** Canonical centimetres to a display value in the user's unit. */
+  lengthDisplay(cm: number | null): number | null {
+    return cm === null ? null : toDisplayLength(cm, this.lengthUnit());
+  }
+
+  lengthCanonical(value: number | null): number | null {
+    return value === null ? null : toCanonicalLength(value, this.lengthUnit());
+  }
+
+  lengthWithUnit(cm: number | null): string {
+    const value = this.lengthDisplay(cm);
+    return value === null ? BLANK : `${this.i18n.formatNumber(value)} ${this.lengthUnitShort()}`;
+  }
+
+  // ------------------------------------------------------ by unit type
+
+  /**
+   * Conversion dispatched on a unit type.
+   *
+   * Custom measurements carry a unit type rather than a known field, so the
+   * screens that render them need one entry point. Percentages and counts are
+   * already canonical — there is no second unit to offer — which is itself
+   * worth stating rather than leaving a reader to wonder why they fall
+   * through.
+   */
+  toDisplay(unitType: MeasurementUnitType, canonical: number | null): number | null {
+    if (canonical === null) return null;
+    // A measured mass, not a load: scale precision rather than the plate grid,
+    // so 80.4 kg stays 80.4 kg instead of becoming 80.5.
+    if (unitType === 'mass') return toDisplayBodyMass(canonical, this.unit());
+    if (unitType === 'length') return toDisplayBodyLength(canonical, this.lengthUnit());
+    return canonical;
+  }
+
+  toCanonical(unitType: MeasurementUnitType, value: number | null): number | null {
+    if (value === null) return null;
+    if (unitType === 'mass') return this.massCanonical(value);
+    if (unitType === 'length') return this.lengthCanonical(value);
+    return value;
+  }
+
+  /** The suffix a field of this unit type is measured in. */
+  unitFor(unitType: MeasurementUnitType): string {
+    if (unitType === 'mass') return this.unitShort();
+    if (unitType === 'length') return this.lengthUnitShort();
+    if (unitType === 'percent') return this.i18n.t('unit.short.percent');
+    return '';
+  }
+
+  /** A measurement with its unit, whatever kind of measurement it is. */
+  byUnitType(unitType: MeasurementUnitType, canonical: number | null): string {
+    const value = this.toDisplay(unitType, canonical);
+    if (value === null) return BLANK;
+    const unit = this.unitFor(unitType);
+    return unit === '' ? this.i18n.formatNumber(value) : `${this.i18n.formatNumber(value)} ${unit}`;
+  }
+
+  /**
+   * A change, always signed.
+   *
+   * The sign is the information: "+0.4 kg" and "0.4 kg" say different things,
+   * and a delta that dropped its sign would read as a measurement.
+   */
+  delta(unitType: MeasurementUnitType, canonical: number | null): string {
+    const value = this.toDisplay(unitType, canonical);
+    if (value === null) return BLANK;
+
+    const formatted = this.i18n.formatNumber(Math.abs(value));
+    const sign = value > 0 ? '+' : value < 0 ? '−' : '±';
+    const unit = this.unitFor(unitType);
+    return unit === '' ? `${sign}${formatted}` : `${sign}${formatted} ${unit}`;
   }
 
   /**
@@ -158,13 +246,32 @@ export class DisplayFormat {
     return this.date(iso, { weekday: 'short', day: 'numeric', month: 'short' });
   }
 
+  /**
+   * The same, for a `YYYY-MM-DD` day key rather than an instant.
+   *
+   * A separate method because `Date.parse('2026-10-20')` reads the string as
+   * UTC midnight, which renders as the 19th anywhere west of Greenwich. The
+   * day a measurement was taken on has no time and no zone, so it is parsed
+   * as local midnight and never shifts.
+   */
+  weekdayDay(day: string): string {
+    const parsed = parseDayKey(day);
+    return Number.isNaN(parsed.getTime())
+      ? BLANK
+      : this.formatDate(parsed, { weekday: 'short', day: 'numeric', month: 'short' });
+  }
+
   private date(iso: string, options: Intl.DateTimeFormatOptions): string {
     const parsed = Date.parse(iso);
     if (Number.isNaN(parsed)) return BLANK;
+    return this.formatDate(new Date(parsed), options);
+  }
+
+  private formatDate(date: Date, options: Intl.DateTimeFormatOptions): string {
     return new Intl.DateTimeFormat(
       `${this.i18n.locale()}-u-nu-${this.settings.numerals()}`,
       options,
-    ).format(new Date(parsed));
+    ).format(date);
   }
 
   /**

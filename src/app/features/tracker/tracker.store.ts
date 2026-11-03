@@ -13,6 +13,7 @@ import {
   WORKOUT_EXERCISES_REPO,
 } from '../../data/tokens';
 import { UNIT_OF_WORK, type TxScope } from '../../data/unit-of-work';
+import type { Measurement } from '../../domain/models/body';
 import type { Draft, Patch } from '../../domain/models/entity';
 import type { TrackingMode } from '../../domain/models/prefs';
 import type { PersonalRecord } from '../../domain/models/records';
@@ -1570,15 +1571,39 @@ export class TrackerStore {
    * Snapshotted at the start so a bodyweight exercise has a meaningful volume,
    * and `null` when nothing has ever been recorded — in which case volume
    * reports as uncounted rather than as a guess.
+   *
+   * Reads through `by_hasWeight` — the indexable mirror of
+   * `weightKg !== null` the schema keeps for exactly this — so only entries
+   * that *have* a weight are fetched. Walking `by_measuredAt` backwards
+   * instead would be wrong for a fixed window and wasteful without one: every
+   * measurement field is optional, so a run of waist-only entries is ordinary
+   * and can fill any window, reporting "never weighed" to someone who weighs
+   * themselves monthly.
+   *
+   * The latest is then picked in memory rather than by taking the index's last
+   * row: equal index keys order by primary key, and an id is assigned when the
+   * entry is *typed in*, not for the day it measures. Backdating an entry
+   * would otherwise make it the newest weight.
    */
   private async nearestBodyWeightKg(): Promise<number | null> {
-    const recent = await this.measurementsRepo.list({
-      index: 'by_measuredAt',
-      direction: 'prev',
-      limit: 20,
-    });
-    return recent.find((entry) => entry.weightKg !== null)?.weightKg ?? null;
+    const weighed = await this.measurementsRepo.list({ index: 'by_hasWeight', equals: 1 });
+
+    let latest: Measurement | null = null;
+    for (const entry of weighed) {
+      if (latest === null || isLaterMeasurement(entry, latest)) latest = entry;
+    }
+    return latest?.weightKg ?? null;
   }
+}
+
+/**
+ * Whether `a` measures a later moment than `b`.
+ *
+ * The day decides, and `recordedAt` breaks a tie: several entries a day are
+ * allowed, and the one entered second is the later reading.
+ */
+function isLaterMeasurement(a: Measurement, b: Measurement): boolean {
+  return a.measuredAt === b.measuredAt ? a.recordedAt > b.recordedAt : a.measuredAt > b.measuredAt;
 }
 
 function message(error: unknown, fallback: string): string {

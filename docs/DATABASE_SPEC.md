@@ -739,16 +739,18 @@ Enforced in `domain/` and reused by both forms and the import validator — one 
 | `targetSets` | integer 1 … 50 |
 | `targetRepsMin/Max` | 1 … 1000, `min ≤ max` |
 | `restSec` | 0 … 3600 |
-| `bodyFatPct` | 1 … 70 |
-| Body measurements (cm) | 1 … 300 |
-| `weightKg` (body) | 20 … 500 |
+| `bodyFatPct` | questioned outside 1 … 70; rejected outside 0 … 100 |
+| Body measurements (cm) | questioned outside 1 … 300; rejected outside 0 … 1000 |
+| `weightKg` (body) | questioned outside 20 … 500; rejected outside 0 … 2000 |
 | `measuredAt` / `takenAt` | valid date, not more than 1 day in the future (timezone slack) |
 | Text names | 1 … 80 chars after trim, non-empty |
 | Notes | ≤ 2000 chars |
-| `custom` keys | must resolve to a live `customMeasurementDefs` id |
+| `custom` keys | must resolve to a `customMeasurementDefs` id, **live or archived** — archiving stops a definition appearing in new entries, and the values already recorded against it have to stay readable |
 | Enums | must be a declared member; import coerces unknowns to the designated fallback and reports it |
 
 Out-of-range values are *questioned, not silently clamped*: the input shows "That's unusually heavy — is 650 kg right?" with Confirm/Edit. Clamping user data is a form of fabrication.
+
+Every measurement range therefore has **two** bands, and the table above names both. The outer band is what the field physically means — a mass cannot be negative, a percentage cannot exceed 100 — and a value outside it is rejected, because it is not a measurement at all. The inner band is what is *plausible*, and a value outside it is questioned once and then saved exactly as typed. Only the outer band is an error; the inner one is a question, and the user's answer wins.
 
 ---
 

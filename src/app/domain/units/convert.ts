@@ -14,11 +14,32 @@ import type { LengthUnit, WeightUnit } from '../models/prefs';
 export const KG_PER_LB = 0.45359237;
 export const CM_PER_IN = 2.54;
 
-/** Display granularity. Stored values keep full precision; this is a view concern. */
+/**
+ * Display granularity for a *load*. Stored values keep full precision.
+ *
+ * Sized for plates: you cannot load 80.4 kg on a bar, so showing it would be
+ * precision the gym does not have.
+ */
 export const MASS_STEP: Readonly<Record<WeightUnit, number>> = Object.freeze({
   kg: 0.25,
   lb: 0.5,
 });
+
+/**
+ * Display granularity for a *measurement*, which is a different question.
+ *
+ * A scale reads 80.4 kg and the app has to show 80.4 kg. Snapping a
+ * measurement to the plate grid would quietly rewrite what the user read off
+ * the display in front of them — the same fabrication the clamping rule in
+ * DATABASE_SPEC section 10 exists to prevent, just rounded instead of capped.
+ *
+ * One tenth in every unit, deliberately. A coarser grid would be defensible
+ * as "what scales read", but it would fail to round-trip a value someone
+ * typed: 177.3 lb on a 0.2 grid comes back as 177.2. The step is here to hide
+ * floating-point noise after a conversion, not to have an opinion about how
+ * precisely a body can be measured.
+ */
+export const MEASUREMENT_STEP = 0.1;
 
 export const LENGTH_STEP: Readonly<Record<LengthUnit, number>> = Object.freeze({
   cm: 0.1,
@@ -53,10 +74,22 @@ export function toCanonicalMass(value: number, unit: WeightUnit): number {
   return unit === 'kg' ? value : value * KG_PER_LB;
 }
 
-/** Canonical kilograms to a display value, snapped to the unit's step. */
+/** Canonical kilograms to a display load, snapped to the plate grid. */
 export function toDisplayMass(kg: number, unit: WeightUnit): number {
   const raw = unit === 'kg' ? kg : kg / KG_PER_LB;
   return roundToStep(raw, MASS_STEP[unit]);
+}
+
+/** Canonical kilograms to a displayed *measurement*, at scale precision. */
+export function toDisplayBodyMass(kg: number, unit: WeightUnit): number {
+  const raw = unit === 'kg' ? kg : kg / KG_PER_LB;
+  return roundToStep(raw, MEASUREMENT_STEP);
+}
+
+/** Canonical centimetres to a displayed *measurement*, at tape precision. */
+export function toDisplayBodyLength(cm: number, unit: LengthUnit): number {
+  const raw = unit === 'cm' ? cm : cm / CM_PER_IN;
+  return roundToStep(raw, MEASUREMENT_STEP);
 }
 
 /** Display value to canonical centimetres. */

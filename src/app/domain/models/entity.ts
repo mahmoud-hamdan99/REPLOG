@@ -36,6 +36,14 @@ export interface Entity {
 }
 
 /**
+ * How long a tombstoned record stays recoverable.
+ *
+ * A property of the tombstone, so it lives beside it rather than being retyped
+ * into each screen that promises it.
+ */
+export const RECOVERY_WINDOW_DAYS = 30;
+
+/**
  * What a caller supplies. The envelope is stamped by the repository, so no
  * application code hand-writes `rev` or `updatedAt` and they cannot drift.
  */

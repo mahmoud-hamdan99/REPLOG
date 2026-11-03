@@ -4,7 +4,13 @@ import { TestBed } from '@angular/core/testing';
 import { PR_DETECTOR, type PrDetector } from '../../data/pr-detector';
 import { APP_META_STORE } from '../../data/app-meta';
 import { TAB_IDENTITY } from '../../data/tab-id';
-import { SET_LOGS_REPO, WORKOUTS_REPO, WORKOUT_EXERCISES_REPO } from '../../data/tokens';
+import {
+  MEASUREMENTS_REPO,
+  SET_LOGS_REPO,
+  WORKOUTS_REPO,
+  WORKOUT_EXERCISES_REPO,
+} from '../../data/tokens';
+import { flag } from '../../domain/models/entity';
 import type { ExerciseFacts } from '../../domain/tracker/session';
 import { PlannerStore } from '../planner/planner.store';
 import {
@@ -98,6 +104,40 @@ describe('TrackerStore', () => {
     return { workoutId, routineId };
   }
 
+  /** Body measurements, oldest first. Only the fields a test cares about. */
+  async function seedWeights(
+    rows: readonly { measuredAt: string; weightKg?: number | null; waistCm?: number | null }[],
+  ) {
+    const repo = TestBed.inject(MEASUREMENTS_REPO);
+    await repo.putMany(
+      rows.map((row) => ({
+        measuredAt: row.measuredAt,
+        recordedAt: `${row.measuredAt}T07:00:00.000Z`,
+        weightKg: row.weightKg ?? null,
+        // The indexable mirror the schema keeps, and what the lookup reads.
+        hasWeight: flag(row.weightKg !== null && row.weightKg !== undefined),
+        source: 'manual' as const,
+        heightCm: null,
+        neckCm: null,
+        shouldersCm: null,
+        chestCm: null,
+        waistCm: row.waistCm ?? null,
+        hipsCm: null,
+        bicepsLeftCm: null,
+        bicepsRightCm: null,
+        forearmLeftCm: null,
+        forearmRightCm: null,
+        thighLeftCm: null,
+        thighRightCm: null,
+        calfLeftCm: null,
+        calfRightCm: null,
+        bodyFatPct: null,
+        custom: {},
+        notes: null,
+      })),
+    );
+  }
+
   /**
    * Replaces the whole injector, keeping the database and the clock.
    *
@@ -143,6 +183,58 @@ describe('TrackerStore', () => {
       expect(store.workout()?.planSnapshot?.routineRevision).toBe(revisionAtStart);
       expect(store.workout()?.name).toBe('Push A');
       expect(store.cards()).toHaveLength(2);
+    });
+
+    it('snapshots the latest recorded body weight', async () => {
+      await seedWeights([
+        { measuredAt: '2026-03-01', weightKg: 78 },
+        { measuredAt: '2026-03-20', weightKg: 80.4 },
+      ]);
+
+      await startSession();
+
+      // The snapshot, not a live reference: a bodyweight set logged today is
+      // scored against what the user weighed today, whatever they weigh later.
+      expect(store.workout()?.bodyWeightKg).toBe(80.4);
+    });
+
+    it('finds a weight behind a long run of entries that recorded none', async () => {
+      // Every measurement field is optional, so months of waist-only entries
+      // are ordinary. A fixed look-back window fills up with them and reports
+      // "never weighed" to someone who weighs themselves monthly.
+      await seedWeights([
+        { measuredAt: '2026-01-05', weightKg: 83.2 },
+        ...Array.from({ length: 40 }, (_, index) => ({
+          measuredAt: `2026-02-${String((index % 28) + 1).padStart(2, '0')}`,
+          weightKg: null,
+          waistCm: 86,
+        })),
+      ]);
+
+      await startSession();
+
+      expect(store.workout()?.bodyWeightKg).toBe(83.2);
+    });
+
+    it('takes the latest day measured, not the entry typed in last', async () => {
+      // Backfilling an old weigh-in is ordinary. The newest row in the index
+      // is the one entered last, which is not the same thing.
+      await seedWeights([
+        { measuredAt: '2026-03-20', weightKg: 80.4 },
+        { measuredAt: '2026-01-05', weightKg: 70 },
+      ]);
+
+      await startSession();
+
+      expect(store.workout()?.bodyWeightKg).toBe(80.4);
+    });
+
+    it('leaves the snapshot null when nothing has ever been weighed', async () => {
+      await startSession();
+
+      // Null, not a guess: volume for a bodyweight set then reports as
+      // uncounted rather than inventing a load.
+      expect(store.workout()?.bodyWeightKg).toBeNull();
     });
 
     it('points appMeta at the session, so a cold start can find it', async () => {

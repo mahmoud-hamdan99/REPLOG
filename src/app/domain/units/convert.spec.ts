@@ -3,11 +3,14 @@ import {
   KG_PER_LB,
   LENGTH_STEP,
   MASS_STEP,
+  MEASUREMENT_STEP,
   displayIncrement,
   roundToStep,
   stepGrid,
   toCanonicalLength,
   toCanonicalMass,
+  toDisplayBodyLength,
+  toDisplayBodyMass,
   toDisplayLength,
   toDisplayMass,
 } from './convert';
@@ -48,6 +51,30 @@ describe('unit conversion', () => {
       expect(canonical).toBeCloseTo(102.05828325, 8);
       // Nothing was snapped on the way in.
       expect(canonical).not.toBe(roundToStep(canonical, MASS_STEP.kg));
+    });
+
+    it('shows a measured mass at scale precision, not on the plate grid', () => {
+      // A load of 80.4 kg is not something you can put on a bar, so a load
+      // display snaps it. A scale reading of 80.4 kg is what the user read,
+      // and rounding it to 80.5 would rewrite their measurement.
+      expect(toDisplayMass(80.4, 'kg')).toBe(80.5);
+      expect(toDisplayBodyMass(80.4, 'kg')).toBe(80.4);
+      expect(MEASUREMENT_STEP).toBeLessThan(MASS_STEP.kg);
+    });
+
+    it('round-trips a typed measurement in either unit', () => {
+      // The property that matters: whatever the user typed comes back.
+      for (const typed of [80.4, 177.3, 62.7]) {
+        expect(toDisplayBodyMass(toCanonicalMass(typed, 'kg'), 'kg')).toBe(typed);
+        expect(toDisplayBodyMass(toCanonicalMass(typed, 'lb'), 'lb')).toBe(typed);
+      }
+    });
+
+    it('round-trips a typed length in either unit', () => {
+      for (const typed of [86.4, 13.3, 42]) {
+        expect(toDisplayBodyLength(toCanonicalLength(typed, 'cm'), 'cm')).toBe(typed);
+        expect(toDisplayBodyLength(toCanonicalLength(typed, 'in'), 'in')).toBe(typed);
+      }
     });
   });
 

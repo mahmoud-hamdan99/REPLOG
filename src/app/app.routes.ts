@@ -125,7 +125,7 @@ export const routes: Routes = [
   },
   {
     path: 'body',
-    loadComponent: placeholder,
+    loadComponent: () => import('./features/body/body.page').then((m) => m.BodyPage),
     data: { titleKey: 'page.body.title', navTab: 'progress' },
   },
 

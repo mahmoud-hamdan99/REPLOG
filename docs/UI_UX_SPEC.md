@@ -514,6 +514,14 @@ Every chart renders a gap for missing data and an explicit "Not enough data to s
 
 List grouped by date, newest first, each entry showing only the fields actually recorded. The entry form is a single scrolling sheet with the weight field first and focused, then a collapsible "More measurements" section in body order (neck → shoulders → chest → waist → hips → arms → forearms → thighs → calves → body fat → custom). Each field shows its last value as ghost text and the delta once a value is entered. Left/right pairs sit on one row. All fields optional; `Save` is enabled as soon as any field has a value.
 
+Each entry is listed under the day it **measures**, not the moment it was typed: backfilling last Tuesday's weigh-in dates it to last Tuesday. The ghost value is a placeholder, never a prefill — a prefilled field makes last week's measurement look like today's until somebody notices — and the delta appears only once a value is entered *and* there is something to compare against.
+
+Saving runs two questions and no edits. A value outside its plausible band is questioned by name ("That is unusual for Body weight. Is 650 kg right?") and then saved as typed. A second entry on a day that already has one offers to merge rather than stacking silently; the entry the user kept wins every field it has, and the other only fills gaps. Deleting is a soft delete behind an undo toast.
+
+**Compare** picks two entries and lists every field either one mentions, with a delta only where both have a value and a line naming the missing side where they do not — a gap stays a gap. The arrow between the two values is a translated string, because U+2192 is not bidi-mirrored and would otherwise point from the later value back at the earlier one in Arabic.
+
+Custom measurements are defined in their own sheet with a name and a unit type, and are **archived, never deleted**: archiving removes a definition from new entries while leaving the values recorded against it readable and named.
+
 ### 5.11 Progress photos
 
 Gallery: date-grouped grid of 3 columns (thumbnails only), pose filter chips, a selection mode for compare/delete. Compare view: two photos side by side (stacked on narrow screens) with a draggable divider option, each captioned with date, pose, weight at the time, and the computed interval ("14 weeks apart").
@@ -571,7 +579,7 @@ Grouped list rows with values on the trailing side:
 | `rl-rest-timer-sheet` / `rl-rest-pill` | Timestamp-driven countdown |
 | `rl-exercise-picker` | Search + filters + multi-select, reused by planner, tracker, and replace flows |
 | `rl-weekday-picker` | 7 toggles, locale-aware week start, RTL order |
-| `rl-measurement-field` | Label + canonical-to-display conversion + delta + last value as ghost text |
+| `rl-measurement-field` | Label + canonical-to-display conversion + delta + last value as ghost text. **The only place a measurement converts units** — values arrive and leave canonical, so a unit switch changes every number on screen and none on disk. Reads and writes the user's numeral system in both directions: an Arabic keyboard's `٨٢٫٥` parses, and the field renders `٨٢٫٥` back, with grouping off so a thousands separator cannot be read as a decimal mark |
 | `rl-photo-thumb` / `rl-photo-compare` | Object-URL lifecycle owned by the store, never the component |
 | `rl-pr-row` | Type, value, previous best, date, estimate marker |
 | `rl-workout-row` | History/activity list row |
@@ -683,6 +691,10 @@ Chart colours come from tokens, so theme switching needs no redraw logic beyond 
 
 `<html lang dir>` is driven by the locale signal. Layout uses **logical properties exclusively**: `margin-inline-start`, `padding-inline-end`, `inset-inline-start`, `border-start-start-radius`, `text-align: start`. Physical `left`/`right`/`margin-left` are banned by a stylelint rule.
 
+Numerals are a preference of their own, separate from the language: an Arabic reader may want Latin digits, and the app honours whichever they chose. Every number on screen goes through `I18n.formatNumber`, and every number typed **in** comes back through `normaliseDigits`, which reads Latin, Arabic-Indic and Persian digits and all three decimal marks. A field that rendered `٧٩٫٨` but only parsed `[0-9.]` would display a number its own keyboard cannot retype.
+
+An arrow that carries meaning is a translated string, not a literal glyph. U+2192 is not bidi-mirrored, so "82.5 → 79.8" in an Arabic paragraph renders right-to-left with the arrowhead still pointing right — from the later value back at the earlier one. Arabic uses U+2190, as it already does for the "Settings ← Data" breadcrumb.
+
 ### 10.2 Mirroring matrix
 
 | Element | RTL behaviour |
@@ -742,6 +754,7 @@ Loading policy: show skeletons after 120 ms (nothing flashes for fast local read
 * **Reduced motion** — §3.5.
 * **Keyboard** — full operability on desktop: `Tab` through sets, `Enter` to complete, `Space` on toggles, arrow keys on segmented controls and chips, `Esc` to close sheets.
 * **Labels** — every icon-only button has an `aria-label`; translated, never English-only in Arabic.
+* **Names are the name and nothing else.** A `<label>` that wraps a whole control names the input with everything inside it — unit suffix, hint, delta — and `aria-describedby` then reads the hint a second time. A field with a hint names itself from the label text alone (`aria-labelledby` on the span), and puts the unit and the hint in the description. For a left/right pair that difference is the whole point: "Biceps Left" and "Biceps Right" are two controls, and without the side in the name they are two controls called the same thing.
 * **No motion-only or colour-only information** anywhere.
 
 ---

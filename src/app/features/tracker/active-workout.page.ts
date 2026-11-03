@@ -23,6 +23,7 @@ import { NumericPad, type PadValue } from '../../shared/ui/numeric-pad';
 import { RestPill, RestTimer } from './components/rest-timer';
 import type { PreviousPerformance } from './previous-performance.service';
 import { TrackerStore, type SessionBlock } from './tracker.store';
+import { RECOVERY_WINDOW_DAYS } from '../../domain/models/entity';
 
 const SET_TYPES: readonly SetType[] = ['warmup', 'working', 'dropset', 'failure', 'backoff'];
 /** 5–10 in half steps: the range anyone actually reports. */
@@ -738,6 +739,7 @@ export class ActiveWorkoutPage {
 
   protected discardSummary(): string {
     return this.i18n.t('tracker.discard.body', {
+      days: RECOVERY_WINDOW_DAYS,
       duration: this.format.clock(this.store.elapsedSec()),
       sets: this.format.setCount(this.store.completedSetCount()),
     });

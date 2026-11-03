@@ -1,0 +1,71 @@
+.mf {
+  display: block;
+  margin-block-end: var(--sp-3);
+}
+
+.mf__label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-1);
+}
+
+.mf__side {
+  color: var(--text-3);
+}
+
+.mf__input-wrap {
+  position: relative;
+  display: block;
+}
+
+.mf__input {
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+
+  /* Room for the unit suffix, on the trailing side in both directions. */
+  padding-inline: var(--sp-3) var(--sp-10);
+  padding-block: var(--sp-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+
+  /* 16px floor, or iOS zooms the page when the field takes focus. */
+  font-size: var(--t-body);
+}
+
+.mf__input::placeholder {
+  color: var(--text-3);
+}
+
+.mf__input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.mf__unit {
+  position: absolute;
+  inset-inline-end: var(--sp-3);
+  inset-block-start: 50%;
+  translate: 0 -50%;
+  color: var(--text-3);
+}
+
+.mf__hint {
+  display: block;
+  margin-block-start: var(--sp-1);
+  min-block-size: 1.2em;
+}
+
+.mf__delta {
+  color: var(--text-2);
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+
+  /* A signed number is an LTR run in every locale (UI_UX_SPEC 10.2). */
+  direction: ltr;
+  display: inline-block;
+}

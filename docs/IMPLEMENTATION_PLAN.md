@@ -440,10 +440,28 @@ Build it in the order below; each step is independently demonstrable.
 
 ### Acceptance criteria
 
-- [ ] An entry with only a weight saves and renders correctly
-- [ ] Switching kg→lb changes every displayed value and no stored value (asserted by re-reading the record)
-- [ ] Deleting a custom definition keeps its historical values readable
-- [ ] Comparing two dates shows deltas only for fields present in both, and says so for the rest
+- [x] An entry with only a weight saves and renders correctly — Save goes live as soon as any field has a value, and the row lists only the fields that were recorded. A row of blanks would make the normal case read as a failed entry. Covered in the store suite and in Playwright, which asserts the saved entry shows exactly one value pair.
+- [x] Switching kg→lb changes every displayed value and no stored value (asserted by re-reading the record) — a Playwright test records 80.4 kg and 86.4 cm, flips both units in Settings, sees 177.3 lb and 34 in, and compares the measurement rows read back out of IndexedDB against the rows read before the switch — every field identical, envelope included, so not even a write happened.
+- [x] Deleting a custom definition keeps its historical values readable — the store **archives** rather than deletes, which is the stronger form of the promise: the definition is still there to name the value, so an entry recorded against "Wrist" still says "Wrist" and not an orphaned id. Archiving removes it from new entries only. Asserted in the store suite and in Playwright.
+- [x] Comparing two dates shows deltas only for fields present in both, and says so for the rest — `compare` emits a status per row and a delta only for `both`; the other rows say which side is missing. A gap stays a gap: a waist that was never measured on the earlier date is not a −4 cm change.
+
+### Deviations
+
+* **A measured mass is displayed at scale precision, not on the plate grid.** `toDisplayMass` snaps to 0.25 kg because that is what you can put on a bar; a body weight of 80.4 kg went in and came out as 80.5. Snapping a *measurement* to the plate grid rewrites what the user read off the display in front of them. Measurements get `MEASUREMENT_STEP` (0.1), which round-trips in kilograms and in pounds — a first attempt at a per-unit step (0.1 kg / 0.2 lb) failed its own round-trip test at 177.3 lb.
+* **The body weight the tracker snapshots is read through `by_hasWeight`, and the latest is chosen by the day measured.** The original scan took the newest 20 entries and looked for a weight among them. Every measurement field is optional, so a run of waist-only entries is ordinary and fills any fixed window — reporting "never weighed" to someone who weighs themselves monthly. The index the schema already keeps for this fetches only entries that have a weight; the latest among them is then picked by `measuredAt`, because an id is assigned when an entry is *typed in*, not for the day it measures, and backfilling an old weigh-in would otherwise make it the newest.
+* **Height leads the collapsed section.** UI_UX_SPEC section 5.10 lists the body order from the neck down and does not place height, which the schema nonetheless carries. It sits first among the secondary fields because it is the one measurement that does not change: a reader scanning for what moved this week skips it immediately, and burying it between the thighs and the calves would make it harder to find on the rare occasion it is entered.
+
+* **Date filtering is the comparison picker, not a range filter.** Task 7 pairs "date filtering" with "historical comparison"; the comparison picker is built, a range filter is not. The list is short by construction — DATABASE_SPEC §11 puts five years of measurements at roughly 250 kB — so there is nothing yet to filter *through*. Phase 10's shared time-range selector covers the body charts and is the natural home for it.
+* **The numeral system is still a stored preference with no control in Settings.** The measurement fields read and write it correctly (below); the preferences screen that exposes it is Phase 11's.
+
+### Carried forward
+
+* **Measurement fields read and write the user's numeral system.** Found by looking at the running app in Arabic: the field displayed Latin `79.8` while every other number on the screen was `٧٩٫٨`, and typing `٨٢٫٥` — what an Arabic keyboard produces — emptied the field, because the parser stripped everything outside `[0-9.]`. `core/i18n/numerals.ts` now reads Arabic-Indic and Persian digits and all three decimal marks; the field renders through `formatNumber` with grouping off.
+* **The comparison arrow is a translated string.** U+2192 is not bidi-mirrored, so in Arabic the line rendered right-to-left with the arrowhead still pointing right — from the later value back at the earlier one. The locale files had already settled this for the "Settings → Data" breadcrumb; `common.arrow` follows it.
+* **The two recovery notices lost their hardcoded numerals.** "30 days" was written into the English copy as `30` and into the Arabic as `٣٠`, so whichever numeral system the user picked, one of those two screens disagreed with every other number in the app. Both now interpolate `RECOVERY_WINDOW_DAYS`.
+* **Measurement entries display `measuredAt`, not `recordedAt`.** The list, the comparison picker and the delete confirmation all showed the instant the entry was typed, so a backfilled weigh-in claimed today's date. `DisplayFormat.weekdayDay` formats a day key as local midnight — `Date.parse('2026-10-20')` reads it as UTC and renders as the 19th anywhere west of Greenwich.
+* **A measurement field names itself, and only itself.** The label element wrapped the whole control, so the input's accessible name was "Body weight kg Last 79.8 kg" — the hint read out as part of the name and then again as the description, and the two halves of a left/right pair were indistinguishable. The name now comes from the label span alone ("Biceps Left"), with the unit and the previous value as the description. The full AXE and VoiceOver sweep is the accessibility pass in section 17 (Phase 14).
+* **Photos are not wired to measurements.** `Photo.measurementId` and the nearest-weight snapshot are Phase 9's; nothing here needs them.
 
 ---
 

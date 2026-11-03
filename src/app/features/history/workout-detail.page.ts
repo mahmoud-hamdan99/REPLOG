@@ -16,6 +16,7 @@ import { SetRow } from '../../shared/ui/set-row';
 import { StatTile } from '../../shared/ui/stat-tile';
 import { TrackerStore } from '../tracker/tracker.store';
 import { HistoryStore, type RoutineState, type WorkoutDetail } from './history.store';
+import { RECOVERY_WINDOW_DAYS } from '../../domain/models/entity';
 
 /**
  * One recorded workout.
@@ -93,7 +94,7 @@ import { HistoryStore, type RoutineState, type WorkoutDetail } from './history.s
           <p class="t-caption">
             {{
               i18n.t('history.detail.bodyWeight', {
-                value: format.massWithUnit(view.workout.bodyWeightKg),
+                value: format.byUnitType('mass', view.workout.bodyWeightKg),
               })
             }}
           </p>
@@ -294,6 +295,7 @@ export class WorkoutDetailPage {
   protected deleteBody(): string {
     const view = this.detail();
     return this.i18n.t('history.detail.deleteBody', {
+      days: RECOVERY_WINDOW_DAYS,
       sets: this.format.setCount(view?.workout.totalSets ?? 0),
     });
   }
