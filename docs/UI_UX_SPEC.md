@@ -673,16 +673,16 @@ Spec §9 forbids claiming unsupported iOS capabilities. The exact copy, surfaced
 Hand-built SVG components (ARCHITECTURE D4). Shared rules:
 
 1. **No chart junk** — no gridline grids, no 3D, no drop shadows, no legends when one series exists. Axis labels are `--t-micro`/`--text-3`; at most 4 y-ticks and 5 x-ticks on mobile.
-2. **Gaps are gaps.** `null` points break the line. No interpolation, no zero-filling, no smoothing that invents values (spec §4.9). A dashed connector may bridge a gap *only* when labelled "no data".
+2. **Gaps are gaps.** `null` points break the line. No interpolation, no zero-filling, no smoothing that invents values (spec §4.9). A dashed connector may bridge a gap *only* when labelled "no data". **The rule has two halves**: an empty bucket is a *gap* for a measurement series (body weight, a circumference, an e1RM) and a real *zero* for a total series (volume, sets, sessions). Drawing a missed fortnight as a gap hides it; drawing an unrecorded weigh-in as zero invents a cliff. `domain/analytics/series.ts` has one builder for each and they are not interchangeable.
 3. **Sparse data is labelled.** Fewer than 3 points → an empty state, not a chart. Fewer than 5 → no trend line. The point count is always printed.
 4. **Axis honesty.** Y axes for body weight and measurements may be zoomed (a 2 kg change on a 0-based axis is invisible), but a zoomed axis must show its real min/max values. Volume and count axes always start at zero.
-5. **Touch reading.** Tap or drag to scrub shows a value callout with the exact figure, unit, and date; no hover-only affordance.
+5. **Touch reading.** Tap or drag to scrub shows a value callout with the exact figure, unit, and date; no hover-only affordance. The callout snaps to a reading, never to a position between two, and is positioned by a separate anchor element: an inline inset resolves against the element's *own* direction, so a callout carrying `dir="auto"` for its Arabic text would otherwise measure its offset from the opposite edge and land at the mirror of its point.
 6. **Estimates differ visually.** Estimated-1RM series are dashed with `--info` and carry the `⌁` marker in the legend.
 
 | Chart | Use | Spec |
 |---|---|---|
 | `rl-line-chart` | Weight, measurements, e1RM, top-set | 2 px accent stroke, 3 px point dots at data points only, optional dashed moving average, area fill at 8 % opacity only for single-series |
-| `rl-bar-chart` | Volume per week/month, frequency | 8 px bars, `--r-sm` top corners, stackable by muscle group with a 6-colour accessible categorical ramp (lime, teal, violet, amber, rose, slate) tested in both themes |
+| `rl-bar-chart` | Volume per week/month, frequency | Bars capped at 16 px with `--r-sm` top corners, stackable by muscle group with a 6-colour categorical ramp (`--cat-lime` … `--cat-slate`). The ramp is defined per theme and **alternates lightness as well as hue**, so it survives greyscale and colour blindness; `check-contrast.mjs` gates each colour against the surface *and* against its neighbour. An empty bucket draws a hairline rather than nothing, because a zero-height bar is indistinguishable from a missing one. A count axis is labelled in whole units |
 | `rl-sparkline` | Inside stat tiles | 40 px tall, no axes, last point emphasised |
 | `rl-distribution` | Muscle-group share | Horizontal stacked bar + a labelled list with percentages — **not** a pie chart (unreadable at 12 categories and bad for RTL) |
 

@@ -595,5 +595,72 @@
   },
   "settings.photos.title": "Photos",
   "settings.photos.blur": "Hide thumbnails until tapped",
-  "settings.photos.blurHint": "Blurs every thumbnail in the gallery. There is no app lock: anyone holding this phone unlocked can open the app."
+  "settings.photos.blurHint": "Blurs every thumbnail in the gallery. There is no app lock: anyone holding this phone unlocked can open the app.",
+  "page.strength.title": "Strength",
+  "page.volume.title": "Volume",
+  "page.bodyTrends.title": "Body",
+  "chart.points": {
+    "one": "{count} reading",
+    "other": "{count} readings"
+  },
+  "chart.buckets": {
+    "one": "{count} bucket",
+    "other": "{count} buckets"
+  },
+  "chart.empty": "Not enough data to show a chart yet.",
+  "chart.sparse": "Too few readings for a trend.",
+  "chart.summary": "{label}, {count} readings",
+  "chart.axisRange": "Axis {min} to {max}",
+  "chart.movingAverage": "{window}-point average (calculated)",
+  "chart.gapNote": "A break in the line is a period with no readings, not a drop.",
+  "range.7d": "7 days",
+  "range.30d": "30 days",
+  "range.3m": "3 months",
+  "range.6m": "6 months",
+  "range.1y": "1 year",
+  "range.all": "All time",
+  "range.label": "Time range",
+  "analytics.pickExercise": "Exercise",
+  "analytics.noExercises": "No exercise has a completed set in this range.",
+  "analytics.e1rm": "Estimated one-rep max",
+  "analytics.topSet": "Heaviest set",
+  "analytics.bestSets": "Best sets",
+  "analytics.volume": "Volume",
+  "analytics.sets": "Sets",
+  "analytics.sessions": "Sessions",
+  "analytics.distribution": "Muscle groups",
+  "analytics.distributionNote": "Working sets only, counted once against the exercise’s first primary muscle. Warm-ups and unconfirmed sets are excluded.",
+  "analytics.unplaced": {
+    "one": "{count} set is not counted: its exercise names no muscle.",
+    "other": "{count} sets are not counted: their exercises name no muscle."
+  },
+  "analytics.weight": "Body weight",
+  "analytics.waist": "Waist",
+  "analytics.chest": "Chest",
+  "analytics.hips": "Hips",
+  "analytics.bodyFat": "Body fat",
+  "analytics.logMeasurement": "Log a measurement",
+  "analytics.consistency": "Consistency",
+  "analytics.consistencyValue": "{hit} of {total} weeks",
+  "analytics.noPlan": "Set a plan to measure consistency against.",
+  "analytics.streak": {
+    "one": "{count} week streak",
+    "other": "{count} week streak"
+  },
+  "analytics.netChange": "Change over this range",
+  "analytics.empty.title": "Nothing to chart yet",
+  "analytics.empty.body": "Finish a workout and the numbers start here.",
+  "dashboard.thisWeek": "This week",
+  "dashboard.thisWeekNote": "Completed sessions",
+  "dashboard.consistency": "Consistency",
+  "dashboard.recentRecords": "Recent records",
+  "dashboard.allRecords": "All records",
+  "dashboard.allHistory": "Workout history",
+  "dashboard.empty.title": "Nothing logged yet",
+  "dashboard.empty.body": "Your first session is what makes this screen worth opening.",
+  "dashboard.empty.action": "Start training",
+  "dashboard.ofWeeks": {
+    "one": "of {count} week",
+    "other": "of {count} weeks"
+  }
 }

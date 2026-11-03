@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+
+.sl {
+  display: block;
+  inline-size: 100%;
+  block-size: 40px;
+  overflow: visible;
+}
+
+.sl__line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sl__last {
+  fill: var(--accent);
+}
+
+.sl__lone {
+  fill: var(--accent);
+}

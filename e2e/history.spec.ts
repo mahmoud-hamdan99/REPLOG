@@ -18,7 +18,9 @@ test.describe.configure({ timeout: 120_000 });
 async function recordWorkout(page: Page, weight: string, reps: string): Promise<void> {
   await page.goto('/train');
   await page.getByRole('button', { name: 'Quick workout' }).click();
-  await expect(page).toHaveURL(/\/train\/active$/, { timeout: 20_000 });
+  // Starting a session on a cold database also seeds the exercise catalog,
+  // which on WebKit is seconds rather than milliseconds.
+  await expect(page).toHaveURL(/\/train\/active$/, { timeout: 40_000 });
 
   await page.getByRole('button', { name: 'Add exercise' }).first().click();
   const picker = page.locator('rl-exercise-picker dialog');
@@ -43,7 +45,9 @@ async function recordWorkout(page: Page, weight: string, reps: string): Promise<
 
   await page.getByRole('button', { name: 'Finish', exact: true }).click();
   await page.getByRole('button', { name: 'Finish workout' }).click();
-  await expect(page).toHaveURL(/\/train\/summary\//);
+  // Finishing writes the whole session in one transaction and detects records
+  // inside it, so this is a piece of real work rather than a navigation.
+  await expect(page).toHaveURL(/\/train\/summary\//, { timeout: 30_000 });
 }
 
 test('a finished workout appears in history with its measured totals', async ({ page }) => {

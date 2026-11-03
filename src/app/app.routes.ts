@@ -21,7 +21,7 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadComponent: placeholder,
+    loadComponent: () => import('./features/dashboard/dashboard.page').then((m) => m.DashboardPage),
     data: { titleKey: 'page.dashboard.title', navTab: 'home' },
   },
 
@@ -109,9 +109,26 @@ export const routes: Routes = [
 
   // Progress and body
   {
-    // Records in Phase 7. Phase 10 turns this into the analytics hub with
-    // Records as one of its tabs, rather than moving a second route then.
+    // The analytics hub. Each tab is a route of its own rather than state
+    // inside one component, so a chart someone wants to come back to has a
+    // URL and a sensible back button.
     path: 'progress',
+    loadComponent: () => import('./features/analytics/analytics.page').then((m) => m.AnalyticsPage),
+    data: { titleKey: 'page.strength.title', navTab: 'progress', tab: 'strength' },
+  },
+  {
+    path: 'progress/volume',
+    loadComponent: () => import('./features/analytics/analytics.page').then((m) => m.AnalyticsPage),
+    data: { titleKey: 'page.volume.title', navTab: 'progress', tab: 'volume' },
+  },
+  {
+    path: 'progress/body',
+    loadComponent: () => import('./features/analytics/analytics.page').then((m) => m.AnalyticsPage),
+    data: { titleKey: 'page.bodyTrends.title', navTab: 'progress', tab: 'body' },
+  },
+  {
+    // Moved off /progress now that the hub lives there. Still a Progress tab.
+    path: 'records',
     loadComponent: () => import('./features/records/records.page').then((m) => m.RecordsPage),
     data: { titleKey: 'page.records.title', navTab: 'progress' },
   },

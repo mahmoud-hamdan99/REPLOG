@@ -440,8 +440,12 @@ describe('PrEngine', () => {
           ),
       );
       // Headroom over the measured time under coverage instrumentation, which
-      // runs several times slower than an ordinary test run.
-    }, 180_000);
+      // runs several times slower than an ordinary test run — about a minute
+      // of the suite uninstrumented. The figure tracks the harness rather
+      // than the engine, so it has had to move as the instrumented surface
+      // grew; the standing fix is to run this one outside the coverage pass
+      // rather than re-budget it every time the codebase does.
+    }, 300_000);
 
     it('clears records a variant can no longer support', async () => {
       await seedSession({ day: 1, sets: [{ weightKg: 100, reps: 5 }] });

@@ -1,0 +1,36 @@
+.page {
+  padding: var(--sp-4);
+  padding-block-end: var(--sp-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+
+.weight__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  margin-block: var(--sp-2);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--sp-1) var(--sp-3);
+  margin-block-end: var(--sp-2);
+}
+
+.note {
+  color: var(--text-3);
+}
+
+.more {
+  display: inline-block;
+  color: var(--accent-ink);
+}

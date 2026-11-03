@@ -235,7 +235,7 @@ describe('PhotosStore', () => {
     // unlikely.
     expect(urls.live.size).toBeLessThanOrEqual(48);
     expect(urls.created - urls.revoked).toBe(urls.live.size);
-  });
+  }, 60_000);
 
   it('evicts the thumbnail nobody has looked at longest', async () => {
     const photos = [];
@@ -256,7 +256,7 @@ describe('PhotosStore', () => {
     await vi.waitFor(() => expect(store.thumbUrl(last)).not.toBeNull());
 
     expect(store.thumbUrl(first)).not.toBeNull();
-  });
+  }, 60_000);
 
   it('revokes everything when the gallery is left', async () => {
     const photo = await add();

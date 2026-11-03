@@ -25,8 +25,8 @@ import { I18n } from '../../core/i18n/i18n.service';
     </p>
     @if (value() === null && emptyHintKey()) {
       <p class="t-caption tile__footnote">{{ i18n.t(emptyHintKey()!) }}</p>
-    } @else if (footnoteKey()) {
-      <p class="t-caption tile__footnote">{{ i18n.t(footnoteKey()!) }}</p>
+    } @else if (footnoteKey() || footnoteText()) {
+      <p class="t-caption tile__footnote">{{ footnoteText() ?? i18n.t(footnoteKey()!) }}</p>
     }
     <ng-content />
   `,
@@ -39,6 +39,8 @@ export class StatTile {
   readonly value = input.required<string | null>();
   readonly unit = input<string | undefined>(undefined);
   readonly footnoteKey = input<string | undefined>(undefined);
+  /** Already-translated footnote, for one that interpolates a count. */
+  readonly footnoteText = input<string | undefined>(undefined);
   /** Shown instead of the footnote when there is no value: what to do next. */
   readonly emptyHintKey = input<string | undefined>(undefined);
   readonly hero = input(false);

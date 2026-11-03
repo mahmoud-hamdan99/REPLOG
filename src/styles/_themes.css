@@ -24,6 +24,17 @@
   --danger: #dc2626;
   --info: #1d6fd0;
 
+  /* The ramp again, darkened. The dark-theme values are tuned against a
+     near-black surface and several of them — lime at 1.4:1 — are barely
+     visible on white. A categorical scale has to be redrawn per theme for the
+     same reason accent text does. */
+  --cat-lime: #65a30d;
+  --cat-teal: #0f766e;
+  --cat-violet: #9b6ffb;
+  --cat-amber: #92400e;
+  --cat-rose: #e11d48;
+  --cat-slate: #334155;
+
   --elev-1: 0 1px 2px rgb(16 20 24 / 8%);
   --elev-2: 0 4px 16px rgb(16 20 24 / 10%);
   --elev-3: 0 12px 32px rgb(16 20 24 / 14%);

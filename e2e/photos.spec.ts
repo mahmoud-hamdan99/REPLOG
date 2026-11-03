@@ -276,12 +276,17 @@ test('the privacy blur hides a thumbnail until it is tapped', async ({ page }) =
 });
 
 test('the Progress screens link to each other', async ({ page }) => {
-  // Three routes with nothing linking to them are three routes nobody can
-  // reach on a phone.
+  // Routes with nothing linking to them are routes nobody can reach on a
+  // phone. Phase 10 moved the measurements log off the tab strip and behind
+  // the Body tab's own button, which is where someone looking at a weight
+  // chart would think to add to it.
   await page.goto('/progress');
   await page.getByRole('link', { name: 'Photos' }).click();
   await expect(page).toHaveURL(/\/photos$/);
 
-  await page.getByRole('link', { name: 'Measurements' }).click();
+  await page.getByRole('link', { name: 'Body', exact: true }).click();
+  await expect(page).toHaveURL(/\/progress\/body$/);
+
+  await page.getByRole('button', { name: 'Log a measurement' }).click();
   await expect(page).toHaveURL(/\/body$/);
 });

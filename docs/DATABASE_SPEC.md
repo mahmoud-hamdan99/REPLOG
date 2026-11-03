@@ -631,7 +631,7 @@ The queries the index design exists to serve. Each must be O(result), never a fu
 | Q11 | History list (paged) | `workouts.by_status_startedAt` cursor `prev` with `limit`/`advance` |
 | Q12 | Workout detail | `workoutExercises.by_workoutId_orderIndex` + `setLogs.by_workoutId`, one transaction |
 | Q13 | Volume per week/month | `setLogs.by_dayKey` range → sum (working sets only) |
-| Q14 | Muscle-group distribution | Q13's rows joined to an in-memory exercise map (library is fully cached) → roll up via the muscle map |
+| Q14 | Muscle-group distribution | Q13's rows joined to an in-memory exercise map (library is fully cached) → roll up via the muscle map. Counted in **sets**, one set against the exercise's first primary muscle, so the per-group counts sum to the sets performed; a set whose exercise names no muscle is reported rather than bucketed |
 | Q15 | Weight/measurement trend | `measurements.by_measuredAt` range |
 | Q16 | Photo gallery | `photos.by_takenAt` cursor `prev`; thumbs fetched per visible item |
 | Q17 | Photo compare | two `photos.get` + two blob reads |

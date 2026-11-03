@@ -32,6 +32,20 @@
   --danger: #f87171;
   --info: #7db8ff;
 
+  /* Categorical ramp for stacked bars and the distribution chart
+     (UI_UX_SPEC section 9). Six, because a reader cannot hold more than that
+     against a legend; the twelve muscle groups fold into it with the tail
+     collected as "other". Every one is a fill behind no text, so what matters
+     is that each is visible against the surface and distinguishable from its
+     neighbour — both gated in check-contrast.mjs. Colour never carries the
+     meaning on its own: every slice is also labelled with its percentage. */
+  --cat-lime: #c8fa4b;
+  --cat-teal: #14857c;
+  --cat-violet: #a78bfa;
+  --cat-amber: #b4700d;
+  --cat-rose: #fb7185;
+  --cat-slate: #64748b;
+
   /* ---------- Typography ---------- */
   --font-ui: 'Inter', 'IBM Plex Sans Arabic', system-ui, sans-serif;
   --font-num: 'Inter', 'IBM Plex Sans Arabic', system-ui, sans-serif;

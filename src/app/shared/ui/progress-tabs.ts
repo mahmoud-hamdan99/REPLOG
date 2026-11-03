@@ -8,23 +8,24 @@ interface ProgressTab {
 }
 
 /**
- * Order follows UI_UX_SPEC section 2: Records first because it is what the
- * Progress tab lands on, then the two logs behind it.
+ * Order follows UI_UX_SPEC section 2, and lands on Strength because that is
+ * what someone opening Progress after a session wants to see.
  */
 const TABS: readonly ProgressTab[] = [
-  { path: '/progress', titleKey: 'page.records.title' },
-  { path: '/body', titleKey: 'page.body.title' },
+  { path: '/progress', titleKey: 'page.strength.title' },
+  { path: '/progress/volume', titleKey: 'page.volume.title' },
+  { path: '/progress/body', titleKey: 'page.bodyTrends.title' },
+  { path: '/records', titleKey: 'page.records.title' },
   { path: '/photos', titleKey: 'page.photos.title' },
 ];
 
 /**
  * Navigation between the Progress screens.
  *
- * The information architecture calls Measurements and Photos "tabs inside
- * Progress", and until Phase 10 builds the analytics hub that holds them,
- * they were three routes with nothing linking to them — reachable only by
- * typing a URL, which on a phone means not reachable. This is the smallest
- * thing that makes them a group; Phase 10 replaces it with the real hub.
+ * The information architecture calls these "tabs inside Progress". They are
+ * separate routes rather than state inside one component, so each keeps its
+ * own URL, its own entry in history and its own back behaviour — a chart
+ * someone wants to come back to is a place, not a mode.
  *
  * Links rather than buttons, so each screen keeps its own URL, its own back
  * behaviour and its own place in history.

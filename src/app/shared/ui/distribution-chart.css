@@ -1,0 +1,92 @@
+:host {
+  display: block;
+}
+
+.dc__bar {
+  display: flex;
+  block-size: 16px;
+  border-radius: var(--r-full);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.dc__seg {
+  display: block;
+  flex-basis: 0;
+  min-inline-size: 2px;
+}
+
+.dc__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-block: var(--sp-3) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dc__row {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+
+.dc__swatch {
+  inline-size: 10px;
+  block-size: 10px;
+  border-radius: var(--r-sm);
+  align-self: center;
+}
+
+.dc__name {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dc__sets {
+  color: var(--text-3);
+}
+
+.dc__footnote {
+  margin-block-start: var(--sp-3);
+  color: var(--text-3);
+}
+
+.dc__empty {
+  padding: var(--sp-4);
+  color: var(--text-2);
+  text-align: center;
+}
+
+.dc__seg[data-color='0'],
+.dc__swatch[data-color='0'] {
+  background: var(--cat-lime);
+}
+
+.dc__seg[data-color='1'],
+.dc__swatch[data-color='1'] {
+  background: var(--cat-teal);
+}
+
+.dc__seg[data-color='2'],
+.dc__swatch[data-color='2'] {
+  background: var(--cat-violet);
+}
+
+.dc__seg[data-color='3'],
+.dc__swatch[data-color='3'] {
+  background: var(--cat-amber);
+}
+
+.dc__seg[data-color='4'],
+.dc__swatch[data-color='4'] {
+  background: var(--cat-rose);
+}
+
+.dc__seg[data-color='5'],
+.dc__swatch[data-color='5'] {
+  background: var(--cat-slate);
+}

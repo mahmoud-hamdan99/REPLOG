@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.rp {
+  display: flex;
+  gap: var(--sp-1);
+  overflow-x: auto;
+  padding-block-end: var(--sp-1);
+
+  /* Six options do not fit a phone; scrolling beats wrapping to two rows that
+     push the chart below the fold. */
+  scrollbar-width: none;
+}
+
+.rp::-webkit-scrollbar {
+  display: none;
+}
+
+.rp__option {
+  flex: none;
+  min-block-size: 36px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  background: var(--surface-1);
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.rp__option--on {
+  border-color: var(--accent-ink);
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.rp__option:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+}

@@ -63,7 +63,7 @@ test('every estimated value on screen is marked and names its formula', async ({
   await expect(estimate).toBeVisible();
   await expect(estimate.getByText('Epley formula')).toBeVisible();
 
-  await page.goto('/progress');
+  await page.goto('/records');
   const onRecords = page.locator('rl-card').filter({ hasText: 'Estimated one-rep max' }).first();
   await expect(onRecords.getByText('Epley formula')).toBeVisible();
 });
@@ -71,7 +71,7 @@ test('every estimated value on screen is marked and names its formula', async ({
 test('records are grouped per variant, and the screen says why', async ({ page }) => {
   await recordWorkout(page, '100', '5');
 
-  await page.goto('/progress');
+  await page.goto('/records');
   await expect(page.getByText(/never replaces a barbell press/)).toBeVisible({
     timeout: 30_000,
   });

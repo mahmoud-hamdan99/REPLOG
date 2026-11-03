@@ -118,6 +118,21 @@ const PAIRS = [
   ['--accent-ink', '--surface-2', AA_LARGE, 'focus ring on inputs'],
 ];
 
+/**
+ * The categorical ramp (UI_UX_SPEC section 9), which the spec says must be
+ * "tested in both themes".
+ *
+ * Two different things are checked. Each colour must stand out from the
+ * surface it is drawn on, or a slice vanishes. And adjacent colours must
+ * differ from each other, or two muscle groups become one bar — which is why
+ * the ramp is checked pairwise in the order it is used rather than only
+ * against the background.
+ */
+const RAMP = ['--cat-lime', '--cat-teal', '--cat-violet', '--cat-amber', '--cat-rose', '--cat-slate'];
+const RAMP_VS_SURFACE = AA_LARGE;
+/** Neighbours only need to be tellable apart, not legible as text on each other. */
+const RAMP_VS_NEIGHBOUR = 1.3;
+
 const failures = [];
 const lines = [];
 
@@ -132,6 +147,37 @@ for (const [themeName, overrides] of Object.entries(themes)) {
     if (!ok) {
       failures.push(
         `${themeName}: ${fg} on ${bg} is ${ratio.toFixed(2)}:1, needs ${minimum}:1 (${note})`,
+      );
+    }
+  }
+}
+
+for (const [themeName, overrides] of Object.entries(themes)) {
+  for (const name of RAMP) {
+    const ratio = contrast(resolve(name, overrides, base), resolve('--surface-1', overrides, base));
+    const ok = ratio >= RAMP_VS_SURFACE;
+    lines.push(
+      `  ${ok ? 'ok  ' : 'FAIL'} ${themeName.padEnd(5)} ${name} on --surface-1 = ${ratio.toFixed(2)}:1 ` +
+        `(needs ${RAMP_VS_SURFACE}) - categorical fill`,
+    );
+    if (!ok) {
+      failures.push(
+        `${themeName}: ${name} on --surface-1 is ${ratio.toFixed(2)}:1, needs ${RAMP_VS_SURFACE}:1 (categorical fill)`,
+      );
+    }
+  }
+
+  for (let index = 0; index < RAMP.length - 1; index++) {
+    const [a, b] = [RAMP[index], RAMP[index + 1]];
+    const ratio = contrast(resolve(a, overrides, base), resolve(b, overrides, base));
+    const ok = ratio >= RAMP_VS_NEIGHBOUR;
+    lines.push(
+      `  ${ok ? 'ok  ' : 'FAIL'} ${themeName.padEnd(5)} ${a} beside ${b} = ${ratio.toFixed(2)}:1 ` +
+        `(needs ${RAMP_VS_NEIGHBOUR}) - adjacent categories`,
+    );
+    if (!ok) {
+      failures.push(
+        `${themeName}: ${a} beside ${b} is ${ratio.toFixed(2)}:1, needs ${RAMP_VS_NEIGHBOUR}:1 (adjacent categories)`,
       );
     }
   }
@@ -162,4 +208,5 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`\ncheck-contrast: OK - ${PAIRS.length * 2} pairs pass`);
+const checked = lines.filter((line) => line.trimStart().startsWith('ok')).length;
+console.log(`\ncheck-contrast: OK - ${checked} pairs pass`);

@@ -1,0 +1,137 @@
+:host {
+  display: block;
+}
+
+.bc {
+  margin: 0;
+}
+
+.bc__grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  gap: var(--sp-1) var(--sp-2);
+}
+
+.bc__y {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  color: var(--text-3);
+  text-align: end;
+}
+
+.bc__plot {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  block-size: 160px;
+  border-block-end: 1px solid var(--border);
+}
+
+.bc__x {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-3);
+  direction: ltr;
+}
+
+.bc__col {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  display: flex;
+  align-items: flex-end;
+  block-size: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.bc__stack {
+  display: flex;
+  flex-direction: column-reverse;
+  inline-size: 100%;
+  max-inline-size: 16px;
+  margin-inline: auto;
+  border-start-start-radius: var(--r-sm);
+  border-start-end-radius: var(--r-sm);
+  overflow: hidden;
+
+  /* A bucket with nothing in it is a real zero, and a zero-height bar would
+     be indistinguishable from a bucket that is missing. A hairline says
+     "nothing here" without claiming a quantity. */
+  min-block-size: 1px;
+  background: var(--border);
+}
+
+.bc__part {
+  display: block;
+  inline-size: 100%;
+  flex-basis: 0;
+}
+
+/*
+ * The six-colour categorical ramp from UI_UX_SPEC section 9. Six because a
+ * reader cannot hold more than that against a legend, and the twelve muscle
+ * groups fold into the ramp with the long tail collected as "other".
+ */
+.bc__part[data-color='0'] {
+  background: var(--cat-lime);
+}
+
+.bc__part[data-color='1'] {
+  background: var(--cat-teal);
+}
+
+.bc__part[data-color='2'] {
+  background: var(--cat-violet);
+}
+
+.bc__part[data-color='3'] {
+  background: var(--cat-amber);
+}
+
+.bc__part[data-color='4'] {
+  background: var(--cat-rose);
+}
+
+.bc__part[data-color='5'] {
+  background: var(--cat-slate);
+}
+
+.bc__col--active .bc__stack {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 1px;
+}
+
+.bc__col:focus-visible .bc__stack {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 1px;
+}
+
+.bc__readout {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: baseline;
+  margin-block-start: var(--sp-2);
+  color: var(--text-2);
+}
+
+.bc__caption {
+  margin-block-start: var(--sp-1);
+  color: var(--text-3);
+}
+
+.bc__empty {
+  padding: var(--sp-4);
+  color: var(--text-2);
+  text-align: center;
+}
