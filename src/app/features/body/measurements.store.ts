@@ -76,7 +76,16 @@ export class MeasurementsStore {
     () => lastRecording(this._entries() ?? [], 'weightKg')?.weightKg ?? null,
   );
 
-  readonly today = computed(() => dayKeyAt(this.clock.now(), this.clock.timezoneOffsetMinutes()));
+  /**
+   * The local day, read fresh.
+   *
+   * A method rather than a computed: the clock is not a signal, so a computed
+   * would cache the first reading and keep handing back yesterday to an app
+   * left open overnight.
+   */
+  today(): string {
+    return dayKeyAt(this.clock.now(), this.clock.timezoneOffsetMinutes());
+  }
 
   async load(options: { force?: boolean } = {}): Promise<void> {
     if (this._entries() !== null && !options.force) {

@@ -426,9 +426,10 @@ with a key-only cursor, without deserialising a single photo.
 4. Correct orientation from the EXIF orientation tag before stripping.
 5. Resize the long edge to **1600 px** max → encode WebP quality 0.82 → `fullBlobId`.
 6. Resize the long edge to **320 px** → WebP quality 0.7 → `thumbBlobId`.
-7. Write both blobs and the metadata record in **one** transaction.
+7. **Read the output back and refuse it if metadata survived.** A re-encode that quietly preserved EXIF would store a photo that looks identical and carries the user's location. Checked before anything is written, so a failure means nothing was stored rather than something being unstored.
+8. Write both blobs and the metadata record in **one** transaction, through `TxScope.blobs()`.
 
-Expected sizes: full ~180–350 kB, thumb ~12–25 kB. Deleting a photo soft-deletes the metadata and **hard-deletes both blobs immediately** — a tombstoned 300 kB image is not worth the undo, so the confirm dialog says the image cannot be recovered.
+Expected sizes: full ~180–350 kB, thumb ~12–25 kB — for a photograph. Measured against synthetic inputs the spread is wider than that range suggests: an image with photographic statistics lands near 30 kB, and pathological full-range noise reaches ~640 kB. The budget describes cameras, not the codec's worst case. Deleting a photo soft-deletes the metadata and **hard-deletes both blobs immediately** — a tombstoned 300 kB image is not worth the undo, so the confirm dialog says the image cannot be recovered.
 
 ---
 

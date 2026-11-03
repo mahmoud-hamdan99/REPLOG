@@ -52,18 +52,33 @@
   background: var(--accent);
 }
 
-/* The centre Train tab: a lifted lime circle. */
+/*
+ * The centre Train tab: a lifted lime circle.
+ *
+ * The circle is positioned rather than laid out, so it cannot push the label
+ * out of the bar. In flow it was 52 px tall against a 56 px bar, and with the
+ * label under it the column came to 63 px in Arabic — whose line box is
+ * several pixels taller than the Latin one at the same size — leaving the word
+ * "تدريب" hanging below the bottom of the screen. Taking the circle out of
+ * flow makes the column's height the label's alone, so the bar fits whatever
+ * the script's metrics turn out to be.
+ */
 .tab--center {
   color: var(--on-accent);
+  justify-content: flex-end;
+  padding-block-end: var(--sp-1);
 }
 
 .tab--center .tab__icon {
+  position: absolute;
+  inset-block-start: -22px;
+  inset-inline: 0;
   display: grid;
   place-items: center;
   inline-size: 52px;
   block-size: 52px;
+  margin-inline: auto;
   border-radius: var(--r-full);
-  margin-block-start: -10px;
   background: var(--accent);
   color: var(--on-accent);
   box-shadow: var(--elev-2);

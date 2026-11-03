@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { I18n } from '../../core/i18n/i18n.service';
 import { AppHeader } from '../../core/nav/app-header';
 import { SettingsStore } from '../../core/settings/settings.store';
 import { Card } from '../../shared/ui/card';
@@ -75,11 +76,33 @@ import type { Language, LengthUnit, ThemePreference, WeightUnit } from '../../do
           </div>
         </rl-card>
       </section>
+
+      <section class="group">
+        <rl-section-header titleKey="settings.photos.title" />
+        <rl-card [inset]="false">
+          <div class="group__control">
+            <label class="toggle">
+              <input
+                class="toggle__input"
+                type="checkbox"
+                [checked]="settings.prefs().blurPhotos"
+                (change)="settings.set('blurPhotos', $any($event.target).checked)"
+              />
+              <span class="t-body">{{ i18n.t('settings.photos.blur') }}</span>
+            </label>
+            <!-- The honest part. UI_UX_SPEC section 7 asks the app to say what
+                 it does not do, and a blur that read as a lock would be worse
+                 than no blur at all. -->
+            <p class="t-caption toggle__hint">{{ i18n.t('settings.photos.blurHint') }}</p>
+          </div>
+        </rl-card>
+      </section>
     </div>
   `,
 })
 export class SettingsPage {
   protected readonly settings = inject(SettingsStore);
+  protected readonly i18n = inject(I18n);
 
   protected readonly themeOptions: readonly SegmentedOption<ThemePreference>[] = [
     { value: 'system', labelKey: 'theme.system' },

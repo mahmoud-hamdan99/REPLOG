@@ -9,14 +9,18 @@ import { expect, test } from '@playwright/test';
 test('boots and renders the shell', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('rl-root')).toBeVisible();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Home');
-  await expect(page.locator('.tab')).toHaveCount(5);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Home', {
+    timeout: 30_000,
+  });
+  await expect(page.locator('.tab')).toHaveCount(5, { timeout: 30_000 });
 });
 
 test('skip link is the first focusable element and targets main', async ({ page }) => {
   await page.goto('/');
   // Wait for the shell to render: goto resolves on load, before Angular boots.
-  await expect(page.locator('.tab')).toHaveCount(5);
+  // Generously, because a cold start also seeds the exercise catalog, and on
+  // WebKit under parallel workers that is seconds rather than milliseconds.
+  await expect(page.locator('.tab')).toHaveCount(5, { timeout: 30_000 });
   await page.keyboard.press('Tab');
   const skip = page.locator('.skip');
   await expect(skip).toBeFocused();

@@ -17,6 +17,24 @@ export interface TxAppMeta {
 }
 
 /**
+ * Photo pixels inside a transaction.
+ *
+ * Both blobs and the metadata record that names them have to land together.
+ * A metadata row whose pixels are missing renders a broken thumbnail the user
+ * cannot explain, and a pair of orphaned blobs is a quarter of a megabyte the
+ * storage meter counts and nothing can reclaim.
+ *
+ * Takes an `ArrayBuffer`, not a `Blob`, because reading a blob's bytes is an
+ * await that is not an IndexedDB operation: do it inside the transaction and
+ * the transaction commits underneath you. The caller reads the bytes first.
+ */
+export interface TxPhotoBlobs {
+  put(id: string, data: ArrayBuffer, mimeType: string): Promise<void>;
+  /** Hard delete — photo blobs are never tombstoned (DATABASE_SPEC 3.12). */
+  remove(id: string): Promise<void>;
+}
+
+/**
  * A transaction scope.
  *
  * Repositories obtained here are bound to the transaction, so several
@@ -30,6 +48,9 @@ export interface TxScope {
 
   /** Requires `'appMeta'` in the transaction's store list. */
   appMeta(): TxAppMeta;
+
+  /** Requires `'photoBlobs'` in the transaction's store list. */
+  blobs(): TxPhotoBlobs;
 
   /**
    * Runs after the transaction commits.

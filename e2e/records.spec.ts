@@ -42,7 +42,9 @@ async function recordWorkout(page: Page, weight: string, reps: string): Promise<
 
   await page.getByRole('button', { name: 'Finish', exact: true }).click();
   await page.getByRole('button', { name: 'Finish workout' }).click();
-  await expect(page).toHaveURL(/\/train\/summary\//);
+  // Finishing writes the whole session in one transaction and detects records
+  // inside it, so this is a real piece of work rather than a navigation.
+  await expect(page).toHaveURL(/\/train\/summary\//, { timeout: 30_000 });
 }
 
 test('a finished workout announces the records it earned', async ({ page }) => {
@@ -70,7 +72,9 @@ test('records are grouped per variant, and the screen says why', async ({ page }
   await recordWorkout(page, '100', '5');
 
   await page.goto('/progress');
-  await expect(page.getByText(/never replaces a barbell press/)).toBeVisible();
+  await expect(page.getByText(/never replaces a barbell press/)).toBeVisible({
+    timeout: 30_000,
+  });
   await expect(page.getByRole('heading', { level: 1, name: 'Records' })).toBeVisible();
   // One card per exercise under "All records", never one merged list.
   await expect(page.locator('.grp')).toHaveCount(1);

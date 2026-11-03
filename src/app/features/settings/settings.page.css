@@ -13,3 +13,23 @@
 .group__label {
   margin: 0;
 }
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--target-min);
+  cursor: pointer;
+}
+
+.toggle__input {
+  inline-size: 20px;
+  block-size: 20px;
+  accent-color: var(--accent);
+  flex: none;
+}
+
+.toggle__hint {
+  margin-block-start: var(--sp-1);
+  color: var(--text-3);
+}

@@ -530,6 +530,10 @@ Capture/import: `<input type="file" accept="image/*">` — note that iOS offers 
 
 Privacy affordances: photos are never shown on the dashboard; the gallery is behind the Progress tab; a Settings option hides thumbnails behind a tap-to-reveal blur. There is no lock screen, and the app does not pretend to offer one — Settings states that anyone with the unlocked phone can open the app.
 
+The blur is on the image, not the tile, so the line explaining why the photo is hidden stays legible. A blurred tile's accessible name is "Tap to reveal" rather than its pose and date — naming the photo to a screen reader would undo the blur for the one user who cannot see it anyway. The first tap reveals and does nothing else: a tap that both revealed and opened would throw a photo full-screen for someone who only wanted to check which one it was.
+
+Deleting is the one irreversible action in the app, because the pixels go with the record. The dialog says "cannot be recovered" and there is no undo toast — the pattern every other delete uses would be a promise this one cannot keep.
+
 ### 5.12 Settings (`/settings`)
 
 Grouped list rows with values on the trailing side:
@@ -580,7 +584,8 @@ Grouped list rows with values on the trailing side:
 | `rl-exercise-picker` | Search + filters + multi-select, reused by planner, tracker, and replace flows |
 | `rl-weekday-picker` | 7 toggles, locale-aware week start, RTL order |
 | `rl-measurement-field` | Label + canonical-to-display conversion + delta + last value as ghost text. **The only place a measurement converts units** — values arrive and leave canonical, so a unit switch changes every number on screen and none on disk. Reads and writes the user's numeral system in both directions: an Arabic keyboard's `٨٢٫٥` parses, and the field renders `٨٢٫٥` back, with grouping off so a thousands separator cannot be read as a decimal mark |
-| `rl-photo-thumb` / `rl-photo-compare` | Object-URL lifecycle owned by the store, never the component |
+| `rl-photo-thumb` | Object-URL lifecycle owned by the store, never the component: it is handed a URL and never makes one, so there is nothing for it to forget to revoke. A null URL is the ordinary loading state; a decode failure says so rather than leaving a gap that reads as a deleted photo, and the tile stays tappable so the detail sheet's Delete is one tap away. A dedicated Remove button on the broken tile is outstanding |
+| `rl-progress-tabs` | Links between the three Progress screens — Records, Measurements, Photos. A stand-in until Phase 10's analytics hub; before it, those routes were reachable only by typing a URL |
 | `rl-pr-row` | Type, value, previous best, date, estimate marker |
 | `rl-workout-row` | History/activity list row |
 

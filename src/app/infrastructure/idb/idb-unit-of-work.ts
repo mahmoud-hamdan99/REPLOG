@@ -1,8 +1,9 @@
 import { inject, Service } from '@angular/core';
 import { DB_EVENTS, type DbChange } from '../../data/db-events';
 import type { EntityStoreName, StoreEntityMap, StoreName } from '../../data/stores';
-import type { TxAppMeta, TxScope, UnitOfWork } from '../../data/unit-of-work';
+import type { TxAppMeta, TxPhotoBlobs, TxScope, UnitOfWork } from '../../data/unit-of-work';
 import type { Repository } from '../../data/repository';
+import type { PhotoBlob } from '../../domain/models/body';
 import { APP_META_DEFAULTS, type AppMeta, type AppMetaKey } from '../../domain/models/system';
 import { IdbDatabase, storeOf, type AnyTransaction } from './idb-database';
 import { IdbEnvironment } from './idb-environment';
@@ -23,6 +24,32 @@ function boundAppMeta(tx: AnyTransaction): TxAppMeta {
     },
     set: async <K extends AppMetaKey>(key: K, value: AppMeta[K]): Promise<void> => {
       await store.put({ key, value });
+    },
+  };
+}
+
+/**
+ * `photoBlobs` access that joins the ambient transaction.
+ *
+ * Mirrors `IdbPhotoBlobStore`'s record shape, down to the denormalised
+ * `byteSize` the storage meter sums from the index — a blob written here and
+ * one written standalone have to be indistinguishable afterwards.
+ */
+function boundBlobs(tx: AnyTransaction, nowIso: () => string): TxPhotoBlobs {
+  const store = storeOf(tx, 'photoBlobs');
+  return {
+    put: async (id: string, data: ArrayBuffer, mimeType: string): Promise<void> => {
+      const record: PhotoBlob = {
+        id,
+        data,
+        mimeType,
+        byteSize: data.byteLength,
+        createdAt: nowIso(),
+      };
+      await store.put(record);
+    },
+    remove: async (id: string): Promise<void> => {
+      await store.delete(id);
     },
   };
 }
@@ -84,6 +111,7 @@ export class IdbUnitOfWork implements UnitOfWork {
         repo: <N extends EntityStoreName>(store: N): Repository<StoreEntityMap[N]> =>
           new IdbRepository<StoreEntityMap[N]>(store, context),
         appMeta: () => boundAppMeta(tx),
+        blobs: () => boundBlobs(tx, () => this.env.nowIso()),
         onCommit: (fn) => {
           commitHooks.push(fn);
         },

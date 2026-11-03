@@ -19,6 +19,8 @@ export interface Prefs {
   e1rmFormula: E1rmFormula;
   confirmBeforeFinish: boolean;
   hapticsEnabled: boolean;
+  /** Hides photo thumbnails behind a tap-to-reveal blur. */
+  blurPhotos: boolean;
   lastRoute: string | null;
   reduceMotion: ReduceMotionPreference;
 }
@@ -52,6 +54,7 @@ export const DEFAULT_PREFS: Readonly<Prefs> = Object.freeze({
   e1rmFormula: 'epley',
   confirmBeforeFinish: true,
   hapticsEnabled: false,
+  blurPhotos: false,
   lastRoute: null,
   reduceMotion: 'system',
 } satisfies Prefs);
@@ -102,6 +105,7 @@ export function normalizePrefs(raw: unknown): Prefs {
     e1rmFormula: oneOf(r['e1rmFormula'], E1RM_FORMULAS, d.e1rmFormula),
     confirmBeforeFinish: bool(r['confirmBeforeFinish'], d.confirmBeforeFinish),
     hapticsEnabled: bool(r['hapticsEnabled'], d.hapticsEnabled),
+    blurPhotos: bool(r['blurPhotos'], d.blurPhotos),
     lastRoute: typeof r['lastRoute'] === 'string' ? r['lastRoute'] : null,
     reduceMotion: oneOf(r['reduceMotion'], REDUCE_MOTION, d.reduceMotion),
   };

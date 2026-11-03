@@ -21,6 +21,7 @@ import { Card } from '../../shared/ui/card';
 import { Chip } from '../../shared/ui/chip';
 import { Dialog } from '../../shared/ui/dialog';
 import { EmptyState } from '../../shared/ui/empty-state';
+import { ProgressTabs } from '../../shared/ui/progress-tabs';
 import { MeasurementField as MeasurementFieldInput } from '../../shared/ui/measurement-field';
 import { Sheet } from '../../shared/ui/sheet';
 import { MeasurementsStore, type MeasurementDraft } from './measurements.store';
@@ -56,6 +57,7 @@ const UNIT_TYPES: readonly MeasurementUnitType[] = ['length', 'mass', 'percent',
     // The one structural directive here: a field row is rendered in two
     // places and there is no native control flow for reusing a template.
     NgTemplateOutlet,
+    ProgressTabs,
     Sheet,
   ],
   template: `
@@ -71,6 +73,8 @@ const UNIT_TYPES: readonly MeasurementUnitType[] = ['length', 'mass', 'percent',
     </rl-app-header>
 
     <div class="page">
+      <rl-progress-tabs />
+
       @if (store.isLoading()) {
         <p class="t-body">{{ i18n.t('state.loading.label') }}</p>
       } @else if (store.error(); as error) {

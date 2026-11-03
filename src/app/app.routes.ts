@@ -128,6 +128,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/body/body.page').then((m) => m.BodyPage),
     data: { titleKey: 'page.body.title', navTab: 'progress' },
   },
+  {
+    path: 'photos',
+    loadComponent: () => import('./features/photos/photos.page').then((m) => m.PhotosPage),
+    data: { titleKey: 'page.photos.title', navTab: 'progress' },
+  },
 
   // Settings
   {

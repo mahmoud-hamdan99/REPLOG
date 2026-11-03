@@ -1,0 +1,30 @@
+.pt {
+  display: flex;
+  gap: var(--sp-1);
+  margin-block-end: var(--sp-4);
+  padding: var(--sp-1);
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+}
+
+.pt__tab {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  min-block-size: var(--target-min);
+  padding-inline: var(--sp-2);
+  border-radius: var(--r-full);
+  color: var(--text-2);
+  text-decoration: none;
+  text-align: center;
+}
+
+.pt__tab--active {
+  color: var(--text-1);
+  background: var(--surface-1);
+}
+
+.pt__tab:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+}

@@ -536,5 +536,64 @@
   "body.side.left": "Left",
   "body.side.right": "Right",
   "unit.short.cm": "cm",
-  "unit.short.in": "in"
+  "unit.short.in": "in",
+  "page.photos.title": "Photos",
+  "pose.front": "Front",
+  "pose.side-left": "Left side",
+  "pose.side-right": "Right side",
+  "pose.back": "Back",
+  "pose.other": "Other",
+  "photos.add": "Add a photo",
+  "photos.select": "Select",
+  "photos.filter": "Filter by pose",
+  "photos.file": "Photo",
+  "photos.pose": "Pose",
+  "photos.date": "Taken on",
+  "photos.notes": "Note",
+  "photos.save": "Save photo",
+  "photos.saved": "Photo added",
+  "photos.broken": "This image could not be opened",
+  "photos.tapToReveal": "Tap to reveal",
+  "photos.privacy": "Photos stay on this device. Location data is removed when a photo is added.",
+  "photos.empty.title": "No photos yet",
+  "photos.empty.body": "A photo every few weeks shows what the numbers cannot.",
+  "photos.empty.action": "Add your first photo",
+  "photos.noMatches.title": "Nothing matches",
+  "photos.noMatches.body": "No photo uses the poses you picked.",
+  "photos.compare.open": "Compare",
+  "photos.compare.title": "Compare two photos",
+  "photos.compare.from": "Earlier",
+  "photos.compare.to": "Later",
+  "photos.compare.none": "Pick two photos to compare.",
+  "photos.compare.sameDay": "Taken the same day",
+  "photos.compare.weeksApart": {
+    "one": "{count} week apart",
+    "other": "{count} weeks apart"
+  },
+  "photos.compare.daysApart": {
+    "one": "{count} day apart",
+    "other": "{count} days apart"
+  },
+  "photos.delete.title": "Delete for good?",
+  "photos.delete.body": {
+    "one": "This photo will be removed, and the image itself cannot be recovered.",
+    "other": "These {count} photos will be removed, and the images themselves cannot be recovered."
+  },
+  "photos.delete.confirm": "Delete permanently",
+  "photos.deleted": {
+    "one": "Photo deleted",
+    "other": "{count} photos deleted"
+  },
+  "photos.invalid.type": "That file is not an image this app can open.",
+  "photos.invalid.tooLarge": "That photo is larger than {max} MB.",
+  "photos.invalid.empty": "That file is empty.",
+  "photos.invalid.decode": "That image could not be opened.",
+  "photos.invalid.metadata": "That image could not be stripped of its location data, so it was not saved.",
+  "count.selected": {
+    "one": "{count} selected",
+    "other": "{count} selected"
+  },
+  "settings.photos.title": "Photos",
+  "settings.photos.blur": "Hide thumbnails until tapped",
+  "settings.photos.blurHint": "Blurs every thumbnail in the gallery. There is no app lock: anyone holding this phone unlocked can open the app."
 }

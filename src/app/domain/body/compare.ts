@@ -154,6 +154,51 @@ export function lastRecording(
   return null;
 }
 
+/**
+ * The weighed entry closest in time to a given day.
+ *
+ * Distinct from `lastRecording`, which walks back from now. A photo taken in
+ * March and imported in July belongs beside March's weight: captioning it with
+ * today's would attach a number to a picture that never showed it. Closest in
+ * either direction, because a weigh-in two days after the photo describes it
+ * better than one three weeks before.
+ *
+ * Ties go to the earlier entry, so the caption does not depend on the order
+ * the list happened to arrive in.
+ */
+export function nearestWeight(entries: readonly Measurement[], day: string): Measurement | null {
+  let best: Measurement | null = null;
+  let bestDistance = Number.POSITIVE_INFINITY;
+
+  for (const entry of entries) {
+    if (entry.weightKg === null) continue;
+
+    const distance = Math.abs(epochDay(entry.measuredAt) - epochDay(day));
+    const closer = distance < bestDistance;
+    const earlierTie =
+      distance === bestDistance && best !== null && entry.measuredAt < best.measuredAt;
+
+    if (closer || earlierTie) {
+      best = entry;
+      bestDistance = distance;
+    }
+  }
+
+  return best;
+}
+
+/**
+ * A `YYYY-MM-DD` key as a count of days.
+ *
+ * Built from UTC so the subtraction is whole days: a local-midnight
+ * difference across a daylight-saving boundary is 23 or 25 hours, and the
+ * distance between two weigh-ins should not depend on the time of year.
+ */
+function epochDay(key: string): number {
+  const [year, month, day] = key.split('-').map(Number);
+  return Date.UTC(year ?? 1970, (month ?? 1) - 1, day ?? 1) / 86_400_000;
+}
+
 function round2(value: number): number {
   return Math.round(value * 100) / 100;
 }

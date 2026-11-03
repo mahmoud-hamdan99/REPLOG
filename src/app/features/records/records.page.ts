@@ -7,6 +7,7 @@ import type { PersonalRecord } from '../../domain/models/records';
 import { Badge } from '../../shared/ui/badge';
 import { Card } from '../../shared/ui/card';
 import { EmptyState } from '../../shared/ui/empty-state';
+import { ProgressTabs } from '../../shared/ui/progress-tabs';
 import { SectionHeader } from '../../shared/ui/section-header';
 import { RecordsStore } from './records.store';
 
@@ -33,11 +34,13 @@ import { RecordsStore } from './records.store';
 @Component({
   selector: 'rl-records-page',
   styleUrl: './records.page.css',
-  imports: [AppHeader, Badge, Card, EmptyState, SectionHeader],
+  imports: [AppHeader, Badge, Card, EmptyState, ProgressTabs, SectionHeader],
   template: `
     <rl-app-header titleKey="page.records.title" />
 
     <div class="page">
+      <rl-progress-tabs />
+
       @if (store.isLoading()) {
         <p class="t-body">{{ i18n.t('state.loading.label') }}</p>
       } @else if (store.error(); as error) {

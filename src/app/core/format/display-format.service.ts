@@ -261,6 +261,20 @@ export class DisplayFormat {
       : this.formatDate(parsed, { weekday: 'short', day: 'numeric', month: 'short' });
   }
 
+  /**
+   * "March 2026", from a `YYYY-MM` key.
+   *
+   * The year is always shown. A gallery heading of "March" alone is ambiguous
+   * the moment someone has been training for more than a year, which is the
+   * case this screen exists for.
+   */
+  monthLabel(month: string): string {
+    const parsed = parseDayKey(`${month}-01`);
+    return Number.isNaN(parsed.getTime())
+      ? BLANK
+      : this.formatDate(parsed, { month: 'long', year: 'numeric' });
+  }
+
   private date(iso: string, options: Intl.DateTimeFormatOptions): string {
     const parsed = Date.parse(iso);
     if (Number.isNaN(parsed)) return BLANK;

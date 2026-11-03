@@ -1,0 +1,150 @@
+.page {
+  padding: var(--sp-4);
+  padding-block-end: var(--sp-16);
+}
+
+.top {
+  display: flex;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-4);
+}
+
+.privacy {
+  margin-block-start: var(--sp-4);
+  color: var(--text-3);
+  text-align: center;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-4);
+}
+
+.month {
+  margin-block: var(--sp-4) var(--sp-2);
+  color: var(--text-2);
+}
+
+/*
+ * Three columns, as UI_UX_SPEC section 5.11 asks. Fixed rather than
+ * auto-fitting: a progress photo is compared against another progress photo,
+ * and a column count that changed with the viewport would change what sits
+ * beside what.
+ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-2);
+}
+
+/* The selection action bar, above the tab bar rather than behind it. */
+.bar {
+  position: sticky;
+  inset-block-end: var(--sp-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-block-start: var(--sp-4);
+  padding: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--surface-1);
+}
+
+.field {
+  display: block;
+  margin-block-end: var(--sp-4);
+}
+
+.field__input {
+  display: block;
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  margin-block-start: var(--sp-1);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font: inherit;
+}
+
+.sheet__title {
+  margin-block-end: var(--sp-2);
+}
+
+.sheet-actions {
+  position: sticky;
+  inset-block-end: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding-block: var(--sp-3);
+  border-block-start: 1px solid var(--border);
+  background: var(--surface-1);
+}
+
+.full {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-block: var(--sp-3);
+}
+
+.facts__pair {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.pickers {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.interval {
+  margin-block: var(--sp-2);
+  text-align: center;
+}
+
+/*
+ * Side by side, and stacked when there is not room — the comparison is the
+ * point, so two half-width photos beat one at a time until they are too small
+ * to read.
+ */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-2);
+}
+
+.compare__half {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.compare__half figcaption {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text-2);
+}
+
+@media (width <= 22rem) {
+  .compare {
+    grid-template-columns: 1fr;
+  }
+}
