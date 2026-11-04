@@ -10,6 +10,9 @@ on, and the only copy that leaves is a backup file you export yourself.
 English and Arabic, with full right-to-left layout. Dark and light. Designed
 for an iPhone first and installable to the home screen.
 
+**Live at [mahmoud-hamdan99.github.io/REPLOG](https://mahmoud-hamdan99.github.io/REPLOG/).**
+Open it in Safari on an iPhone and use Share → Add to Home Screen.
+
 **Using the app?** [**docs/USER_GUIDE.md**](docs/USER_GUIDE.md) is the complete
 guide — every screen, every setting, how to back up, and what REPLOG
 deliberately does not do. Everything below this line is for working on the code.
