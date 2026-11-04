@@ -10,6 +10,10 @@ on, and the only copy that leaves is a backup file you export yourself.
 English and Arabic, with full right-to-left layout. Dark and light. Designed
 for an iPhone first and installable to the home screen.
 
+**Using the app?** [**docs/USER_GUIDE.md**](docs/USER_GUIDE.md) is the complete
+guide — every screen, every setting, how to back up, and what REPLOG
+deliberately does not do. Everything below this line is for working on the code.
+
 ---
 
 ## What it does
@@ -182,3 +186,4 @@ was actually built, including what was left undone and why:
 | [`DATABASE_SPEC.md`](docs/DATABASE_SPEC.md)             | Stores, indexes, queries, the backup format, destructive-action policy       |
 | [`ARCHITECTURE.md`](docs/ARCHITECTURE.md)               | Layering, data access, the tracker's reliability design, PWA and deployment  |
 | [`IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md) | The phase plan, with acceptance criteria ticked only where there is evidence |
+| [`USER_GUIDE.md`](docs/USER_GUIDE.md)                   | The end-user manual: every screen, every setting, backups, troubleshooting   |
