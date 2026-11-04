@@ -24,6 +24,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Asserts the Pages configuration instead of depending on a setting
+      # somebody once chose in a web form. `enablement` turns Pages on if it
+      # is off and switches the source to GitHub Actions if it is a branch —
+      # the two states in which `deploy-pages` below either fails in seconds
+      # or hangs until it times out, neither of them saying which. Same
+      # principle as the rest of this file: the repository describes what it
+      # needs, and CI cannot drift from it.
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -81,5 +92,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # 20 minutes rather than the default 10. Publishing this artifact is 88
+      # files and 1.7 MB, so a ten-minute wait is the Pages service being slow
+      # to confirm, not an upload that is large — and failing there throws
+      # away a green build for no reason.
       - id: deployment
         uses: actions/deploy-pages@v4
+        timeout-minutes: 20
