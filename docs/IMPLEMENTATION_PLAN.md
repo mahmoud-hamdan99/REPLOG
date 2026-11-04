@@ -924,6 +924,8 @@ Recorded here so it stays out of V1 (spec §12): authentication, Supabase Postgr
 
 The seams that make these additive rather than a rewrite are listed in ARCHITECTURE §11. Nothing in that list justifies writing V2 code now.
 
+The first three of those — a database, auth and multi-device sync — are planned in [`SYNC_PLAN.md`](SYNC_PLAN.md): the choice of Supabase and what it costs, the eight phases, and the three seams §11 claims that are not actually in the code.
+
 ---
 
 ## 22. Version Lock

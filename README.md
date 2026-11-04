@@ -187,3 +187,4 @@ was actually built, including what was left undone and why:
 | [`ARCHITECTURE.md`](docs/ARCHITECTURE.md)               | Layering, data access, the tracker's reliability design, PWA and deployment  |
 | [`IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md) | The phase plan, with acceptance criteria ticked only where there is evidence |
 | [`USER_GUIDE.md`](docs/USER_GUIDE.md)                   | The end-user manual: every screen, every setting, backups, troubleshooting   |
+| [`SYNC_PLAN.md`](docs/SYNC_PLAN.md)                     | Version 2: the database, auth and sync design, and what the free tier costs  |
