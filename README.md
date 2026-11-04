@@ -189,5 +189,6 @@ was actually built, including what was left undone and why:
 | [`DATABASE_SPEC.md`](docs/DATABASE_SPEC.md)             | Stores, indexes, queries, the backup format, destructive-action policy       |
 | [`ARCHITECTURE.md`](docs/ARCHITECTURE.md)               | Layering, data access, the tracker's reliability design, PWA and deployment  |
 | [`IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md) | The phase plan, with acceptance criteria ticked only where there is evidence |
+| [`PROJECT_STATE.md`](docs/PROJECT_STATE.md)             | **Start here to work on it:** where it stands, how it is built, the traps    |
 | [`USER_GUIDE.md`](docs/USER_GUIDE.md)                   | The end-user manual: every screen, every setting, backups, troubleshooting   |
 | [`SYNC_PLAN.md`](docs/SYNC_PLAN.md)                     | Version 2: the database, auth and sync design, and what the free tier costs  |

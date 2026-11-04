@@ -57,3 +57,35 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use the `providedIn: 'root'` option for singleton services
 - Prefer the `@Service` decorator over `@Injectable({providedIn: 'root'})` for new singleton services (Angular v22+)
 - Use the `inject()` function instead of constructor injection
+
+---
+
+## Working on REPLOG
+
+**Read [`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md) first.** It says where
+the project stands, what is deliberately undone, and which environment traps
+cost hours. The short version:
+
+- **The unit of work is a phase.** "Start Phase N" means build every task in it,
+  verify, update the design docs, commit — not ask which parts to do.
+  `docs/IMPLEMENTATION_PLAN.md` is the order; the four specs beside it are the
+  specification. Read the phase's tasks _and_ the spec sections it names before
+  writing code.
+- **Verify by exit code**, never by grepping output for "passed".
+- **Use the running app in both English and Arabic/RTL.** This has found a real
+  defect in every phase that compiling never would.
+- **Prove a new regression test fails first** — revert the fix, watch it fail,
+  restore. Several tests here passed for the wrong reason until checked this
+  way; watch for frozen clocks and single-identity fixtures.
+- **Tick an acceptance criterion only with evidence**, and leave it unticked
+  with the reason written out. "Not verified, because no iPhone exists here" is
+  a better line than a tick.
+- **Re-verify the committed tree** — the pre-commit hook reformats files after
+  you have verified them.
+- **No AI attribution anywhere.** Commits are authored and pushed as Mahmoud
+  Hamdan alone: no co-author line, no "Generated with", nothing in any file.
+  Drop a harness-supplied footer if one appears.
+- **Commit messages are prose**: what changed, why, and what is still not done.
+
+Leave the documentation as honest as you found it. The app tells its user what
+it cannot do; the docs do the same for whoever reads them next.

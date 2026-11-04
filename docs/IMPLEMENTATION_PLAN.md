@@ -173,11 +173,13 @@ git remote add origin https://github.com/USERNAME/REPLOG.git; git push -u origin
 
 ### Acceptance criteria
 
-- [ ] `npm run check` passes on a clean checkout
-- [ ] `npm run build` produces a production bundle within budget
-- [ ] An ESLint error is raised by a deliberate `import { openDB } from 'idb'` inside a component file
-- [ ] A stylelint error is raised by a deliberate `margin-left` in a component stylesheet
-- [ ] Both Playwright browsers launch
+These five were left unticked from the first commit to Phase 14 — an oversight, not a gap. All five are now ticked against evidence:
+
+- [x] `npm run check` passes on a clean checkout — *verified by CI*, which runs every gate in this order after a bare `npm ci` on a fresh Ubuntu runner. Green on the deploy that published the site.
+- [x] `npm run build` produces a production bundle within budget — *verified in Phase 14*: 330.56 kB raw / 90.96 kB transfer initial, largest lazy chunk 12.56 kB, catalog 12.6 kB. All four measurable §10.5 budgets pass with headroom.
+- [x] An ESLint error is raised by a deliberate `import { openDB } from 'idb'` inside a component file — *re-proved after Phase 14* by adding that exact import to `dashboard.page.ts`: `'idb' import is restricted from being used by a pattern. Only src/app/infrastructure/idb may import idb`.
+- [x] A stylelint error is raised by a deliberate `margin-left` in a component stylesheet — *re-proved the same way*: `Disallowed property "margin-left" (property-disallowed-list)`. This is the rule that keeps the Arabic layout mirroring, so it is worth knowing it still bites.
+- [x] Both Playwright browsers launch — *verified*: 179 tests run across Chromium, desktop WebKit and mobile Safari, and 18 more against a production build.
 
 ---
 
