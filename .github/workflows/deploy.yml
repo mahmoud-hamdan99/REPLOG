@@ -58,13 +58,16 @@ jobs:
       - name: Build for Pages
         run: npm run build:pages
 
-      # The deployment shape itself: the offline suite, re-run against the
-      # subpath build. This is what catches an asset path or a worker scope
-      # that is correct at the root and wrong where it will actually live.
-      - name: Install the browser the offline suite needs
+      # The deployment shape itself: every suite that needs a production
+      # build, re-run against the subpath. Offline and update behaviour, the
+      # console-cleanliness and raw-key scans, the axe and keyboard passes,
+      # and the two-year soak. This is what catches an asset path or a worker
+      # scope that is correct at the root and wrong where it will actually
+      # live, and an accessibility regression before it is published.
+      - name: Install the browser these suites need
         run: npx playwright install --with-deps chromium
 
-      - name: Verify the Pages build offline, under the subpath
+      - name: Verify the Pages build under the subpath
         run: node scripts/test-pages.mjs
 
       - uses: actions/upload-pages-artifact@v3

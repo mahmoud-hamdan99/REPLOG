@@ -54,7 +54,7 @@ import { RECOVERY_WINDOW_DAYS } from '../../domain/models/entity';
       @if (detail() === null) {
         <rl-empty-state titleKey="history.detail.notFound" bodyKey="history.empty.body" />
       } @else if (detail(); as view) {
-        <h1 class="t-h1 det__name">{{ view.workout.name }}</h1>
+        <h2 class="t-h1 det__name">{{ view.workout.name }}</h2>
         <p class="t-caption">
           {{
             i18n.join([

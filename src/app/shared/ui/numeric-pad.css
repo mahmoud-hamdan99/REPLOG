@@ -51,8 +51,12 @@
   gap: var(--sp-1);
 }
 
+/* --text-2, not --text-3: the active field is drawn on --surface-3, and
+   caption grey on that surface is 3.96:1 — below the AA minimum, which axe
+   found here and nowhere else. The rule that came out of it: on --surface-3,
+   small text steps up a level. */
 .pad__unit {
-  color: var(--text-3);
+  color: var(--text-2);
 }
 
 .pad__prev {

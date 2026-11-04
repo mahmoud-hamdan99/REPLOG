@@ -49,7 +49,7 @@ const FEELINGS: readonly Feeling[] = ['great', 'good', 'ok', 'rough'];
       @if (workout() === null) {
         <rl-empty-state titleKey="summary.notFound" bodyKey="tracker.notFound.body" />
       } @else {
-        <h1 class="t-h1 sum__name">{{ workout()!.name }}</h1>
+        <h2 class="t-h1 sum__name">{{ workout()!.name }}</h2>
         <p class="t-caption">{{ format.shortDate(workout()!.startedAt) }}</p>
 
         <div class="sum__stats">

@@ -42,8 +42,17 @@ export interface Bar {
             }
           </div>
 
-          <!-- Time runs left to right in both directions (UI_UX_SPEC 10.2). -->
-          <div class="bc__plot" dir="ltr" role="img" [attr.aria-label]="summary()">
+          <!--
+            Time runs left to right in both directions (UI_UX_SPEC 10.2).
+
+            A group, not an image. An img role says "this element's contents
+            are a picture, read my label instead" — which silently takes every
+            bar button out of the accessibility tree and leaves a keyboard
+            user with nothing to move through. Axe names it
+            nested-interactive. As a group the summary is the name of the set
+            and the bars inside it stay reachable, which is what they are.
+          -->
+          <div class="bc__plot" dir="ltr" role="group" [attr.aria-label]="summary()">
             @for (bar of bars(); track bar.key) {
               <button
                 type="button"

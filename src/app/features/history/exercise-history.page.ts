@@ -30,7 +30,7 @@ import { HistoryStore, type ExerciseSession } from './history.store';
     <rl-app-header titleKey="exerciseHistory.title" [showBack]="true" />
 
     <div class="page">
-      <h1 class="t-h1 xh__name">{{ exerciseName() }}</h1>
+      <h2 class="t-h1 xh__name">{{ exerciseName() }}</h2>
 
       @if (sessions() === null) {
         <p class="t-body">{{ i18n.t('state.loading.label') }}</p>

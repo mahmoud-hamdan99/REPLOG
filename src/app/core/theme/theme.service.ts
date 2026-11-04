@@ -1,5 +1,5 @@
 import { DOCUMENT, DestroyRef, effect, inject, Service, signal, computed } from '@angular/core';
-import type { ResolvedTheme } from '../../domain/models/prefs';
+import type { ReduceMotionPreference, ResolvedTheme } from '../../domain/models/prefs';
 import { SettingsStore } from '../settings/settings.store';
 
 /**
@@ -43,6 +43,18 @@ export class ThemeService {
       this.doc
         .querySelector('meta[name="theme-color"]')
         ?.setAttribute('content', THEME_COLORS[theme]);
+    });
+
+    // The motion preference, reflected the same way, because until Phase 14
+    // it was reflected nowhere: the setting existed, the Settings screen
+    // offered all three values, and nothing in the app read any of them. Only
+    // the OS-level media query in _base.css did anything, so "Always" and
+    // "Never" were both quietly "System".
+    effect(() => {
+      const preference: ReduceMotionPreference = this.settings.reduceMotion();
+      const element = this.doc.documentElement;
+      if (preference === 'system') element.removeAttribute('data-motion');
+      else element.setAttribute('data-motion', preference === 'always' ? 'reduced' : 'full');
     });
   }
 

@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { BUILD_INFO } from '../../core/build-info';
 import { DisplayFormat } from '../../core/format/display-format.service';
 import { DiagnosticsService } from '../../core/errors/diagnostics.service';
@@ -34,9 +35,10 @@ const PLATFORM_NOTES: readonly string[] = [
  * fact rather than as an apology or a "coming soon" — a teaser is a promise,
  * and Version 1 is not making any.
  *
- * The identifiers below are read from the database, not guessed. There is
- * deliberately no build stamp: nothing in the build writes one yet, and an
- * invented one would be worse than its absence on the one screen whose
+ * The identifiers below are read from the database, not guessed, and the
+ * build stamp is read from what `scripts/stamp-build.mjs` wrote. A build that
+ * was never stamped says so rather than showing a plausible blank: an
+ * invented version would be worse than its absence on the one screen whose
  * purpose is to be trustworthy.
  */
 @Component({
@@ -68,6 +70,16 @@ const PLATFORM_NOTES: readonly string[] = [
             <p class="t-body about__note">{{ i18n.t(note) }}</p>
           }
         </rl-card>
+      </section>
+
+      <!-- The one thing on this screen a user can act on. The note above
+           tells them iOS may remove their data and that they should export;
+           leaving them to find the Data screen themselves would be stating a
+           risk and withholding the remedy. -->
+      <section class="group">
+        <rl-button variant="secondary" [full]="true" (click)="openData()">
+          {{ i18n.t('about.backup.action') }}
+        </rl-button>
       </section>
 
       <section class="group">
@@ -135,6 +147,7 @@ export class AboutPage {
   private readonly meta = inject(APP_META_STORE);
   private readonly settings = inject(SettingsStore);
   private readonly toasts = inject(ToastService);
+  private readonly router = inject(Router);
 
   protected readonly platformNotes = PLATFORM_NOTES;
 
@@ -205,6 +218,10 @@ export class AboutPage {
 
   protected async install(): Promise<void> {
     await this.pwa.promptInstall();
+  }
+
+  protected openData(): void {
+    void this.router.navigate(['/settings/data']);
   }
 
   protected async copy(): Promise<void> {

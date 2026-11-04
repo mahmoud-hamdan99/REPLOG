@@ -186,9 +186,17 @@ const REST_PRESETS = [60, 90, 120, 180, 240];
               class="picks__item"
               [class.picks__item--on]="selected().has(exercise.id)"
               [attr.aria-pressed]="selected().has(exercise.id)"
-              (click)="toggleSelected(exercise.id, exercise.nameEn)"
+              (click)="toggleSelected(exercise.id, library.displayName(exercise))"
             >
-              <span>{{ exercise.nameEn }}</span>
+              <!--
+                The reading language, not nameEn. Every other surface that
+                lists exercises goes through displayName(); this one printed
+                the English name regardless, so an Arabic user built their
+                plan from a list in a language they had not chosen, and the
+                name it snapshotted into the routine stayed English in their
+                history afterwards.
+              -->
+              <span>{{ library.displayName(exercise) }}</span>
             </button>
           </li>
         }

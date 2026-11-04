@@ -101,7 +101,7 @@ import { ExerciseLibraryStore } from './exercise-library.store';
           <span class="t-label">{{ i18n.t('exercises.form.pattern') }}</span>
           <select class="field__input" formControlName="movementPattern">
             @for (item of patterns; track item) {
-              <option [value]="item">{{ item }}</option>
+              <option [value]="item">{{ i18n.t('pattern.' + item) }}</option>
             }
           </select>
         </label>

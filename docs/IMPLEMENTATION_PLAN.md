@@ -204,9 +204,9 @@ git remote add origin https://github.com/USERNAME/REPLOG.git; git push -u origin
 - [x] Switching to Arabic flips direction instantly, with no reload, and persists across restarts — *verified* by two E2E tests (in-place switch, and switch + reload) on Chromium, WebKit and mobile Safari.
 - [x] `i18n:check` and `tokens:check` pass, and both run in `npm run check` — *verified*. Note that "every shell string comes from the dictionaries" is currently upheld by review, not by a rule: the lint rule that flags literal strings in templates is still outstanding (see ARCHITECTURE §12.3).
 - [x] All routes navigate; the tab bar reflects the active destination; deep-linking a nested route works — *verified* by E2E, including the 404 route and the tab bar being absent on `/train/active`.
-- [ ] Safe areas on a real iPhone — **not verified.** No device available in this environment. The CSS uses `env(safe-area-inset-*)` with `viewport-fit=cover`, but inset behaviour in Safari standalone mode cannot be confirmed from a simulator or a desktop browser. Carry into the Phase 14 device pass.
+- [ ] Safe areas on a real iPhone — **not verified**, in Phase 1 or in Phase 14. No device is available in this environment. The CSS uses `env(safe-area-inset-*)` with `viewport-fit=cover`, but inset behaviour in Safari standalone mode cannot be confirmed from a simulator or a desktop browser. It stays on the §18 device matrix as outstanding.
 - [x] The UI kit renders in a dev-only gallery route in both themes and both directions — *verified* by visual review at 375×812 in dark, light, and Arabic RTL. That review found three real defects, now fixed: a mirrored number/unit pair (`kg 82.4`), a directional arrow used for "no change", and a doubled document title.
-- [ ] Reduced-motion variants — **not verified.** The global `prefers-reduced-motion` rule is in `_base.css` and the shimmer and sheet animations inherit it, but no test or visual pass exercises the reduced-motion branch yet.
+- [x] Reduced-motion variants — *verified in Phase 14*, which also found the half of this that was missing. The global `prefers-reduced-motion` rule was the only thing honouring motion preferences, so the app's own three-way setting did nothing in two of its three positions: `reduceMotion` was stored, offered on the Settings screen, and read by nothing. `ThemeService` now reflects it as `data-motion` the same way it reflects the theme, and `_base.css` reads both sources — the OS unless the app's setting overrides it. Tested on both sides: three unit tests for the attribute, and a browser test that measures a real transition duration under all three combinations, including "never" holding the animation on a device asking for less motion.
 
 ---
 
@@ -266,7 +266,7 @@ git remote add origin https://github.com/USERNAME/REPLOG.git; git push -u origin
 - [x] Arabic search works regardless of diacritics, tatweel or alef form — *verified* by unit tests and by using the app in Arabic.
 - [x] Filter and search combine, and the count matches the rendered list — *verified*.
 - [x] The library payload is **9.25 kB gzipped** in its own lazy chunk, well under the 60 kB budget and absent from the initial bundle.
-- [ ] Scrolling at 60 fps on an iPhone — **not verified.** No device available, and the list is **not virtualised**: 168 plain rows render acceptably, but the spec calls for virtualisation past 40 results and that is still outstanding. Carry into the Phase 14 device pass.
+- [ ] Scrolling at 60 fps on an iPhone — **not verified**, in Phase 3 or in Phase 14. No device is available, and the list is **not virtualised**: 168 plain rows render acceptably, but the spec calls for virtualisation past 40 results and that is still outstanding. What Phase 14 could measure it did: the library screen renders in 143–163 ms against the soak dataset on desktop Chromium, which says the list is not the bottleneck but says nothing about frame rate on a phone. It stays on the §18 device matrix.
 
 **Catalog scope, stated plainly:** 168 exercises rather than the 180–260 targeted, and 17 of them carry written instructions. Breadth was prioritised over written content — finding your lift is what makes a library usable, and instructions are additive content the reconciliation path exists to ship incrementally. See DATABASE_SPEC §6.1.
 
@@ -813,10 +813,46 @@ not been pushed. Each criterion says which half it has.
 
 ### Acceptance criteria
 
-- [ ] All E2E journeys pass on Chromium and WebKit
-- [ ] Budgets met; no console errors or warnings in production
-- [ ] The soak dataset performs within the stated targets on a real iPhone
-- [ ] §19 is complete, with every row marked verified, manually verified, or **not verified** — and nothing left implied
+- [x] All E2E journeys pass on Chromium and WebKit — *verified*. 179 browser tests across Chromium, desktop WebKit and mobile Safari, and 18 more against the production build on Chromium. The journey suite that §17 task 1 asks for now exists: plan → train → finish → history, quick workout → history → records → analytics, and export → reset → import **through the screens** rather than through the store. The last of those was proved load-bearing by replacing the Merge click with a cancel and watching the restored counts come back 0 against an expected 1.
+- [x] Budgets met; no console errors or warnings in production — *verified*. Initial bundle **330.56 kB raw / 90.96 kB transfer** against a 180 kB gz budget, largest lazy chunk **12.56 kB**, catalog payload **12.6 kB** against 60 kB. Console cleanliness is asserted rather than eyeballed: every screen is loaded in a fresh page in both languages and any error or warning fails the run, with a filter list of two entries, both of them browser noise the app cannot prevent.
+- [ ] The soak dataset performs within the stated targets on a real iPhone — **not verified, and not verifiable here.** The dataset exists and is exercised on every run: 400 workouts, 2 400 workout exercises, 10 000 set logs, 150 measurements and 60 photos, built as a backup file and loaded through the app's own import, which also rebuilds every personal record from the set logs. On desktop Chromium against the production build, on an otherwise idle machine, the import takes about **5.3 s** and every screen renders in **86–384 ms**: dashboard 345, history 248, volume chart 125, records 362, photos 380, workout detail 384, exercise history 86. With the three-engine browser suite running alongside it, the same figures stretch to 102–649 ms — which is the measurement saying what it is worth. These are desktop numbers on one machine, and the assertion that guards them is a 5 s ceiling, an order of magnitude above all of them. The §10.5 figure that mentions a phone is a Lighthouse measurement against a deployed site, which nothing in this environment can produce.
+- [x] §19 is complete, with every row marked verified, manually verified, or **not verified** — and nothing left implied — *done*. Two of the fifteen rows are **not verified** outright — installing from Safari and the Pages deployment itself — and four more are verified in their automated half while naming the part that is not: the iPhone interruption script, the photo device check, iOS storage eviction, and a full hand-reproduction of the dashboard against the soak dataset.
+
+### What this phase found
+
+The point of a hardening phase is to look where nothing has looked yet. Eleven defects came out of it, and every one was invisible to a green test suite.
+
+**Seven accessibility defects**, from pointing axe at all nineteen screens in both languages and both themes, and then at the sheets and detail screens a route list cannot reach:
+
+* `--text-3` failed AA on fourteen screens. It is the colour of every caption, tab-bar label, row meta, chart caption and form hint in the app, and it was held to the large-text minimum against one surface on the stated assumption that captions are "never essential". Both themes were raised until the token passes against all three surfaces it is drawn on, and `check-contrast.mjs` now tests all three — the gate had been checking one pair out of three, which is how a token passes its own test and fails everywhere it is used.
+* The bar chart's plot was `role="img"` wrapped around a row of buttons. That role tells a screen reader to read the label and ignore the contents, so every bar was unreachable. It is a `group` now.
+* The exercise picker's listbox had `<li>` elements between it and its options, which produced four violations at once — options with no permitted parent, list items with no list, a listbox with no children it recognised, and a listbox with no name.
+* The set row's weight, reps and type buttons were named "Weight, set 1" and "Set type" while displaying "100", "5" and "W". That fails Label in Name, and worse, the `aria-label` *replaced* the content, so a screen reader never read the value at all. The names now carry what is on the button.
+* The workout detail, exercise history and workout summary screens each rendered a second `<h1>` under the header's own. No route scan would ever have found it; the interaction scan did.
+* The numeric pad's unit label sat on `--surface-3` at 3.96 : 1.
+* The Settings screen's "Reduce motion" control did nothing in two of its three positions. The preference was stored and offered; nothing in the app read it, and only the operating system's own media query had any effect — so "Always" and "Never" were both quietly "System". Found by looking for where the preference was applied and finding nowhere. `ThemeService` now reflects it as `data-motion` beside the theme, and `_base.css` reads both sources.
+
+**The error paths had no tests at all** (task 7). `AppError`, `toAppError` and `AppErrorHandler` are the taxonomy every failure in the app passes through — ARCHITECTURE §12.1 promises each of the five kinds a different response — and none of the three had a spec. Twenty now cover it: that a quota error is recognised under both engines' names for it and comes back **not** retryable, because retrying a write into a full disk fails the same way; that an interrupted transaction comes back retryable, because it usually succeeds; that an unrecognised `DOMException` stays unclassified rather than being guessed at; that normalising a circular object does not throw a second error on the way; that every kind reaches the diagnostics buffer, which is the whole of this app's error reporting since nothing is uploaded; and that a validation error raises **no** toast, because it belongs on the field that produced it.
+
+Quota exhaustion is rehearsed rather than hoped for, by overriding `storage.estimate()` before the app boots — the app has no other source for how full the device is, so from its side it is indistinguishable from a full phone, and unlike a real one it can assert both thresholds. At 85 % the screen warns and says removing photos is the quickest fix; at 97 % it says storage is full **and** that workouts still log normally, which is the sentence that matters to someone at quota mid-session; with no `storage` API at all it says the browser will not say rather than inventing a figure.
+
+**The end-to-end suites were not type-checked by anything.** `tsconfig.app.json` covers `src/`, `tsconfig.spec.json` covers the unit specs, and Playwright compiles with esbuild — which strips types without reading them. So the suite that guards the app compiled happily around a function called with an argument its signature did not allow, and four strict-mode violations in the soak generator. `tsconfig.e2e.json` now covers both suites and `npm run typecheck` runs it.
+
+**Three copy defects**, from reading the screens rather than the strings:
+
+* The exercise form's movement-pattern select listed `horizontal-push` and `vertical-pull` — raw enum values, in both languages. Invisible to `i18n:check` (nothing asks for a missing key) and to the raw-key scan (no dots). A new guard flags any `<option>` whose label is its own identifier-shaped value, and it was proved by reverting the fix and watching it name all four.
+* The planner's exercise picker listed `nameEn` regardless of the reading language, so an Arabic user built their plan from an English list — and the name it snapshotted into the routine stayed English in their history afterwards. Every other surface in the app goes through `displayName()`.
+* The custom-exercise delete dialog read "Delete" over the words "Your exercise". It is the one destructive action in the app with no undo — Recently deleted does not cover exercises — and it said none of that. It now names the exercise, says history stays readable, and says there is no way back without an older backup. It had no test at all, which is how it got that way; it has one now.
+
+### Deviations and what is carried forward
+
+* **The soak ceiling is a shape check, not a latency claim.** It fails a screen that takes longer than 5 s against the dataset, which is an order of magnitude above every measured number. It would not catch a 2× regression, and saying so is more useful than a tighter number that would make the suite flaky on a loaded machine.
+* **The raw-enum guard is partial by construction.** It only flags identifier-shaped values — hyphenated or camelCase — because several stores are legitimately labelled with the word they are named after. A single-word enum rendered raw slips past; a set of them does not.
+* **The planner keeps its own picker.** The routine editor has a second exercise-picker sheet rather than reusing `rl-exercise-picker`. The language bug above was a direct consequence. Collapsing the two is a real refactor and is carried forward rather than done under a hardening phase.
+* **Four manual passes remain outstanding**, all for the same reason: VoiceOver on a real device, the §18 device matrix, the soak dataset on an iPhone, and installing from Safari. The automated half of the accessibility pass — axe on every screen in two languages and two themes, the keyboard reachability and modal focus checks, and 200 % text scaling — runs on every production build.
+* **UI_UX_SPEC §16 design QA per screen** (task 4) was done as part of the axe and visual passes rather than as a separate screen-by-screen review against the spec's checklist. The gap is the parts of §16 no tool can judge: spacing rhythm, visual weight, and whether a screen reads well.
+* **The three text levels are now closer together than they were.** Raising `--text-3` to AA on three surfaces leaves it 1.6 : 1 from `--text-2` in dark and 1.3 : 1 in light, so the hierarchy between secondary and tertiary text is carried mostly by size and weight rather than by colour. That is the trade AA asks for at this background lightness, and it is the right way round: a legible caption that looks a little close to the label above it beats an elegant one nobody can read.
+* **`v1.0.0` is not tagged** (task 11). A tag is a public statement that this is the released version, and nothing has been pushed or deployed — §19 rows 13 and 14 are the two that are not verified at all. Tagging now would date the release to a commit no one can install.
 
 ---
 
@@ -833,6 +869,8 @@ not been pushed. Each criterion says which half it has.
 | Android Chrome | P2 | Should work; not a release gate |
 | Firefox | P3 | Best effort |
 
+**Status after Phase 14.** Desktop Chrome and desktop Safari are covered: every browser test runs on Chromium and WebKit, and the production-build suites (offline, console cleanliness, axe, keyboard, soak) run on Chromium at both the root and the `/REPLOG/` subpath. Mobile Safari is covered only as Playwright's iPhone 14 Pro emulation — the same WebKit engine at a phone viewport with touch emulated, which is a layout and engine check and nothing more. **No row marked P0 has been verified**, because no iPhone is available in this environment. That means install from Safari, standalone chrome, safe-area insets, iOS storage eviction, force-quit during a session, VoiceOver, and real scrolling performance are all outstanding, and the release notes must say so.
+
 Honesty rule for the release notes: anything verified only in a simulator is reported as such. Simulators do not reproduce iOS storage eviction, real Add-to-Home-Screen behaviour, or true standalone-mode quirks.
 
 ---
@@ -843,21 +881,21 @@ Spec §14's fifteen criteria, each mapped to the phase that delivers it and the 
 
 | # | Criterion | Phase | Evidence | Status |
 |---|---|---|---|---|
-| 1 | Works locally on Windows | P0 | `npm start` and `npm run build:pages` succeed on Windows 11 | |
-| 2 | All main modules functional | P1–P11 | Per-phase acceptance criteria all checked | |
-| 3 | Plans can be created and saved | P4 | E2E journey + unit tests | |
-| 4 | Completed workouts persist | P5 | Reliability suite + 20-scenario interruption script on a real iPhone | |
-| 5 | Previous performance available | P5, P7 | Q7 test + visual check with seeded history | |
-| 6 | Measurements recorded and charted | P8, P10 | Unit tests + chart states | |
-| 7 | Progress photos work | P9 | Pipeline tests + GPS-removal assertion + device check | |
-| 8 | Analytics use actual stored data | P10 | Hand-reproduction of every dashboard figure from the soak dataset | |
-| 9 | English and Arabic work | P1, P14 | `i18n:check` green + per-screen RTL review | |
-| 10 | Light and dark themes work | P1, P14 | `tokens:check` green + per-screen review in both themes | |
-| 11 | Export and import work | P11 | Round-trip equality test including photos | |
-| 12 | PWA works offline after first load | P12 | Offline cold start, automated and on a device | |
-| 13 | Installs on iPhone via Safari | P12, P13 | **Manual only** — no automated equivalent exists | |
-| 14 | GitHub Pages deployment works | P13 | Live URL, deep links, SW scope, auto-deploy on push | |
-| 15 | No paid infrastructure | P0–P13 | Dependency audit: licences and runtime services | |
+| 1 | Works locally on Windows | P0 | `npm start`, `npm run check` and `npm run build:pages` all run on Windows 11 under PowerShell. The one Windows trap found — MSYS rewriting `--base-href /REPLOG/` into a Windows path, silently, with the build still succeeding — is avoided by `build-pages.mjs` using no shell, and documented in the README. | **verified** |
+| 2 | All main modules functional | P1–P11 | Every phase's acceptance criteria above, each ticked only against stated evidence. 832 unit tests, 179 browser tests on three engines, 18 against the production build. The exceptions are named in their own phases rather than implied here. | **verified** |
+| 3 | Plans can be created and saved | P4 | `planner.store.spec.ts`, plus the plan journey in `e2e/journey.spec.ts`: a plan is created, named, given a flexible routine and an exercise, started from the Train screen and finished, and history calls the session what the plan called it. | **verified** |
+| 4 | Completed workouts persist | P5 | The reliability suite kills the store and reads the database back through a fresh injector; a Playwright test reloads a real browser mid-session on Chromium, WebKit and mobile Safari and finds the confirmed set. The 20-scenario interruption script on an iPhone — force-quit, iOS memory reclaim — is **not** done. | **verified** (automated); device script **not verified** |
+| 5 | Previous performance available | P5, P7 | The Q7 query test at 5 000 seeded set logs, variant-scoped so a dumbbell press is never offered for a barbell press, plus the "No history yet" path; seen in the running app with seeded history. | **verified** |
+| 6 | Measurements recorded and charted | P8, P10 | Unit tests for entry, merge-on-same-day and unit conversion; `e2e/body.spec.ts` for the screens, including Arabic-Indic digits in and out; chart states covered including the gap rule — a missing day is a gap, never interpolated. | **verified** |
+| 7 | Progress photos work | P9 | Pipeline tests for decode, resize and re-encode; `e2e/photos.spec.ts` asserts a stored photo carries no location data, that the capture date is read before EXIF is stripped, that no request leaves the device during an import, and that deleting reclaims both blobs. The device check — real camera, real HEIC, real iOS share sheet — is **not** done. | **verified** (automated); device check **not verified** |
+| 8 | Analytics use actual stored data | P10 | Every figure is computed in `domain/analytics` with its own tests over fixtures, and the journey suite reproduces two of them by hand end to end: one 100 kg × 5 set reads 500 kg of volume on the summary, and one finished session reads 1 on the dashboard's "This week" tile rather than an em dash. The soak run exercises all of them at 400 workouts and 10 000 set logs. A hand-reproduction of *every* dashboard figure against the soak dataset, as §17 task 3 describes, was **not** done. | **verified** (automated, two figures by hand); full hand-reproduction **not verified** |
+| 9 | English and Arabic work | P1, P14 | `check-i18n` green on 820 keys across both locales; axe passes every screen in both languages; a scan asserts no raw translation key and no raw enum value reaches any screen in either; RTL reviewed by using the app, which is how three of this phase's defects were found. | **verified** |
+| 10 | Light and dark themes work | P1, P14 | `check-contrast` green on 58 token pairs across both themes, now covering every text token against every surface it is drawn on; axe passes every screen in the light theme as its own run, not as an assumption about the dark one. | **verified** |
+| 11 | Export and import work | P11 | The round-trip test covers every store including photo blobs, with the clock advanced three days between export and import so a restore that re-stamped the sync envelope fails — which it did, until `restoreMany` was added. `e2e/journey.spec.ts` then does the whole thing through the screens: export, wipe, import, and the session readable again on the history detail. | **verified** |
+| 12 | PWA works offline after first load | P12 | Six offline tests against a production build, run twice — at the root and under `/REPLOG/`. They wait for a controlling worker and for every prefetch URL named in `ngsw.json`, cold start with the network disabled, and load routes never opened online. On a device, with real iOS storage eviction, **not** verified. | **verified** (automated); device **not verified** |
+| 13 | Installs on iPhone via Safari | P12, P13 | No automated equivalent exists. No iPhone is available in this environment. | **not verified** |
+| 14 | GitHub Pages deployment works | P13 | The build is correct for the subpath and tested there — asset paths, manifest URL, worker scope and deep links all asserted against `/REPLOG/` by a server that reproduces how Pages serves. But nothing has been pushed, the workflow has never run, and no live URL exists. | **not verified** |
+| 15 | No paid infrastructure | P0–P13 | Ten runtime dependencies, all permissively licensed: MIT (Angular ×7), ISC (`idb`), Apache-2.0 (`rxjs`), 0BSD (`tslib`). The built bundle contains no network call to any origin — the two external URLs in it are Angular's own documentation links inside error strings. Everything is stored in IndexedDB on the device; hosting is GitHub Pages on a free plan. | **verified** |
 
 ---
 

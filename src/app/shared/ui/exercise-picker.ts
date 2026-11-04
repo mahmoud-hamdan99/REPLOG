@@ -49,28 +49,39 @@ export interface PickerItem {
       } @else if (items().length === 0) {
         <rl-empty-state titleKey="picker.none" bodyKey="exercises.search.placeholder" />
       } @else {
-        <ul class="pick__list" role="listbox" [attr.aria-multiselectable]="multiple()">
+        <!--
+          A div, not a ul. A listbox's required children are options, and the
+          li wrapper this used to have sat between the two: axe reported four
+          violations at once — the options had no permitted parent, the list
+          items had no list, and the listbox had no children it recognised.
+          The list semantics were buying nothing a listbox does not already
+          say, so they are gone, and the listbox now carries its own name.
+        -->
+        <div
+          class="pick__list"
+          role="listbox"
+          [attr.aria-label]="i18n.t(titleKey())"
+          [attr.aria-multiselectable]="multiple()"
+        >
           @for (item of items(); track item.id) {
-            <li>
-              <button
-                type="button"
-                class="pick__item"
-                role="option"
-                [class.pick__item--on]="selected().has(item.id)"
-                [attr.aria-selected]="selected().has(item.id)"
-                (click)="toggle(item.id)"
-              >
-                <span class="pick__name t-body-strong">{{ item.name }}</span>
-                @if (item.detail) {
-                  <span class="t-caption">{{ item.detail }}</span>
-                }
-                @if (selected().has(item.id)) {
-                  <span class="pick__tick" aria-hidden="true">&#10003;</span>
-                }
-              </button>
-            </li>
+            <button
+              type="button"
+              class="pick__item"
+              role="option"
+              [class.pick__item--on]="selected().has(item.id)"
+              [attr.aria-selected]="selected().has(item.id)"
+              (click)="toggle(item.id)"
+            >
+              <span class="pick__name t-body-strong">{{ item.name }}</span>
+              @if (item.detail) {
+                <span class="t-caption">{{ item.detail }}</span>
+              }
+              @if (selected().has(item.id)) {
+                <span class="pick__tick" aria-hidden="true">&#10003;</span>
+              }
+            </button>
           }
-        </ul>
+        </div>
       }
 
       <div class="pick__actions">

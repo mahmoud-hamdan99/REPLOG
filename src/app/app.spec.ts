@@ -113,4 +113,30 @@ describe('App shell', () => {
     expect(document.documentElement.lang).toBe('ar');
     expect(document.documentElement.dir).toBe('rtl');
   });
+
+  // The motion preference reaches the document, which it did not before
+  // Phase 14: the Settings screen offered three values and the stylesheet
+  // only ever listened to the operating system, so two of the three did
+  // nothing at all. 'system' deliberately writes no attribute, which is what
+  // hands the decision back to the media query.
+  it('reflects "always" onto the document as reduced motion', async () => {
+    const fixture = setup({ reduceMotion: 'always' });
+    await fixture.whenStable();
+    expect(document.documentElement.getAttribute('data-motion')).toBe('reduced');
+  });
+
+  it('reflects "never" as full motion, overriding the system preference', async () => {
+    const fixture = setup({ reduceMotion: 'never' });
+    await fixture.whenStable();
+    expect(document.documentElement.getAttribute('data-motion')).toBe('full');
+  });
+
+  it('writes no motion attribute for "system", leaving the media query in charge', async () => {
+    // Set first, so this asserts the effect *removes* it rather than merely
+    // that nothing in this test wrote one.
+    document.documentElement.setAttribute('data-motion', 'reduced');
+    const fixture = setup({ reduceMotion: 'system' });
+    await fixture.whenStable();
+    expect(document.documentElement.getAttribute('data-motion')).toBeNull();
+  });
 });

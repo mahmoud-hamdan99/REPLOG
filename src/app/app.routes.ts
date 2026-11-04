@@ -190,8 +190,14 @@ export const routes: Routes = [
     data: { titleKey: 'page.about.title', navTab: 'more', showBack: true },
   },
 
-  // Development-only component gallery. Excluded from production builds so it
-  // cannot be reached in the deployed app.
+  // Development-only component gallery.
+  //
+  // The route is built only in development, so in the deployed app the path
+  // resolves to the 404 page and nothing can reach the component. Its lazy
+  // chunk is still emitted — the dynamic import is statically analysable, so
+  // the bundler keeps it whether or not a route references it — but at 3.2 kB
+  // gzipped, never requested, that is a fair price for not maintaining a
+  // file-replacement just to delete a file from a build.
   ...(isDevMode()
     ? [
         {

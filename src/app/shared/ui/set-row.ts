@@ -38,7 +38,7 @@ const SWIPE_THRESHOLD = 72;
       <button
         type="button"
         class="row__badge"
-        [attr.aria-label]="i18n.t('tracker.setType')"
+        [attr.aria-label]="badgeLabel()"
         [disabled]="readOnly()"
         (click)="opened.emit()"
       >
@@ -58,7 +58,12 @@ const SWIPE_THRESHOLD = 72;
           type="button"
           class="row__field"
           [class.row__field--empty]="set().weightKg === null"
-          [attr.aria-label]="i18n.t('tracker.set.editWeight', { index: label() })"
+          [attr.aria-label]="
+            i18n.t('tracker.set.editWeight', {
+              index: label(),
+              value: format.mass(set().weightKg),
+            })
+          "
           [disabled]="readOnly()"
           (click)="editWeight.emit()"
         >
@@ -70,7 +75,9 @@ const SWIPE_THRESHOLD = 72;
         type="button"
         class="row__field"
         [class.row__field--empty]="set().reps === null"
-        [attr.aria-label]="i18n.t('tracker.set.editReps', { index: label() })"
+        [attr.aria-label]="
+          i18n.t('tracker.set.editReps', { index: label(), value: format.number(set().reps) })
+        "
         [disabled]="readOnly()"
         (click)="editReps.emit()"
       >
@@ -173,6 +180,22 @@ export class SetRow {
     this.isWarmup()
       ? this.i18n.t('tracker.set.warmupLabel')
       : this.i18n.formatNumber(this.workingIndex()),
+  );
+
+  /**
+   * The badge's name, carrying the character printed on it.
+   *
+   * WCAG 2.5.3: a control's accessible name has to contain its visible label,
+   * so somebody using voice control can say what they can see. This button
+   * shows "W" or a set number and used to be named "Set type", which matched
+   * nothing on screen — axe reports it as label-content-name-mismatch, and it
+   * also meant a screen reader never read the number out, because the
+   * aria-label replaced the content rather than describing it.
+   */
+  protected readonly badgeLabel = computed(() =>
+    this.i18n.t('tracker.set.typeOf', {
+      label: this.isWarmup() ? this.i18n.t('tracker.set.warmup') : this.label(),
+    }),
   );
 
   private startX = 0;

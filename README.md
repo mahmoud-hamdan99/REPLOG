@@ -75,8 +75,8 @@ Run these from **PowerShell**, not Git Bash — see the warning below.
 | `npm test`            | Unit tests once                                                                           |
 | `npm run test:watch`  | Unit tests in watch mode                                                                  |
 | `npm run test:e2e`    | Playwright, across Chromium, WebKit and mobile Safari                                     |
-| `npm run test:pwa`    | Offline and service-worker tests, against a production build at the root                  |
-| `npm run test:pages`  | The same, against a build under the `/REPLOG/` subpath — the shape GitHub Pages serves    |
+| `npm run test:pwa`    | Everything that needs a real build: offline, console cleanliness, axe, keyboard, the soak |
+| `npm run test:pages`  | The same, under the `/REPLOG/` subpath — the shape GitHub Pages serves. CI runs this one  |
 | `npm run build:pages` | The deployable build, including `404.html` and `.nojekyll`                                |
 | `npm run icons`       | Regenerates the icon set from `scripts/build-icons.mjs`                                   |
 | `npm run format`      | Prettier over the repository                                                              |
@@ -158,6 +158,19 @@ Angular with signals and standalone components, zoneless, strict TypeScript.
 IndexedDB behind a repository contract, with every record carrying a
 sync-ready envelope. Translations are runtime JSON with real plural rules for
 both languages. No analytics, no trackers, no third-party requests at runtime.
+
+### Accessibility
+
+Held to WCAG AA, and checked rather than claimed. `npm run test:pwa` runs axe
+over every screen in English and Arabic and in both themes, over the sheets and
+detail screens a route list cannot reach, and then checks that the keyboard can
+reach every control, that a modal keeps focus inside it, that nothing scrolls
+sideways at 200 % text, and that the motion preference is honoured in all three
+of its positions. `npm run check` holds every text colour to 4.5 : 1 against
+every surface it is drawn on.
+
+What that cannot cover is VoiceOver on a real iPhone, which is outstanding and
+recorded as outstanding in the plan's §19.
 
 The design documents in `docs/` are the specification and the record of what
 was actually built, including what was left undone and why:

@@ -62,7 +62,7 @@ All tokens are CSS custom properties on `:root`, redefined per theme. Components
 | `--border-strong` | `#3C424C` | Focus outlines, dividers under headers |
 | `--text-1` | `#F4F6F8` | Primary text, numbers |
 | `--text-2` | `#A3ABB6` | Labels, secondary |
-| `--text-3` | `#6F7883` | Captions, disabled |
+| `--text-3` | `#7F8791` | Captions, disabled |
 | `--accent` | `#C8FA4B` | Primary accent (lime) |
 | `--accent-dim` | `#9BC92F` | Accent hover/pressed |
 | `--accent-soft` | `#C8FA4B1F` | 12 % accent wash |
@@ -84,7 +84,7 @@ All tokens are CSS custom properties on `:root`, redefined per theme. Components
 | `--border-strong` | `#C9CFD6` |
 | `--text-1` | `#111417` |
 | `--text-2` | `#555E69` |
-| `--text-3` | `#808A96` |
+| `--text-3` | `#676F79` |
 | `--accent` | `#C8FA4B` *(fills only)* |
 | `--accent-ink` | `#4A6B07` | **accent-coloured text/icons in light theme** |
 | `--accent-dim` | `#B2E532` |
@@ -101,12 +101,18 @@ All tokens are CSS custom properties on `:root`, redefined per theme. Components
 |---|---|---|
 | `--text-1` on `--bg` (dark) | 18.06 : 1 | ✅ |
 | `--text-2` on `--surface-1` (dark) | 7.81 : 1 | ✅ |
-| `--text-3` on `--surface-1` (dark) | 4.05 : 1 | ⚠️ captions only, ≥ 14 px, never essential |
+| `--text-3` on `--surface-1` (dark) | 4.98 : 1 | ✅ |
+| `--text-3` on `--surface-2` (dark) | 4.55 : 1 | ✅ |
+| `--text-3` on `--surface-3` (either) | 3.96 : 1 | ❌ **forbidden** — small text on `--surface-3` steps up to `--text-2` |
 | `--accent` on `--bg` (dark) | 16.06 : 1 | ✅ |
 | `--on-accent` on `--accent` | 16.06 : 1 dark / 15.14 : 1 light | ✅ |
 | **`--accent` as text on light `--surface-1`** | 1.22 : 1 | ❌ **forbidden** — use `--accent-ink` |
 | `--text-1` on `--surface-1` (light) | 18.48 : 1 | ✅ |
 | `--positive`/`--danger` on their theme surface | ≥ 4.5 : 1 | ✅ (values above are tuned per theme) |
+
+Third hard rule: **a caption is text, and text is held to 4.5 : 1.** `--text-3` used to sit at 4.05 : 1 on cards, excused as "captions only, never essential". Phase 14 pointed axe at every screen in both languages and both themes and found it failing on fourteen of them: it is the colour of the tab-bar labels, the exercise row meta, the chart captions, the form hints and every `.t-caption` in the app, all at caption size. None of that is decoration. The token was raised in both themes until it passes against `--bg`, `--surface-1` and `--surface-2`, and `check-contrast.mjs` now tests all three surfaces rather than cards alone — a gate that checks one pair out of three is how a token passes its own test and fails where it is used.
+
+`--surface-3` is the exception and stays one: reaching 4.5 : 1 there would leave `--text-2` and `--text-3` 1.2 : 1 apart from each other, which is no hierarchy at all. So small text on `--surface-3` steps up to `--text-2`, and the axe suite — which scans every screen and every sheet — is what enforces it.
 
 Hard rule: **lime is a fill colour in light theme and a text colour only in dark theme.** The ratios above are not hand-computed: `scripts/check-contrast.mjs` parses `_tokens.css` and `_themes.css`, resolves `var()` aliases and fails the build on any pair below its minimum. It also asserts that the forbidden pair *stays* illegible, so it cannot be "fixed" by darkening lime.
 

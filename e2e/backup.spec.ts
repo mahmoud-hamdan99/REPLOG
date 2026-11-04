@@ -142,3 +142,57 @@ test('the data screen mirrors and translates', async ({ page }) => {
   await page.goto('/settings');
   await page.getByRole('radio', { name: 'English' }).check();
 });
+
+/**
+ * Quota exhaustion, rehearsed rather than hoped for.
+ *
+ * IMPLEMENTATION_PLAN §17 task 7 asks for it by filling storage. Filling a
+ * browser's real quota takes gigabytes and leaves the machine in that state,
+ * so what is filled here is the number the app reads: `storage.estimate()`,
+ * overridden before the app boots. The app has no other source for how full
+ * the device is, so from its side this is indistinguishable from the real
+ * thing — and unlike the real thing it can assert both thresholds.
+ */
+async function reportUsage(page: Page, fraction: number): Promise<void> {
+  await page.addInitScript((used: number) => {
+    const quota = 1_000_000_000;
+    Object.defineProperty(navigator, 'storage', {
+      configurable: true,
+      value: {
+        estimate: () => Promise.resolve({ usage: Math.round(quota * used), quota }),
+        persisted: () => Promise.resolve(false),
+        persist: () => Promise.resolve(false),
+      },
+    });
+  }, fraction);
+}
+
+test('a nearly full device is warned, and told the quickest way out', async ({ page }) => {
+  await reportUsage(page, 0.85);
+  await page.goto('/settings/data');
+
+  await expect(page.getByText(/Storage is nearly full/)).toBeVisible({ timeout: 20_000 });
+  // A warning that does not say what to do is just an alarm.
+  await expect(page.getByText(/Removing a few photos/)).toBeVisible();
+});
+
+test('a full device says what still works, not only what does not', async ({ page }) => {
+  await reportUsage(page, 0.97);
+  await page.goto('/settings/data');
+
+  await expect(page.getByText(/Storage is full/)).toBeVisible({ timeout: 20_000 });
+  // The sentence that matters: training still logs. A user at quota mid-
+  // session needs to know the app has not stopped being a workout tracker.
+  await expect(page.getByText(/workouts still log normally/)).toBeVisible();
+});
+
+test('a browser that will not report usage says so rather than inventing a figure', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'storage', { configurable: true, value: undefined });
+  });
+  await page.goto('/settings/data');
+
+  await expect(page.getByText(/will not say how much is used/)).toBeVisible({ timeout: 20_000 });
+});

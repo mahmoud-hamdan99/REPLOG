@@ -102,12 +102,37 @@ const themes = {
   light,
 };
 
-/** [foreground, background, minimum, note] */
+/**
+ * [foreground, background, minimum, note]
+ *
+ * Every text token is checked against **all three** surfaces it can be drawn
+ * on, not just `--surface-1`. Phase 14 found out why: `--text-3` was held to
+ * the large-text minimum on cards alone, on the stated assumption that
+ * captions are "large only, never essential". They are neither. It is the
+ * colour of `.t-caption`, the tab-bar labels, the exercise row meta, chart
+ * captions and every form hint — all at caption size, on all three surfaces —
+ * and axe found it failing on fourteen screens in both themes. A gate that
+ * checks one pair out of three permits exactly that: a token that passes its
+ * own test and fails where it is used.
+ */
 const PAIRS = [
   ['--text-1', '--bg', AAA_TEXT, 'primary text'],
   ['--text-1', '--surface-1', AAA_TEXT, 'primary text on cards'],
-  ['--text-2', '--surface-1', AA_TEXT, 'secondary text'],
-  ['--text-3', '--surface-1', AA_LARGE, 'captions (large only, never essential)'],
+  ['--text-1', '--surface-2', AA_TEXT, 'primary text on raised surfaces'],
+  ['--text-2', '--bg', AA_TEXT, 'secondary text'],
+  ['--text-2', '--surface-1', AA_TEXT, 'secondary text on cards'],
+  ['--text-2', '--surface-2', AA_TEXT, 'secondary text on raised surfaces'],
+  ['--text-3', '--bg', AA_TEXT, 'captions'],
+  ['--text-3', '--surface-1', AA_TEXT, 'captions on cards'],
+  ['--text-3', '--surface-2', AA_TEXT, 'captions on raised surfaces'],
+  // --surface-3 is the one surface captions may not be drawn on: --text-3 is
+  // 3.96:1 there, and raising it far enough would leave --text-2 and --text-3
+  // indistinguishable from each other. So small text on --surface-3 steps up
+  // to --text-2, and this pair is what guarantees that step is legible. The
+  // rule is enforced where it can actually be seen: the axe suite scans every
+  // screen and every sheet in both languages, so a caption that lands on
+  // --surface-3 fails there.
+  ['--text-2', '--surface-3', AA_TEXT, 'small text on the raised field surface'],
   ['--accent-ink', '--bg', AA_TEXT, 'accent text'],
   ['--accent-ink', '--surface-1', AA_TEXT, 'accent text on cards'],
   ['--on-accent', '--accent', AA_TEXT, 'text on accent fills'],
@@ -128,7 +153,14 @@ const PAIRS = [
  * the ramp is checked pairwise in the order it is used rather than only
  * against the background.
  */
-const RAMP = ['--cat-lime', '--cat-teal', '--cat-violet', '--cat-amber', '--cat-rose', '--cat-slate'];
+const RAMP = [
+  '--cat-lime',
+  '--cat-teal',
+  '--cat-violet',
+  '--cat-amber',
+  '--cat-rose',
+  '--cat-slate',
+];
 const RAMP_VS_SURFACE = AA_LARGE;
 /** Neighbours only need to be tellable apart, not legible as text on each other. */
 const RAMP_VS_NEIGHBOUR = 1.3;

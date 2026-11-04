@@ -586,6 +586,8 @@ Permissions: `contents: read`, `pages: write`, `id-token: write`. Concurrency gr
 | First Contentful Paint, iPhone 4G | < 1.5 s | Lighthouse CI (informational) |
 | Set-confirm → committed UI | < 100 ms p95 | manual instrumentation in dev builds |
 
+**Measured in Phase 14**, against the production build: initial **330.56 kB raw / 90.96 kB transfer**, largest lazy chunk **12.56 kB** (the Arabic locale), exercise catalog **12.6 kB**. All four measurable budgets pass with room. The two that are not measurable here say so: First Contentful Paint on a phone over 4G is a Lighthouse figure against a deployed site, and set-confirm latency is guarded instead by a test that seeds 5 000 set logs and would fail on a confirm that starts scanning. A soak run against 400 workouts and 10 000 set logs renders every screen in 125–480 ms on desktop Chromium — a shape check, not a phone number.
+
 Angular's `budgets` measure **raw** bundle size, not compressed, so the configured thresholds are raw equivalents: `initial` 500 kB warning / 600 kB error, and 250 kB / 350 kB for any single chunk. At the ratio this project actually compresses at (~3.6x), a 600 kB raw initial bundle is roughly 165 kB gzipped, which keeps the real 180 kB gz target with headroom. Scaffold baseline for reference: **190.87 kB raw / 52.21 kB gzipped**.
 
 ---

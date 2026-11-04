@@ -1,0 +1,15 @@
+/* The end-to-end suites.
+   They were not type-checked by anything until Phase 14: `tsconfig.app.json`
+   covers `src/`, `tsconfig.spec.json` covers the unit specs, and Playwright
+   compiles with esbuild, which strips types without reading them. So a type
+   error in the suite that guards the app sat there compiling happily — which
+   is where this file came from. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  },
+  "include": ["e2e/**/*.ts", "e2e-pwa/**/*.ts"]
+}

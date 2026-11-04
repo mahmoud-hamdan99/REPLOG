@@ -153,10 +153,17 @@ import { ExerciseLibraryStore } from './exercise-library.store';
       </div>
     }
 
+    <!--
+      Specific, because it is irreversible from inside the app. This dialog
+      used to read "Delete" over the words "Your exercise", which said nothing
+      about what was about to happen: not that the library loses it, not that
+      history keeps reading correctly, and not that Recently deleted does not
+      cover exercises so there is no way back without an older backup.
+    -->
     <rl-dialog
       [(open)]="confirmDelete"
-      titleKey="common.delete"
-      bodyKey="exercises.detail.custom"
+      titleKey="exercises.deleteTitle"
+      [bodyText]="deleteBody()"
       confirmKey="common.delete"
       [destructive]="true"
       (confirmed)="remove()"
@@ -262,6 +269,14 @@ export class ExerciseDetailPage {
     await this.store.resetToOriginal(this.exerciseId());
     this.toasts.success(this.i18n.t('exercises.action.reset'));
   }
+
+  /** Names the exercise in the delete dialog, so the warning is about it. */
+  protected readonly deleteBody = computed(() => {
+    const exercise = this.store.byId().get(this.exerciseId());
+    return this.i18n.t('exercises.deleteBody', {
+      name: exercise === undefined ? '' : this.store.displayName(exercise),
+    });
+  });
 
   protected async remove(): Promise<void> {
     await this.store.removeCustom(this.exerciseId());
