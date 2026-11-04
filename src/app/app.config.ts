@@ -2,9 +2,11 @@ import {
   ApplicationConfig,
   ErrorHandler,
   inject,
+  isDevMode,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
+import { provideServiceWorker } from '@angular/service-worker';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -16,8 +18,10 @@ import {
 import { routes } from './app.routes';
 import { provideDataLayer } from './app.providers';
 import { APP_META_STORE } from './data/app-meta';
+import { BUILD_INFO } from './core/build-info';
 import { AppErrorHandler } from './core/errors/app-error-handler';
 import { I18n } from './core/i18n/i18n.service';
+import { PwaService } from './core/pwa/pwa.service';
 import { SelectivePreloadStrategy } from './core/nav/preload.strategy';
 import { TranslatedTitleStrategy } from './core/nav/title.strategy';
 import { SettingsStore } from './core/settings/settings.store';
@@ -45,6 +49,15 @@ export const appConfig: ApplicationConfig = {
     { provide: TitleStrategy, useExisting: TranslatedTitleStrategy },
     { provide: ErrorHandler, useExisting: AppErrorHandler },
 
+    // Registered after the app settles rather than during bootstrap: the
+    // worker's first job is to prefetch every chunk in the build, and doing
+    // that while the first screen is still rendering competes with it for the
+    // connection on exactly the devices that can least afford it.
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
+
     // Storage contracts bound to their browser implementations. Shared with the
     // test harness so both wire the stack the same way.
     ...provideDataLayer(),
@@ -71,13 +84,30 @@ export const appConfig: ApplicationConfig = {
         const deviceId = meta.deviceId || environment.newId();
         environment.setDeviceId(deviceId);
 
-        if (meta.deviceId !== deviceId || meta.schemaVersion !== DB_VERSION) {
-          await appMeta.patch({ deviceId, schemaVersion: DB_VERSION });
+        if (
+          meta.deviceId !== deviceId ||
+          meta.schemaVersion !== DB_VERSION ||
+          meta.appVersion !== BUILD_INFO.version
+        ) {
+          // appVersion is recorded here so a backup file states the version
+          // that wrote it. Without this it stayed at its default forever and
+          // every export claimed 0.0.0.
+          await appMeta.patch({
+            deviceId,
+            schemaVersion: DB_VERSION,
+            appVersion: BUILD_INFO.version,
+          });
         }
       } catch {
         // `database.isSafeMode()` carries the reason for the UI to surface.
         void database;
       }
+    }),
+
+    // Update handling starts after the rest of the app is wired, so a version
+    // event can never arrive before there is something to show it on.
+    provideAppInitializer(() => {
+      inject(PwaService).listen();
     }),
   ],
 };

@@ -25,14 +25,23 @@
     <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#0b0c0e" />
 
-    <!-- iOS standalone PWA. Icons and manifest are added in Phase 12. -->
+    <!-- iOS standalone PWA. There is no install prompt API on iOS; the About
+         screen explains Share → Add to Home Screen instead of pretending to
+         offer one. -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="REPLOG" />
     <meta name="format-detection" content="telephone=no" />
 
+    <!-- Every href here is relative, so the app works under a repository
+         subpath without any of these being rewritten at build time. An
+         absolute "/icons/..." would 404 on GitHub Pages. -->
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <!-- iOS ignores `purpose: maskable` and masks an opaque image itself, so
+         it needs its own square. -->
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
 
     <!-- Runs before first paint so the theme and text direction are correct
          immediately. Without this, a dark-theme user sees a white flash and an

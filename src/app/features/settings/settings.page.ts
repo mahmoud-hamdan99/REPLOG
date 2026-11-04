@@ -2,7 +2,9 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { I18n } from '../../core/i18n/i18n.service';
 import { AppHeader } from '../../core/nav/app-header';
+import { PwaService } from '../../core/pwa/pwa.service';
 import { SettingsStore } from '../../core/settings/settings.store';
+import { Button } from '../../shared/ui/button';
 import { Card } from '../../shared/ui/card';
 import { ListRow } from '../../shared/ui/list-row';
 import { SectionHeader } from '../../shared/ui/section-header';
@@ -25,11 +27,26 @@ import type { Language, ReduceMotionPreference, ThemePreference } from '../../do
 @Component({
   selector: 'rl-settings-page',
   styleUrl: './settings.page.css',
-  imports: [AppHeader, Card, ListRow, SectionHeader, Segmented],
+  imports: [AppHeader, Button, Card, ListRow, SectionHeader, Segmented],
   template: `
     <rl-app-header titleKey="page.settings.title" />
 
     <div class="page">
+      <!-- A held update waits here. The toast that offered it has long since
+           gone, and an update nobody can find again is an update nobody
+           applies. -->
+      @if (pwa.updateReady()) {
+        <section class="group">
+          <rl-card>
+            <rl-section-header titleKey="update.title" />
+            <p class="t-body group__note">{{ i18n.t('update.body') }}</p>
+            <rl-button variant="primary" [full]="true" (click)="pwa.apply()">
+              {{ i18n.t('update.reload') }}
+            </rl-button>
+          </rl-card>
+        </section>
+      }
+
       <section class="group">
         <rl-section-header titleKey="settings.appearance.title" />
         <rl-card [inset]="false">
@@ -108,6 +125,7 @@ import type { Language, ReduceMotionPreference, ThemePreference } from '../../do
   `,
 })
 export class SettingsPage {
+  protected readonly pwa = inject(PwaService);
   protected readonly settings = inject(SettingsStore);
   protected readonly i18n = inject(I18n);
   private readonly router = inject(Router);

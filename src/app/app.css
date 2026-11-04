@@ -41,3 +41,35 @@
 .skip:focus-visible {
   transform: translateY(0);
 }
+
+/* Damaged-cache banner. Sits above the scrolling region rather than inside
+   it, so it cannot be scrolled away while it is still true. */
+.broken {
+  padding: var(--sp-4);
+  border-block-end: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.broken__title {
+  margin: 0;
+  color: var(--text-1);
+}
+
+.broken__body {
+  margin-block: var(--sp-2);
+  color: var(--text-2);
+}
+
+.broken__action {
+  min-block-size: var(--target-min);
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-1);
+  color: var(--accent-ink);
+}
+
+.broken__action:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

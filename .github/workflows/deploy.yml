@@ -1,0 +1,83 @@
+name: Deploy to GitHub Pages
+
+# A failing gate fails the deploy. PRODUCT_SPEC section 13 requires a green
+# production build before release, which is only true if nothing can skip it.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never cancel a deploy in progress: the artifact it is uploading is what the
+# site will serve, and a half-published site is worse than an old one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  # The one place the repository subpath is written. The manifest and the
+  # service worker both resolve their own URLs relative to it, so this flag is
+  # the only thing that needs to change to serve from somewhere else.
+  BASE_HREF: /REPLOG/
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # The same gates a developer runs, in the same order, so a green local
+      # check means a green deploy.
+      - run: npm run lint
+      - run: npm run lint:css
+      - run: npm run i18n:check
+      - run: npm run tokens:check
+      - run: npm run catalog:check
+      - run: npm run typecheck
+      - run: npm run test
+
+      # Icons are generated from `scripts/build-icons.mjs`, so a drift between
+      # the script and the committed PNGs would ship the wrong mark silently.
+      - name: Check the icon set is current
+        run: |
+          npm run icons
+          git diff --exit-code -- public/icons
+
+      - name: Stamp the build
+        run: npm run stamp
+
+      - name: Build
+        run: npx ng build --configuration production --base-href "$BASE_HREF"
+
+      # GitHub Pages serves 404.html for an unknown path; Angular's router
+      # then resolves it client-side. Without this, every deep link is a dead
+      # end for anyone who did not arrive at the root.
+      - name: SPA fallback and Jekyll opt-out
+        run: |
+          cp dist/REPLOG/browser/index.html dist/REPLOG/browser/404.html
+          touch dist/REPLOG/browser/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/REPLOG/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

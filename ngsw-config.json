@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "$comment": "The whole application, not just a shell. Every lazy route chunk is prefetched on install, because 'works offline' has to mean every screen and not only the ones visited while online: somebody who logs workouts at the gym may never have opened Progress on a connection.",
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": ["/index.html", "/manifest.webmanifest", "/favicon.ico", "/**/*.css", "/**/*.js"]
+      }
+    },
+    {
+      "$comment": "Icons and both font families. The Arabic faces are not optional: without them a user reading the app in Arabic offline falls back to a system font, which changes every line's metrics.",
+      "name": "branding",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": ["/**/*.woff2", "/icons/*.png"]
+      }
+    },
+    {
+      "$comment": "Optional illustration packs: fetched on first use, then kept current. These are the only assets a user might never need.",
+      "name": "illustrations",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": ["/exercise-art/**/*.*", "/data/**/*.*", "!/**/.*"]
+      }
+    }
+  ],
+  "$commentDataGroups": "Deliberately empty. Version 1 makes no network requests at all — the exercise catalog and the translations are build output, not an API — so there is no response caching to configure. Anything added here would be caching a server that does not exist.",
+  "dataGroups": [],
+  "$commentNavigationUrls": "Matched within the service worker's scope, which is the base href, so this stays correct when the app is served from a repository subpath. The exclusions keep anything with a file extension from being served index.html.",
+  "navigationUrls": ["/**", "!/**/*.*", "!/**/*__*", "!/**/*__*/**"]
+}

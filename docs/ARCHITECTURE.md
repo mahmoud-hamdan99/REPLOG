@@ -491,9 +491,11 @@ Route-level `data: { title, navTab, hideNav }` drives the shell. Preloading: `/t
 Angular's service worker (`@angular/pwa`) with a tuned `ngsw-config.json`:
 
 * **`prefetch` asset group** — app shell, JS/CSS, fonts, icons, locale JSON, exercise illustrations under a size cap. Offline on first load after install.
-* **`lazy` + `updateMode: prefetch`** for optional illustration packs.
+* **Route chunks are prefetched too, not lazy.** The acceptance criterion is that *every* route works offline, and a user who logs at the gym may never have opened Progress on a connection. Caching a chunk on first use would make the app offline-capable only for the screens they happened to visit first.
+* **`lazy` + `updateMode: prefetch`** for optional illustration packs — the only assets a user might genuinely never need.
 * **No `dataGroups`** — there is no network data in V1. Explicitly empty, with a comment, so nobody adds caching for an API that does not exist.
-* `navigationUrls` must respect the repository subpath (`/REPLOG/**`, excluding `/REPLOG/assets/**`).
+* `navigationUrls` stays `/**` with the extension exclusions. ngsw matches it **inside the worker's scope**, and the scope is the base href, so this is already subpath-correct without naming the repository — and stays correct if the repository is renamed. The exclusions are what keep a hashed `.js` from being served `index.html`.
+* The config is strict JSON: `//` is a build error. Explanations live in `$comment` keys, which the builder tolerates, so the warning about `dataGroups` sits where somebody would be tempted to add one.
 
 Update handling (spec §9 "handle application updates correctly"):
 
@@ -508,14 +510,20 @@ UnrecoverableStateError → full-reload prompt explaining that cached files are 
 
 Never auto-reload. Reloading mid-set would violate G2.
 
+"Is a session running" is read from `appMeta.activeWorkoutId` rather than from the tracker store: it is the documented single source of truth (§7.1), it does not couple the shell to a lazy feature, and it survives the tab eviction that would leave the store empty. A read that *fails* — safe mode, or the database blocked by another tab — holds the update, because the cost of waiting is nothing and the cost of guessing wrong is somebody's workout.
+
+**Build identity.** `scripts/stamp-build.mjs` writes `src/app/core/build-info.ts` in CI, immediately before the production build. The committed copy holds nulls; a local build is unstamped and About says so rather than printing a version that traces back to nothing. The same version is written into `appMeta.appVersion` at boot, so a backup file records the version that wrote it.
+
 ### 10.2 Manifest & iOS specifics
+
+**`start_url` and `scope` are `"./"`, not the subpath.** A webmanifest resolves relative URLs against its own location, so `"./"` is `/REPLOG/` when served from `/REPLOG/manifest.webmanifest` and `/` when served from the root — correct everywhere, with nothing to patch at build time and no way for the two to drift apart. Icon `src` values are relative for the same reason. This replaces the build-time manifest patching described in §10.3.
 
 ```json
 {
   "name": "REPLOG — Workout Tracker",
   "short_name": "REPLOG",
-  "start_url": "/REPLOG/",
-  "scope": "/REPLOG/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0B0C0E",
   "theme_color": "#0B0C0E",
@@ -542,10 +550,10 @@ Honest iOS statements for the About screen (spec §9 forbids claiming unsupporte
 | Deep links 404 on static hosting | Copy `index.html` → `404.html` in the deploy job. GitHub Pages serves it for unknown paths with a 404 status; Angular's router then resolves the URL client-side. |
 | Jekyll strips `_`-prefixed files | Add an empty `.nojekyll` to the artifact. |
 | Service worker scope | Scope is the base href; `start_url` and `scope` in the manifest must both include the subpath. |
-| Hard-coded absolute URLs in the manifest | Generate/patch the manifest at build time from the configured base href. |
+| Hard-coded absolute URLs in the manifest | Not applicable: the manifest is relative (§10.2), so there is nothing to patch. |
 | Router base | `provideRouter` + `APP_BASE_HREF` from `<base href>` injected by the CLI. |
 
-A single `BASE_HREF` value feeds the build flag, manifest, and SW config. It lives in one place (`scripts/set-base-href.mjs`, run in CI) so staging under a different repo name is a one-variable change.
+A single `BASE_HREF` value feeds the build flag, and nothing else needs it: the manifest resolves relative to itself and the service worker's `navigationUrls` resolve inside its scope. It lives in the deploy workflow's `env`, so staging under a different repository name is a one-variable change — and there is no second copy to forget. `scripts/set-base-href.mjs` is therefore not needed and was not written.
 
 ### 10.4 CI/CD
 

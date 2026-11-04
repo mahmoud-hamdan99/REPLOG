@@ -2,6 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { App } from './app';
 import { CLOCK, type Clock } from './data/clock';
+import { SwUpdate } from '@angular/service-worker';
+import { APP_META_STORE } from './data/app-meta';
+import { EMPTY } from 'rxjs';
 import { PREFS_STORE, type PrefsStore } from './data/prefs';
 import { DEFAULT_PREFS, normalizePrefs, type Prefs } from './domain/models/prefs';
 
@@ -38,6 +41,21 @@ describe('App shell', () => {
       imports: [App],
       providers: [
         provideRouter([]),
+        // The shell reads PwaService for the damaged-cache banner, which
+        // pulls in SwUpdate. Disabled here: these tests are about the shell,
+        // and a real SwUpdate would try to talk to a worker that is not there.
+        {
+          provide: SwUpdate,
+          useValue: {
+            isEnabled: false,
+            versionUpdates: EMPTY,
+            unrecoverable: EMPTY,
+          },
+        },
+        // PwaService asks appMeta whether a workout is running before it
+        // would ever offer an update. Nothing here triggers that, but the
+        // injector still has to be able to build the service.
+        { provide: APP_META_STORE, useValue: { get: async () => null } },
         { provide: PREFS_STORE, useValue: inMemoryPrefs(prefs) },
         { provide: CLOCK, useValue: fixedClock() },
       ],

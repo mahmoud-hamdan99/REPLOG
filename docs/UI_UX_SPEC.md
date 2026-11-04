@@ -643,6 +643,8 @@ Spec §9 forbids claiming unsupported iOS capabilities. The exact copy, surfaced
 | Topic | What the app says |
 |---|---|
 | Install | "Open REPLOG in Safari, tap Share, then Add to Home Screen." No fake install button on iOS; the `beforeinstallprompt` path is used only where the browser supports it. |
+
+Built in Phase 12 as a section on Settings → About: an Install button **only** where `beforeinstallprompt` actually fired, and the Share → Add to Home Screen sentence otherwise. The prompt is captured by the shell at startup because the event fires once and early; a listener added when the About screen opens would never hear it. There is no screenshot in the instructions yet.
 | Storage | "Your data is stored by Safari on this device. iOS may remove it if storage runs low, or if you clear website data. Export a backup regularly." |
 | Rest timer | "Timers keep perfect time while REPLOG is open. iOS cannot alert you once the app is in the background or the screen is locked." |
 | Notifications | Not offered. No permission prompt, no "coming soon" teaser. |
@@ -651,6 +653,10 @@ Spec §9 forbids claiming unsupported iOS capabilities. The exact copy, surfaced
 | Sync | "Version 1 keeps everything on this device. Nothing is uploaded." |
 | Photos | "Photos never leave your device. Location data is removed when a photo is added." |
 | Offline | "REPLOG works fully offline after its first load." (True — there is no runtime network dependency.) |
+
+**No offline indicator was built**, and that is the honest choice rather than an omission: nothing in the app fetches anything, so an indicator would have nothing to report and would imply network-dependent behaviour the app does not have. The guarantee is stated on About instead, and tested — see `e2e-pwa/offline.spec.ts`.
+
+**The first-run storage notice** is a dismissible card at the top of the dashboard, not a modal: nothing about it needs an answer before the app can be used, and a dialog on first launch teaches people to dismiss dialogs without reading them. Acknowledgement is recorded in `appMeta.storageWarningAcknowledgedAt`.
 
 ---
 

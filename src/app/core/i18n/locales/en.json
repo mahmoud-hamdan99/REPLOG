@@ -848,7 +848,6 @@
   "about.platform.notifications": "There are no notifications, and no permission is ever requested.",
   "about.platform.photos": "Photos never leave your device. Location data is removed when a photo is added.",
   "about.platform.health": "There is no HealthKit, Apple Watch or health-data integration.",
-  "about.platform.install": "To install: open REPLOG in Safari, tap Share, then Add to Home Screen.",
   "about.diagnostics.title": "Diagnostics",
   "about.diagnostics.note": "Kept in memory for this session only. Nothing is uploaded, and nothing is written to disk.",
   "about.diagnostics.empty": "Nothing has gone wrong this session.",
@@ -906,5 +905,21 @@
   "count.routines": {
     "one": "{count} routine",
     "other": "{count} routines"
-  }
+  },
+  "update.ready": "A new version is ready.",
+  "update.reload": "Reload",
+  "update.title": "Update available",
+  "update.body": "A new version has been downloaded and will be used the next time you reload. Your training history is not affected either way.",
+  "update.held": "Held until your session is finished.",
+  "update.broken.title": "Some app files are damaged",
+  "update.broken.body": "Your training history is untouched: it is stored separately from the app and is not part of what needs repairing. The browser’s copy of REPLOG itself is incomplete, so it has to be downloaded again.",
+  "update.broken.action": "Download the app again",
+  "install.title": "Add REPLOG to your home screen",
+  "install.ios": "In Safari, tap the Share button, then Add to Home Screen. REPLOG then opens full-screen, like an app.",
+  "install.action": "Install",
+  "firstRun.title": "Where your training is kept",
+  "firstRun.body": "Everything you log stays in this browser, on this device. Nothing is uploaded, and nobody else can see it — including us. The trade is that clearing your browser’s website data, or offloading the app, deletes it.",
+  "firstRun.action": "Export a backup now",
+  "firstRun.dismiss": "Got it",
+  "about.build": "Build"
 }

@@ -1,6 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { BUILD_INFO } from '../../core/build-info';
+import { DisplayFormat } from '../../core/format/display-format.service';
 import { DiagnosticsService } from '../../core/errors/diagnostics.service';
 import { I18n } from '../../core/i18n/i18n.service';
+import { PwaService } from '../../core/pwa/pwa.service';
 import { AppHeader } from '../../core/nav/app-header';
 import { SettingsStore } from '../../core/settings/settings.store';
 import { ToastService } from '../../core/toast/toast.service';
@@ -20,7 +23,6 @@ const PLATFORM_NOTES: readonly string[] = [
   'about.platform.notifications',
   'about.platform.photos',
   'about.platform.health',
-  'about.platform.install',
 ];
 
 /**
@@ -48,6 +50,7 @@ const PLATFORM_NOTES: readonly string[] = [
       <section class="group">
         <rl-card [inset]="false">
           <rl-list-row labelKey="about.version" [valueText]="version()" [interactive]="false" />
+          <rl-list-row labelKey="about.build" [valueText]="build()" [interactive]="false" />
           <rl-list-row
             labelKey="about.schema"
             [valueText]="schemaVersion()"
@@ -99,6 +102,23 @@ const PLATFORM_NOTES: readonly string[] = [
       </section>
 
       <section class="group">
+        <rl-section-header titleKey="install.title" />
+        <rl-card>
+          <!-- iOS has no install prompt API, so there is no button to offer.
+               Where the browser does support one, it is shown; where it does
+               not, the instructions are the honest alternative to a button
+               that would do nothing. -->
+          @if (canPrompt()) {
+            <rl-button variant="primary" [full]="true" (click)="install()">
+              {{ i18n.t('install.action') }}
+            </rl-button>
+          } @else {
+            <p class="t-body about__note">{{ i18n.t('install.ios') }}</p>
+          }
+        </rl-card>
+      </section>
+
+      <section class="group">
         <rl-section-header titleKey="about.credits.title" />
         <rl-card>
           <p class="t-body about__note">{{ i18n.t('about.credits.body') }}</p>
@@ -110,17 +130,45 @@ const PLATFORM_NOTES: readonly string[] = [
 export class AboutPage {
   protected readonly i18n = inject(I18n);
   protected readonly diagnostics = inject(DiagnosticsService);
+  private readonly pwa = inject(PwaService);
+  private readonly fmt = inject(DisplayFormat);
   private readonly meta = inject(APP_META_STORE);
   private readonly settings = inject(SettingsStore);
   private readonly toasts = inject(ToastService);
 
   protected readonly platformNotes = PLATFORM_NOTES;
 
+  /**
+   * The deferred install prompt, where the browser offers one.
+   *
+   * Captured by the shell before this screen exists, because the event fires
+   * once and early. Null on iOS, which has no such API at all — hence the
+   * instructions rather than a button that could not work.
+   */
+  protected readonly canPrompt = computed(() => this.pwa.installPrompt() !== null);
+
   protected readonly version = signal('…');
   protected readonly deviceId = signal('…');
 
   constructor() {
     void this.load();
+  }
+
+  /**
+   * The commit and date this build came from, or a plain statement that it
+   * carries neither.
+   *
+   * `scripts/stamp-build.mjs` fills these in CI. A local build has no stamp,
+   * and the screen says so rather than printing a version number that traces
+   * back to nothing — this is the one screen whose entire purpose is to be
+   * checkable.
+   */
+  protected build(): string {
+    if (BUILD_INFO.commit === null) return this.i18n.t('about.buildUnknown');
+    return this.i18n.join([
+      BUILD_INFO.commit,
+      BUILD_INFO.builtAt === null ? '' : this.fmt.shortDate(BUILD_INFO.builtAt),
+    ]);
   }
 
   protected schemaVersion(): string {
@@ -153,6 +201,10 @@ export class AboutPage {
     // The first segment only: enough to tell two devices apart in a backup
     // file, short enough to read out, and not a fingerprint on display.
     this.deviceId.set(device.split('-')[0] ?? device);
+  }
+
+  protected async install(): Promise<void> {
+    await this.pwa.promptInstall();
   }
 
   protected async copy(): Promise<void> {

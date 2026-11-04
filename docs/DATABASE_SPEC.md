@@ -727,7 +727,7 @@ Nothing purges tombstones on a schedule. The recovery screen lists what is still
 
 Browser storage can be evicted. The app must say so (spec §8) rather than imply permanence:
 
-* First run shows a one-time, dismissible notice: local-only storage, eviction is possible, export regularly. Acknowledgement is recorded in `appMeta`.
+* First run shows a one-time, dismissible notice: local-only storage, eviction is possible, export regularly. Acknowledgement is recorded in `appMeta`. Built in Phase 12 as a card at the top of the dashboard rather than a dialog, and hidden optimistically before the acknowledgement is written — a write that fails in safe mode must not leave a notice that will not go away.
 * `navigator.storage.persist()` is requested once. The result is displayed honestly in Settings → Data: *Protected* / *Best-effort (this browser does not grant persistent storage)*. On iOS it is best-effort.
 * `navigator.storage.estimate()` drives a usage meter with a photo/record breakdown.
 * A backup reminder appears when `now - lastExportAt > 14 days` **and** there are new completed workouts since then — a non-blocking card on the dashboard, snoozable, never a modal.

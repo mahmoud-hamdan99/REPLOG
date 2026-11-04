@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { DisplayFormat } from '../../core/format/display-format.service';
 import { I18n } from '../../core/i18n/i18n.service';
 import { AppHeader } from '../../core/nav/app-header';
+import { FirstRunNotice } from '../../core/pwa/first-run-notice';
 import { netChange, pointCount, type Point } from '../../domain/analytics/series';
 import { Badge } from '../../shared/ui/badge';
 import { Button } from '../../shared/ui/button';
@@ -35,6 +36,7 @@ import { AnalyticsStore } from '../analytics/analytics.store';
   imports: [
     AppHeader,
     Badge,
+    FirstRunNotice,
     Button,
     Card,
     EmptyState,
@@ -47,6 +49,11 @@ import { AnalyticsStore } from '../analytics/analytics.store';
     <rl-app-header titleKey="page.dashboard.title" />
 
     <div class="page">
+      <!-- Above everything, including the empty state: the first thing a new
+           user should learn about this app is where their data lives and what
+           can remove it. It appears once and is acknowledged once. -->
+      <rl-first-run-notice />
+
       @if (loading()) {
         <p class="t-body">{{ i18n.t('state.loading.label') }}</p>
       } @else if (isEmpty()) {

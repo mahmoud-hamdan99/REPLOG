@@ -4,6 +4,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 
 import { I18n } from './core/i18n/i18n.service';
+import { PwaService } from './core/pwa/pwa.service';
 import { TabBar } from './core/nav/tab-bar';
 import { ThemeService } from './core/theme/theme.service';
 import { ToastHost } from './shared/ui/toast-host';
@@ -30,6 +31,22 @@ import { ToastHost } from './shared/ui/toast-host';
       {{ i18n.t('a11y.skipToContent') }}
     </button>
 
+    <!-- The one thing the shell interrupts for. An unrecoverable service
+         worker means the cached app files are damaged, which looks to a user
+         exactly like "the app ate my training" — so the first sentence says
+         the history is untouched, before explaining anything else. It is a
+         banner rather than a dialog because the app still works; only its
+         ability to update itself does not. -->
+    @if (pwa.isBroken()) {
+      <div class="broken" role="alert">
+        <p class="t-h3 broken__title">{{ i18n.t('update.broken.title') }}</p>
+        <p class="t-body broken__body">{{ i18n.t('update.broken.body') }}</p>
+        <button type="button" class="broken__action t-label" (click)="pwa.reloadFromNetwork()">
+          {{ i18n.t('update.broken.action') }}
+        </button>
+      </div>
+    }
+
     <main
       #mainContent
       id="main-content"
@@ -49,6 +66,7 @@ import { ToastHost } from './shared/ui/toast-host';
 })
 export class App {
   protected readonly i18n = inject(I18n);
+  protected readonly pwa = inject(PwaService);
   private readonly router = inject(Router);
 
   // Started for their document-reflecting effects.
