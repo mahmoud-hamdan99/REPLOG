@@ -1,0 +1,48 @@
+.page {
+  padding: var(--sp-4);
+  padding-block-end: calc(var(--nav-height) + var(--sp-6));
+}
+
+.hint {
+  margin-block: 0 var(--sp-4);
+  color: var(--text-3);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-block-end: 1px solid var(--border);
+}
+
+.item:last-child {
+  border-block-end: 0;
+}
+
+.item__text {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.item__title {
+  margin: 0;
+  color: var(--text-1);
+  overflow-wrap: anywhere;
+}
+
+.item__detail {
+  margin-block: var(--sp-1) 0;
+  color: var(--text-2);
+}
+
+.item__left {
+  margin-block: var(--sp-1) 0;
+  color: var(--text-3);
+}
+
+/* Colour is the emphasis, never the message: the row still says how many
+   days are left in words, so this reads the same without it. */
+.item__left--urgent {
+  color: var(--warn-ink);
+}

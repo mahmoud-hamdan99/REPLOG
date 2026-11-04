@@ -681,7 +681,9 @@ Notes:
 * **Photos are optional and off by default** in the quick export, because base64 inflates the file ~33 % and a photo-heavy backup can reach 50–100 MB. The UI shows the projected size for both choices before exporting.
 * `integrity` is computed over a canonical (key-sorted, whitespace-free) serialisation of `data` + `photoBlobs`. On import, a mismatch is a **warning** with a preview, not a hard block — a hand-edited backup is still better than no backup.
 * Large exports stream through a `Blob` built in chunks to avoid one giant string; the writer yields to the event loop so the UI keeps a progress bar.
-* Export is also offered **per store** ("export measurements as CSV") for users who want their numbers in a spreadsheet. CSV is export-only, never an import path.
+* Export is also offered **per store** ("export measurements as CSV") for users who want their numbers in a spreadsheet. CSV is export-only, never an import path — it has nowhere to put a photo, a nested snapshot or the envelope, so a file written that way could not be read back without losing something.
+
+  The CSV writer has three rules that are not obvious and each of which produces a file that opens, looks plausible and is wrong if skipped. It emits a **byte-order mark**, or Excel reads the file as the system codepage and every Arabic note arrives as mojibake. It takes the **union of every row's keys** as the header, because records are sparse — an absent optional measurement is absent, not null — so taking the first row's keys would silently drop whole columns. And it **defuses a leading `=`, `+`, `-` or `@`** with a tab, because a spreadsheet runs those: a note somebody typed as "-10kg from last week" otherwise renders as `#NAME?`, and `=HYPERLINK(…)` in a shared file is an attack on whoever opens it.
 
 ### 9.2 Import
 
@@ -695,6 +697,10 @@ Three-stage, with the user in control at every step:
 
 Forward compatibility: a file with a *lower* `formatVersion` is upgraded by the same migration chain as the database. A *higher* version is refused with "this backup was made by a newer version of REPLOG".
 
+**The import writes the envelope the file carries.** It goes through `Repository.restoreMany`, not `putMany`, because the ordinary write path stamps `createdAt`, `updatedAt`, `rev` and `origin` — correct for every other caller and wrong for exactly this one. `updatedAt` is the field step 2's merge compares, so stamping it to the moment of the import makes every record in the file newer than every local record; restoring a six-month-old backup would then win the *next* merge against everything logged since. `origin` says which device wrote a record and `createdAt` when it was first made, so stamped, a history restored from an old phone claims to have been written here today, and a measurement taken in October is dated to the day it was restored. None of this shows on the app's own screens, which read the domain fields — it is loss that reports success.
+
+Round-trip tests must therefore move the clock between export and import. With a frozen clock every envelope field coincides by accident and the test passes while the import is destroying all four.
+
 **Cascade ordering.** A workout deletion tombstones the workout first and its children after, so every child carries a `deletedAt` at or after its parent's. Restoring reverses exactly that set: a child tombstoned *earlier* was deleted on its own and stays deleted. This is why the order is load-bearing rather than cosmetic.
 
 ### 9.3 Destructive-action policy
@@ -707,10 +713,15 @@ Forward compatibility: a file with a *lower* `formatVersion` is upgraded by the 
 | Delete a photo | Confirm sheet; **blobs are hard-deleted** and this is stated |
 | Delete a plan/routine | Confirm; soft delete; history unaffected (explicitly stated in the dialog) |
 | Delete a measurement | Inline undo toast |
-| Import in replace mode | Type `REPLACE` + offered pre-flight export |
+| Import in replace mode | Type `REPLACE` + an automatic pre-flight export |
+| Permanently delete past the recovery window | Offered on Settings → Data → Recently deleted, never run automatically; confirm names the count |
 | Reset application data | Type `DELETE` + mandatory export offer + a second confirmation listing exactly what is destroyed |
 
 No destructive action is ever a single unconfirmed tap, and no confirmation copy is vague ("Are you sure?"). Each dialog states the object, the scope, and the reversibility.
+
+The typed phrase is **translated**, not a fixed Latin word. A gate that asks for `DELETE` on an Arabic keyboard is not deliberate effort, it is a locked door; the Arabic build asks for `احذف`. What the user types is trimmed before comparison — an on-screen keyboard's trailing space is not a different answer — and otherwise matched exactly.
+
+Nothing purges tombstones on a schedule. The recovery screen lists what is still inside the window and offers to permanently delete what is past it; running that on page load would make it the one destructive action in the app that nobody chose. A background purge is not built.
 
 ### 9.4 Durability reality check
 

@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { I18n } from '../../core/i18n/i18n.service';
 import { AppHeader } from '../../core/nav/app-header';
 import { SettingsStore } from '../../core/settings/settings.store';
 import { ToastService } from '../../core/toast/toast.service';
@@ -185,11 +186,12 @@ import type { Language, ThemePreference } from '../../domain/models/prefs';
       bodyKey="state.error.body"
       confirmKey="common.delete"
       [destructive]="true"
-      typedConfirmPhrase="DELETE"
+      [typedConfirmPhrase]="i18n.t('dialog.phrase.delete')"
     />
   `,
 })
 export class UiGalleryPage {
+  protected readonly i18n = inject(I18n);
   protected readonly settings = inject(SettingsStore);
   protected readonly toasts = inject(ToastService);
 

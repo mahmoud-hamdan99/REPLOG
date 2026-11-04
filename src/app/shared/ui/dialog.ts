@@ -103,9 +103,15 @@ export class Dialog {
     return this.bodyText() ?? (key === undefined ? null : this.i18n.t(key));
   });
 
+  /**
+   * Trimmed, not loosened. The phrase still has to match exactly — that is
+   * the point of the gate — but a trailing space from an on-screen keyboard
+   * is not a different answer, and reading as a refusal would make the
+   * dialog look broken at the moment it matters most.
+   */
   protected readonly canConfirm = computed(() => {
     const phrase = this.typedConfirmPhrase();
-    return phrase === undefined || this.typed() === phrase;
+    return phrase === undefined || this.typed().trim() === phrase.trim();
   });
 
   constructor() {

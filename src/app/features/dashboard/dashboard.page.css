@@ -34,3 +34,14 @@
   display: inline-block;
   color: var(--accent-ink);
 }
+
+.reminder__body {
+  margin-block: 0 var(--sp-3);
+  color: var(--text-2);
+}
+
+.reminder__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}

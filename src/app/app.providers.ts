@@ -6,6 +6,7 @@ import { ID_FACTORY } from './data/ids';
 import { IMAGE_CODEC } from './data/image-codec';
 import { OBJECT_URLS } from './data/object-urls';
 import { PHOTO_PROCESSOR } from './data/photo-processor';
+import { FILE_IO, HASHER, STORAGE_PROBE } from './data/platform';
 import { PHOTO_BLOB_STORE } from './data/photo-blobs';
 import { PR_DETECTOR } from './data/pr-detector';
 import { PREFS_STORE } from './data/prefs';
@@ -27,6 +28,11 @@ import { IdbUnitOfWork, StandaloneRepoContext } from './infrastructure/idb/idb-u
 import { PrEngine } from './features/records/pr-engine';
 import { LocalStoragePrefs } from './infrastructure/prefs/local-storage-prefs';
 import { BrowserObjectUrls } from './infrastructure/platform/browser-object-urls';
+import {
+  BrowserFileIo,
+  BrowserStorageProbe,
+  SubtleHasher,
+} from './infrastructure/platform/browser-platform';
 import { CanvasImageCodec } from './infrastructure/photos/canvas-image-codec';
 import { CanvasPhotoProcessor } from './infrastructure/photos/photo-processor';
 import { SessionTabIdentity } from './infrastructure/platform/session-tab-identity';
@@ -59,6 +65,11 @@ export function provideDataLayer(options: { clock?: Provider } = {}): Provider[]
     { provide: IMAGE_CODEC, useExisting: CanvasImageCodec },
     { provide: PHOTO_PROCESSOR, useExisting: CanvasPhotoProcessor },
     { provide: OBJECT_URLS, useExisting: BrowserObjectUrls },
+    // Backup and storage. Each is a seam because each is a browser API a test
+    // cannot have: a download folder, a secure context, a quota.
+    { provide: FILE_IO, useExisting: BrowserFileIo },
+    { provide: HASHER, useExisting: SubtleHasher },
+    { provide: STORAGE_PROBE, useExisting: BrowserStorageProbe },
     // The seam Phase 5 declared, filled in by Phase 7. Bound here because
     // this is the composition root; nothing in data/ or features/ reaches for
     // the implementation directly.

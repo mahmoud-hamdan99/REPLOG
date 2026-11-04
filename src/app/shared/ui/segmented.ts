@@ -19,7 +19,15 @@ export interface SegmentedOption<T extends string> {
   selector: 'rl-segmented',
   styleUrl: './segmented.css',
   template: `
-    <div class="seg" role="radiogroup" [attr.aria-label]="i18n.t(labelKey())">
+    @if (showLabel()) {
+      <span class="t-label seg__label" [id]="labelId">{{ i18n.t(labelKey()) }}</span>
+    }
+    <div
+      class="seg"
+      role="radiogroup"
+      [attr.aria-label]="showLabel() ? null : i18n.t(labelKey())"
+      [attr.aria-labelledby]="showLabel() ? labelId : null"
+    >
       @for (option of options(); track option.value) {
         <label class="seg__item" [class.seg__item--active]="option.value === value()">
           <input
@@ -43,4 +51,24 @@ export class Segmented<T extends string> {
   readonly value = model.required<T>();
   readonly name = input.required<string>();
   readonly labelKey = input.required<string>();
+
+  /**
+   * Renders the label above the control instead of only naming the group for
+   * assistive technology.
+   *
+   * Off by default, for the places where the surrounding context already says
+   * what the control is — a section header directly above it, or the one
+   * picker on a screen. It has to be switched on wherever two of these sit in
+   * the same card, which was how the units screen shipped with a "Weight
+   * unit" header above a weight control *and* an unlabelled length control:
+   * a screen reader was told which was which and a sighted user was not.
+   */
+  readonly showLabel = input(false);
+
+  protected readonly labelId = `seg-label-${nextId()}`;
+}
+
+let sequence = 0;
+function nextId(): number {
+  return ++sequence;
 }

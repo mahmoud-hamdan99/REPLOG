@@ -157,11 +157,38 @@ export const routes: Routes = [
     loadComponent: () => import('./features/settings/settings.page').then((m) => m.SettingsPage),
     data: { titleKey: 'page.settings.title', navTab: 'more' },
   },
-  ...(['profile', 'units', 'workout', 'data', 'about'] as const).map((sub) => ({
-    path: `settings/${sub}`,
-    loadComponent: placeholder,
-    data: { titleKey: 'page.settings.title', navTab: 'more', showBack: true },
-  })),
+  {
+    path: 'settings/data',
+    loadComponent: () => import('./features/backup/data.page').then((m) => m.DataPage),
+    data: { titleKey: 'page.data.title', navTab: 'more', showBack: true },
+  },
+  {
+    path: 'settings/deleted',
+    loadComponent: () =>
+      import('./features/backup/recently-deleted.page').then((m) => m.RecentlyDeletedPage),
+    data: { titleKey: 'deleted.title', navTab: 'more', showBack: true },
+  },
+  {
+    path: 'settings/profile',
+    loadComponent: () => import('./features/settings/profile.page').then((m) => m.ProfilePage),
+    data: { titleKey: 'settings.profile.title', navTab: 'more', showBack: true },
+  },
+  {
+    path: 'settings/units',
+    loadComponent: () => import('./features/settings/units.page').then((m) => m.UnitsPage),
+    data: { titleKey: 'settings.units.title', navTab: 'more', showBack: true },
+  },
+  {
+    path: 'settings/workout',
+    loadComponent: () =>
+      import('./features/settings/workout.page').then((m) => m.WorkoutSettingsPage),
+    data: { titleKey: 'settings.workout.title', navTab: 'more', showBack: true },
+  },
+  {
+    path: 'settings/about',
+    loadComponent: () => import('./features/settings/about.page').then((m) => m.AboutPage),
+    data: { titleKey: 'page.about.title', navTab: 'more', showBack: true },
+  },
 
   // Development-only component gallery. Excluded from production builds so it
   // cannot be reached in the deployed app.

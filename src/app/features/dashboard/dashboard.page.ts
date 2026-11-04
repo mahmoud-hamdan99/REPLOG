@@ -5,11 +5,13 @@ import { I18n } from '../../core/i18n/i18n.service';
 import { AppHeader } from '../../core/nav/app-header';
 import { netChange, pointCount, type Point } from '../../domain/analytics/series';
 import { Badge } from '../../shared/ui/badge';
+import { Button } from '../../shared/ui/button';
 import { Card } from '../../shared/ui/card';
 import { EmptyState } from '../../shared/ui/empty-state';
 import { SectionHeader } from '../../shared/ui/section-header';
 import { Sparkline } from '../../shared/ui/sparkline';
 import { StatTile } from '../../shared/ui/stat-tile';
+import { BackupReminderStore } from '../backup/reminder.store';
 import { PlannerStore } from '../planner/planner.store';
 import { RecordsStore } from '../records/records.store';
 import { AnalyticsStore } from '../analytics/analytics.store';
@@ -30,7 +32,17 @@ import { AnalyticsStore } from '../analytics/analytics.store';
 @Component({
   selector: 'rl-dashboard-page',
   styleUrl: './dashboard.page.css',
-  imports: [AppHeader, Badge, Card, EmptyState, RouterLink, SectionHeader, Sparkline, StatTile],
+  imports: [
+    AppHeader,
+    Badge,
+    Button,
+    Card,
+    EmptyState,
+    RouterLink,
+    SectionHeader,
+    Sparkline,
+    StatTile,
+  ],
   template: `
     <rl-app-header titleKey="page.dashboard.title" />
 
@@ -45,6 +57,31 @@ import { AnalyticsStore } from '../analytics/analytics.store';
           (actioned)="goTrain()"
         />
       } @else {
+        <!-- Non-blocking and snoozable, per DATABASE_SPEC section 9.4. It sits
+             above the tiles because a reminder below the fold is not one, and
+             it is a card rather than a dialog because nothing here is urgent
+             enough to stand between someone and their training. -->
+        @if (reminders.reminder(); as due) {
+          <rl-card>
+            <rl-section-header titleKey="reminder.title" />
+            <p class="t-body reminder__body">
+              {{
+                due.reason === 'never-exported'
+                  ? i18n.t('reminder.never')
+                  : i18n.t('reminder.stale', { count: due.daysSinceExport })
+              }}
+            </p>
+            <div class="reminder__actions">
+              <rl-button variant="primary" routerLink="/settings/data">
+                {{ i18n.t('reminder.action') }}
+              </rl-button>
+              <rl-button variant="ghost" (click)="snoozeReminder()">
+                {{ i18n.t('reminder.snooze') }}
+              </rl-button>
+            </div>
+          </rl-card>
+        }
+
         <div class="tiles">
           <rl-stat-tile
             labelKey="dashboard.thisWeek"
@@ -99,6 +136,7 @@ export class DashboardPage {
   private readonly analytics = inject(AnalyticsStore);
   private readonly recordsStore = inject(RecordsStore);
   private readonly planner = inject(PlannerStore);
+  protected readonly reminders = inject(BackupReminderStore);
 
   protected readonly loading = signal(true);
   private readonly version = signal(0);
@@ -111,9 +149,18 @@ export class DashboardPage {
     // The analytics store already reads everything this screen needs over the
     // widest open window; a second set of queries here would read the same
     // rows again for the same answers.
-    await Promise.all([this.analytics.load(), this.recordsStore.load(), this.planner.load()]);
+    await Promise.all([
+      this.analytics.load(),
+      this.recordsStore.load(),
+      this.planner.load(),
+      this.reminders.check(),
+    ]);
     this.version.update((value) => value + 1);
     this.loading.set(false);
+  }
+
+  protected async snoozeReminder(): Promise<void> {
+    await this.reminders.snooze();
   }
 
   /** Completed sessions in the current week — Q2, counted, not estimated. */

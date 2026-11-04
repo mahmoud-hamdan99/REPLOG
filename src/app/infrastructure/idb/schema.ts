@@ -1,12 +1,16 @@
+import { EXPECTED_SCHEMA_VERSION } from '../../data/schema-version';
 import type { StoreName } from '../../data/stores';
 
 export const DB_NAME = 'replog';
 
 /**
- * Bump this for any store or index change, and add a matching migration.
- * Forward-only: see migrations/index.ts.
+ * The database version, which is the expected schema version.
+ *
+ * Re-exported from `data/` rather than declared here: the integrity check is
+ * a feature and may not import from `infrastructure/`, so the number lives in
+ * the layer both are allowed to see.
  */
-export const DB_VERSION = 1;
+export const DB_VERSION = EXPECTED_SCHEMA_VERSION;
 
 export interface IndexDef {
   name: string;

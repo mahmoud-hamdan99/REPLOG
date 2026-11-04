@@ -49,3 +49,9 @@
   opacity: 0;
   cursor: pointer;
 }
+
+.seg__label {
+  display: block;
+  margin-block-end: var(--sp-2);
+  color: var(--text-2);
+}

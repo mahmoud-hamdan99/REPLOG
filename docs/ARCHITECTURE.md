@@ -218,6 +218,8 @@ export interface Repository<T extends Entity> {
   /** Insert or full replace. Stamps updatedAt/rev/origin. */
   put(value: Draft<T>): Promise<T>;
   putMany(values: readonly Draft<T>[]): Promise<T[]>;
+  /** Import only: writes records verbatim, envelope included. Never stamps. */
+  restoreMany(records: readonly T[]): Promise<void>;
   /** Shallow field patch; throws if the record is missing. */
   patch(id: string, changes: Partial<Draft<T>>): Promise<T>;
   /** Soft delete by default; hard delete only for data reset / import replace. */
@@ -227,6 +229,8 @@ export interface Repository<T extends Entity> {
 ```
 
 `Draft<T> = Omit<T, 'createdAt' | 'updatedAt' | 'rev' | 'origin' | 'id' | 'deletedAt'> & { id?: string; deletedAt?: string | null }` — callers never hand-write envelope fields, and `deletedAt` is omitted too so an ordinary insert does not have to state that it is not deleted.
+
+`restoreMany` is the one write that does not stamp, and it exists for import alone. Every other write is someone changing something *now*; an import is restoring records that already have a history, and that history is the envelope. `updatedAt` is what decides which copy wins the next merge, so stamping it makes every record in a restored backup outrank the local copy — restoring last winter's file would then overwrite everything logged since, on the *next* merge, silently. `origin` is which device wrote the record and `createdAt` is when it was first made; stamped, a history restored from an old phone claims to have been written here today. None of this is visible on the app's own screens, which read the domain fields, so it is the kind of loss that reports success.
 
 One `InjectionToken<Repository<X>>` per aggregate lives in `data/tokens.ts`. Stores inject tokens, so tests provide in-memory fakes with no IndexedDB and no fake-indexeddb shim.
 
@@ -439,6 +443,11 @@ Formatting and unit conversion live in `core/format` (`DisplayFormat`), not in a
 
 `RecordsStore` only reads. Records are written by `PrEngine` inside whichever transaction changed the history — the finish transaction, a correction, a deletion — because a record and the sets it is derived from have to move together or not at all.
 | `BackupStore` | Export/import progress, validation report | Route |
+| `IntegrityStore` | Integrity findings, per-item repairs, storage estimate | Route |
+| `RecentlyDeletedStore` | The 30-day recovery list and the purge past it | Route |
+| `BackupReminderStore` | Whether the dashboard's export reminder is due | App |
+
+`RecentlyDeletedStore` lists but does not restore: each restore is delegated to the store that owns the rules for that kind. Restoring is not "clear the tombstone" — a workout has to bring back exactly the children its own deletion took and recompute its totals and personal records, and a plan the routines its cascade took. A second implementation on the recovery screen would be a second chance to get that wrong.
 
 `PhotosStore` must `URL.revokeObjectURL` on every replaced or discarded blob URL — tracked in a `Map<id, string>` released in `ngOnDestroy`/`DestroyRef`. Leaking object URLs pins blobs in memory and is a known iOS crash vector on photo-heavy galleries.
 
@@ -464,7 +473,9 @@ Hash-free path routing with a GitHub Pages `404.html` fallback (§10.3).
 | `/progress` | Analytics hub — tabs: Strength · Volume · Body · Photos · Records | lazy |
 | `/progress/exercise/:exerciseId` | Per-exercise progression — the sets list ships with history in Phase 6, the chart in Phase 10 | lazy |
 | `/body` | Measurements list + entry | lazy |
-| `/settings` + `/settings/{profile,appearance,units,workout,data,about}` | Settings | lazy |
+| `/settings` | Settings hub — appearance, language and photo privacy inline; the rest are rows | lazy |
+| `/settings/{profile,units,workout,data,about}` | Settings sub-screens | lazy |
+| `/settings/deleted` | Recently deleted — 30-day recovery across workouts, measurements, plans, routines | lazy |
 | `**` | Not found page | A 404 screen rather than a silent redirect: a broken link should be visible, not swallowed |
 
 Bottom navigation exposes five destinations (Home · Plans · **Train** · Progress · More); the full map above is reachable from them. Tab state is preserved per destination; the tracker is modal-feeling and deliberately sits outside tab navigation.

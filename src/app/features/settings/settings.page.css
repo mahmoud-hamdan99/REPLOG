@@ -33,3 +33,95 @@
   margin-block-start: var(--sp-1);
   color: var(--text-3);
 }
+
+.group__link {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--target-min);
+  color: var(--accent-ink);
+  text-decoration: none;
+}
+
+.group__note {
+  margin-block: var(--sp-2) var(--sp-4);
+  padding-inline: var(--sp-1);
+  color: var(--text-3);
+}
+
+/* A labelled text or date field inside a settings card. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.field__input {
+  min-block-size: var(--target-min);
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-1);
+
+  /* 16px is the floor: anything smaller makes iOS Safari zoom the page on
+     focus, and the zoom does not come back on blur. */
+  font-size: var(--t-body);
+}
+
+.field__input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Default rest: a range plus the value it currently reads. */
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.slider__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.slider__value {
+  color: var(--text-1);
+  font-variant-numeric: tabular-nums;
+}
+
+.slider__input {
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  accent-color: var(--accent);
+}
+
+.about__note {
+  margin-block: 0 var(--sp-3);
+  color: var(--text-2);
+}
+
+.about__note:last-child {
+  margin-block-end: 0;
+}
+
+.about__log {
+  max-block-size: 40vh;
+  margin-block: var(--sp-3);
+  padding: var(--sp-3);
+  overflow: auto;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-family: ui-monospace, monospace;
+  font-size: var(--t-caption);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.about__actions {
+  display: flex;
+  gap: var(--sp-2);
+}

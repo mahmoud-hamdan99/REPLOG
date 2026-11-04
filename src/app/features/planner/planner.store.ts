@@ -229,6 +229,46 @@ export class PlannerStore {
     await this.load({ force: true });
   }
 
+  /**
+   * Brings a deleted plan back, with the routines that went down with it.
+   *
+   * The cascade rule from DATABASE_SPEC section 9.2: a routine tombstoned at
+   * or after the plan went with the plan and comes back; one tombstoned
+   * *earlier* was deleted on its own, on purpose, and stays deleted. Without
+   * that comparison, restoring a plan would quietly resurrect every routine
+   * the user had ever removed from it.
+   */
+  async restorePlan(id: string): Promise<void> {
+    await this.uow.run(['plans', 'routines'], 'readwrite', async (tx) => {
+      const plans = tx.repo('plans');
+      const plan = await plans.get(id, { includeDeleted: true });
+      if (!plan || plan.deletedAt === null) return;
+
+      const cascadedAt = plan.deletedAt;
+      const routines = await tx
+        .repo('routines')
+        .list({ index: 'by_planId', equals: id, includeDeleted: true });
+
+      await plans.put({ ...plan, deletedAt: null });
+      for (const routine of routines) {
+        if (routine.deletedAt !== null && routine.deletedAt >= cascadedAt) {
+          await tx.repo('routines').put({ ...routine, deletedAt: null });
+        }
+      }
+    });
+
+    await this.load({ force: true });
+  }
+
+  /** A routine on its own. Its plan has to still be there to restore into. */
+  async restoreRoutine(id: string): Promise<void> {
+    const tombstoned = await this.routinesRepo.get(id, { includeDeleted: true });
+    if (!tombstoned || tombstoned.deletedAt === null) return;
+
+    await this.routinesRepo.put({ ...tombstoned, deletedAt: null });
+    await this.load({ force: true });
+  }
+
   async movePlan(fromIndex: number, toIndex: number): Promise<void> {
     const ordered = this.livePlans();
     const next = indexForMove(ordered, fromIndex, toIndex);

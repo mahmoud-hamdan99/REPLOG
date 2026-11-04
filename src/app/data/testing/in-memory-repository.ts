@@ -75,6 +75,30 @@ export class InMemoryRepository<T extends Entity> implements Repository<T> {
     return Promise.all(values.map((value) => this.put(value)));
   }
 
+  /**
+   * Writes records exactly as given, envelope and all. See the contract in
+   * data/repository.ts for why this is the one write that does not stamp.
+   *
+   * Missing fields are filled rather than written as undefined: these rows
+   * come out of a file a person may have hand-edited, and updatedAt is
+   * indexed, so an undefined key would drop the record out of every range
+   * query over it.
+   */
+  async restoreMany(records: readonly T[]): Promise<void> {
+    for (const record of records) {
+      const claimed = record as Partial<Entity> & { id: string };
+      const now = this.nowIso();
+      this.records.set(record.id, {
+        ...record,
+        createdAt: claimed.createdAt ?? now,
+        updatedAt: claimed.updatedAt ?? now,
+        deletedAt: claimed.deletedAt ?? null,
+        rev: claimed.rev ?? 1,
+        origin: claimed.origin ?? this.origin(),
+      });
+    }
+  }
+
   async patch(id: string, changes: Patch<T>): Promise<T> {
     const existing = this.records.get(id);
     if (!existing) {

@@ -50,6 +50,28 @@ export interface Repository<T extends Entity> {
   put(value: Draft<T>): Promise<T>;
   putMany(values: readonly Draft<T>[]): Promise<T[]>;
 
+  /**
+   * Writes records exactly as given, envelope and all.
+   *
+   * The one write path that does not stamp, and it exists for import alone.
+   * Every other write is someone changing something *now*, so stamping is
+   * right; an import is restoring records that already have a history, and
+   * their envelope is the history:
+   *
+   *   - `updatedAt` is the fact that decides which copy wins the next merge.
+   *     Stamped to now, every imported record outranks every local one, so
+   *     restoring a six-month-old backup would quietly overwrite newer edits
+   *     on the next merge.
+   *   - `origin` is which device wrote the record. Stamped, a history
+   *     restored from an old phone claims to have been written here.
+   *   - `createdAt` is when the record was first made. Stamped, a
+   *     measurement taken in October is dated to the day it was restored.
+   *
+   * None of that is visible in the app's own screens, which read the domain
+   * fields, so this is the kind of loss that reports success.
+   */
+  restoreMany(records: readonly T[]): Promise<void>;
+
   /** Shallow field patch. Rejects if the record is missing. */
   patch(id: string, changes: Patch<T>): Promise<T>;
 

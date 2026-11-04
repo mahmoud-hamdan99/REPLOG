@@ -100,6 +100,42 @@ export class IdbRepository<T extends Entity> implements Repository<T> {
     return records;
   }
 
+  /**
+   * Writes records exactly as given, envelope and all. See the contract in
+   * data/repository.ts for why this is the one write that does not stamp.
+   *
+   * Missing fields are filled rather than written as undefined: these rows
+   * come out of a file a person may have hand-edited, and updatedAt is
+   * indexed, so an undefined key would drop the record out of every range
+   * query over it.
+   */
+  async restoreMany(records: readonly T[]): Promise<void> {
+    if (records.length === 0) {
+      return;
+    }
+
+    const ids = await this.ctx.run([this.storeName], 'readwrite', async (tx) => {
+      const store = storeOf(tx, this.storeName);
+      const written: string[] = [];
+      for (const record of records) {
+        const claimed = record as Partial<Entity> & { id: string };
+        const now = this.ctx.nowIso();
+        await store.put({
+          ...record,
+          createdAt: claimed.createdAt ?? now,
+          updatedAt: claimed.updatedAt ?? now,
+          deletedAt: claimed.deletedAt ?? null,
+          rev: claimed.rev ?? 1,
+          origin: claimed.origin ?? this.ctx.origin(),
+        });
+        written.push(record.id);
+      }
+      return written;
+    });
+
+    this.ctx.notify({ store: this.storeName, ids, kind: 'bulk', local: true });
+  }
+
   async patch(id: string, changes: Patch<T>): Promise<T> {
     const record = await this.ctx.run([this.storeName], 'readwrite', async (tx) => {
       const store = storeOf(tx, this.storeName);

@@ -51,6 +51,9 @@ class CountingRepository<T extends Entity> implements Repository<T> {
   putMany(values: readonly Draft<T>[]): Promise<T[]> {
     return this.inner.putMany(values);
   }
+  restoreMany(records: readonly T[]): Promise<void> {
+    return this.inner.restoreMany(records);
+  }
   patch(id: string, changes: Patch<T>): Promise<T> {
     return this.inner.patch(id, changes);
   }

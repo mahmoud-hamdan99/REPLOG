@@ -13,16 +13,21 @@ const SETS_PER_EXERCISE = 20; // 50 * 5 * 20 = 5000 set logs
  * Ceiling for an indexed read over the full fixture.
  *
  * This is an **index regression guard, not a latency measurement.**
- * `fake-indexeddb` in Node is not the engine that ships, and under V8 coverage
- * instrumentation the same cursor walk costs several times what it does
- * uninstrumented — an earlier 50 ms budget passed normally and failed under
- * coverage, which makes a test that cries wolf rather than one that catches
- * bugs.
+ * `fake-indexeddb` in Node is not the engine that ships, and real-device
+ * latency is verified in Phase 14, not here. What this catches is a query
+ * that quietly stopped using its index: a full scan of these 5 000 records
+ * takes several hundred milliseconds, so losing an index blows straight
+ * through the ceiling while a healthy cursor walk stays an order of magnitude
+ * under it.
  *
- * The number that matters is the margin: a full scan of these 5 000 records
- * takes several hundred milliseconds uninstrumented and over a second with
- * coverage on, so losing an index still blows straight through this ceiling.
- * Real-device latency is verified in Phase 14, not here.
+ * **This file is excluded from the coverage pass** (see `test:coverage` in
+ * package.json). V8 instrumentation makes the same cursor walk several times
+ * slower, and the cost grows with every file added to the instrumented
+ * surface — so the budget had been raised twice to survive the harness rather
+ * than to describe the product, and was about to be raised a third time. A
+ * number that tracks how much code exists is not a budget. The file still
+ * runs, uninstrumented, in `npm run test`, which is the pass where the
+ * measurement means something.
  */
 const INDEXED_QUERY_BUDGET_MS = 400;
 

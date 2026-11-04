@@ -543,7 +543,7 @@ Grouped list rows with values on the trailing side:
 * **Language** — English / العربية, applied instantly with the direction flip; no reload.
 * **Units** — weight (kg/lb), length (cm/in), numerals (1234 / ١٢٣٤). A note explains that data is stored in metric and converted for display, so switching never alters history.
 * **Workout** — default rest, auto-start rest timer, timer sound, keep screen awake (hidden if unsupported), tracking mode, e1RM formula, confirm before finishing, show previous performance, show suggestions.
-* **Data & backup** — Export (with/without photos, projected size), Import (dry-run report → mode choice), Check data integrity, Storage usage meter with a photo breakdown, Recently deleted (30-day recovery), Reset application data.
+* **Data & backup** — Export (with/without photos, projected size), per-table CSV export (export only, stated as such), Import (dry-run report → mode choice), Check data integrity, Storage usage meter, Recently deleted (30-day recovery), Reset application data.
 * **Exercise library** — manage custom exercises, archived exercises, catalog version, re-seed.
 * **About** — version, build, licence/credits, honest platform notes (§7), diagnostics log with copy-to-clipboard.
 
@@ -563,7 +563,7 @@ Grouped list rows with values on the trailing side:
 | `rl-sheet` | half · full | Built on the native `<dialog>` with `showModal()`, so the focus trap, Escape handling, background inerting and `::backdrop` come from the platform instead of hand-rolled ARIA. Entry uses a `@starting-style` transition. **That alone is not enough**: a transition advances on the document timeline, and a document that is not painting does not advance it, so an unrun transition holds its `@starting-style` value exactly as an unrun keyframe animation holds its first frame — for a slide-up, a full viewport below the fold. The component therefore checks rather than assumes: one sheet-duration after opening, any entry transition still at exactly zero has its timeline frozen and is finished outright. `dismissible="false"` blocks Escape for a sheet that exists to collect an answer, so a prompt something is waiting on cannot be closed without choosing. Drag-to-dismiss is still outstanding. |
 | `rl-dialog` | confirm · destructive-confirm · typed-confirm | Native `<dialog>`, as above. Destructive variants require a distinct action label (never "OK"), state the consequence, and put the destructive action on the trailing side |
 | `rl-toast` | info · success · undo · error | Bottom-anchored above the nav, max 2 stacked, 5 s (undo 7 s), swipe to dismiss |
-| `rl-segmented` | 2–4 segments | Theme/mode pickers; roving tabindex |
+| `rl-segmented` | 2–4 segments | Theme/mode pickers. Built on native radios in a `radiogroup`, so roles, arrow-key navigation and a single tab stop come from the platform. `showLabel` renders the group's name above it and switches the group from `aria-label` to `aria-labelledby`; it has to be set wherever two of these share a card, which is how the units screen first shipped with a "Weight unit" heading above a weight control **and** an unlabelled length control — named correctly for a screen reader and not at all for a sighted user |
 | `rl-list-row` | value · nav · toggle · destructive | 52 px min height |
 | `rl-empty-state` | icon + title + body + action | §11 |
 | `rl-skeleton` | line · card · chart | Shimmer disabled under reduced motion |

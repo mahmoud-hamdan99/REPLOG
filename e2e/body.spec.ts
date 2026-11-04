@@ -75,7 +75,10 @@ test('switching units changes every number on screen and none on disk', async ({
 
   const before = await storedMeasurements(page);
 
-  await page.goto('/settings');
+  // Units moved to their own screen when Settings became a hub in Phase 11;
+  // theme, language and photo privacy stayed on it, because those change the
+  // app the instant they are touched.
+  await page.goto('/settings/units');
   await page.getByRole('radio', { name: 'Pounds' }).check();
   await page.getByRole('radio', { name: 'Inches' }).check();
 

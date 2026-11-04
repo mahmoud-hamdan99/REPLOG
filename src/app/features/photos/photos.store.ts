@@ -1,9 +1,11 @@
 import { computed, inject, Service, signal } from '@angular/core';
-import { validationError } from '../../core/errors/app-error';
+import { storageError, validationError } from '../../core/errors/app-error';
 import { CLOCK } from '../../data/clock';
 import { OBJECT_URLS } from '../../data/object-urls';
 import { PHOTO_BLOB_STORE } from '../../data/photo-blobs';
 import { PHOTO_PROCESSOR } from '../../data/photo-processor';
+import { STORAGE_PROBE } from '../../data/platform';
+import { isAtQuota } from '../../domain/storage/quota';
 import { MEASUREMENTS_REPO, PHOTOS_REPO } from '../../data/tokens';
 import { ID_FACTORY } from '../../data/ids';
 import { UNIT_OF_WORK } from '../../data/unit-of-work';
@@ -60,6 +62,7 @@ export class PhotosStore {
   private readonly uow = inject(UNIT_OF_WORK);
   private readonly urls = inject(OBJECT_URLS);
   private readonly processor = inject(PHOTO_PROCESSOR);
+  private readonly storage = inject(STORAGE_PROBE);
   private readonly ids = inject(ID_FACTORY);
   private readonly clock = inject(CLOCK);
 
@@ -205,6 +208,17 @@ export class PhotosStore {
    * it needs is in memory.
    */
   async add(draft: PhotoDraft): Promise<Photo> {
+    // Checked before the decode, not after: processing a 12 MP image costs
+    // seconds and memory, and failing afterwards would spend both to arrive
+    // at the same refusal. A browser that will not report its quota does not
+    // block anything — see usageFraction.
+    if (isAtQuota(await this.storage.estimate())) {
+      throw storageError('Photo storage is at quota', {
+        messageKey: 'data.storage.full',
+        retryable: false,
+      });
+    }
+
     const processed = await this.processor.process(draft.file);
 
     const [fullData, thumbData] = await Promise.all([

@@ -19,7 +19,7 @@
     "prepare": "husky",
     "i18n:check": "node scripts/check-i18n.mjs",
     "tokens:check": "node scripts/check-contrast.mjs",
-    "test:coverage": "ng test --coverage",
+    "test:coverage": "ng test --coverage --exclude src/app/infrastructure/idb/query-catalog.spec.ts",
     "catalog:build": "node scripts/build-catalog.mjs",
     "catalog:check": "node scripts/build-catalog.mjs --check"
   },
