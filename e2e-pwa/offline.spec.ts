@@ -44,7 +44,7 @@ async function waitForOfflineReady(page: Page): Promise<void> {
 
 /** How many files `ngsw.json` declares for eager prefetch. */
 async function prefetchedUrlCount(page: Page): Promise<number> {
-  const manifest = (await (await page.request.get('/ngsw.json')).json()) as {
+  const manifest = (await (await page.request.get('ngsw.json')).json()) as {
     assetGroups: { installMode: string; urls: string[] }[];
   };
   return manifest.assetGroups
@@ -80,30 +80,37 @@ function cachedCount(page: Page): Promise<number> {
   });
 }
 
-/** Every route the tab bar and Settings can reach. */
+/**
+ * Every route the tab bar and Settings can reach, **relative** to the
+ * baseURL.
+ *
+ * Relative on purpose: the baseURL carries the subpath when this suite runs
+ * against a Pages-shaped build, and a leading slash would reset the path and
+ * quietly test the root instead.
+ */
 const ROUTES = [
-  '/',
-  '/plans',
-  '/exercises',
-  '/train',
-  '/history',
-  '/progress',
-  '/progress/volume',
-  '/progress/body',
-  '/records',
-  '/body',
-  '/photos',
-  '/settings',
-  '/settings/profile',
-  '/settings/units',
-  '/settings/workout',
-  '/settings/data',
-  '/settings/deleted',
-  '/settings/about',
+  '',
+  'plans',
+  'exercises',
+  'train',
+  'history',
+  'progress',
+  'progress/volume',
+  'progress/body',
+  'records',
+  'body',
+  'photos',
+  'settings',
+  'settings/profile',
+  'settings/units',
+  'settings/workout',
+  'settings/data',
+  'settings/deleted',
+  'settings/about',
 ];
 
 test('registers a service worker and caches the whole application', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('');
   await waitForOfflineReady(page);
 
   // Not just "a worker exists": the point of prefetching every chunk is that
@@ -113,7 +120,7 @@ test('registers a service worker and caches the whole application', async ({ pag
 });
 
 test('cold starts with the network disabled', async ({ page, context }) => {
-  await page.goto('/');
+  await page.goto('');
   await waitForOfflineReady(page);
 
   await context.setOffline(true);
@@ -125,7 +132,7 @@ test('cold starts with the network disabled', async ({ page, context }) => {
   // rather than of the app. Navigating away and back is the same thing from
   // the worker's side: a navigation request it must answer from cache.
   await page.goto('about:blank');
-  await page.goto('/');
+  await page.goto('');
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Home', { timeout: 30_000 });
   // The navigation landmark, not the `rl-tab-bar` host: the host is an inline
@@ -138,7 +145,7 @@ test('cold starts with the network disabled', async ({ page, context }) => {
 });
 
 test('every route loads offline, including ones never opened online', async ({ page, context }) => {
-  await page.goto('/');
+  await page.goto('');
   await waitForOfflineReady(page);
 
   await context.setOffline(true);
@@ -157,7 +164,7 @@ test('every route loads offline, including ones never opened online', async ({ p
 });
 
 test('the exercise catalog seeds offline', async ({ page, context }) => {
-  await page.goto('/');
+  await page.goto('');
   await waitForOfflineReady(page);
 
   // Clear the database so the catalog has to be seeded from its lazy chunk,
@@ -172,7 +179,7 @@ test('the exercise catalog seeds offline', async ({ page, context }) => {
   });
 
   await context.setOffline(true);
-  await page.goto('/exercises');
+  await page.goto('exercises');
 
   // 168 built-in exercises, written from a chunk the worker prefetched.
   await expect(page.getByRole('searchbox')).toBeVisible({ timeout: 60_000 });
@@ -184,7 +191,7 @@ test('the exercise catalog seeds offline', async ({ page, context }) => {
 test('the manifest and icons are reachable under the served base path', async ({ page }) => {
   // A manifest that 404s costs the install prompt silently: the browser
   // simply does not offer it, with nothing in the UI to notice.
-  const manifest = await page.request.get('/manifest.webmanifest');
+  const manifest = await page.request.get('manifest.webmanifest');
   expect(manifest.status()).toBe(200);
 
   const parsed = (await manifest.json()) as { icons: { src: string }[]; start_url: string };
@@ -192,10 +199,35 @@ test('the manifest and icons are reachable under the served base path', async ({
   expect(parsed.start_url).toBe('./');
 
   for (const icon of parsed.icons) {
-    const response = await page.request.get(`/${icon.src}`);
+    const response = await page.request.get(icon.src);
     expect(response.status(), `${icon.src} should be served`).toBe(200);
   }
 
-  const apple = await page.request.get('/icons/apple-touch-icon.png');
+  const apple = await page.request.get('icons/apple-touch-icon.png');
   expect(apple.status()).toBe(200);
+});
+
+test('serves from wherever it is deployed, subpath included', async ({ page, baseURL }) => {
+  // The guard on this whole suite when PAGES_BASE is set: if the relative
+  // paths ever resolved against the origin instead of the base, every
+  // assertion above would be testing the root and passing while saying
+  // nothing about the deployment. This fails loudly if that happens.
+  await page.goto('');
+  expect(page.url()).toBe(baseURL);
+
+  // The document's own base, which is what every relative asset reference in
+  // the app resolves against.
+  const documentBase = await page.evaluate(() => document.baseURI);
+  expect(documentBase).toBe(baseURL);
+
+  // And the worker's scope, which is what decides whether it controls these
+  // pages at all. Waited for first: a page that has only just loaded has no
+  // registration yet, and reading one straight away says null whatever the
+  // scope would have been.
+  await waitForOfflineReady(page);
+  const scope = await page.evaluate(async () => {
+    const registration = await navigator.serviceWorker.getRegistration();
+    return registration?.scope ?? null;
+  });
+  expect(scope).toBe(baseURL);
 });

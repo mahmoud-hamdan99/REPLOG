@@ -18,12 +18,6 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
-env:
-  # The one place the repository subpath is written. The manifest and the
-  # service worker both resolve their own URLs relative to it, so this flag is
-  # the only thing that needs to change to serve from somewhere else.
-  BASE_HREF: /REPLOG/
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -57,16 +51,21 @@ jobs:
       - name: Stamp the build
         run: npm run stamp
 
-      - name: Build
-        run: npx ng build --configuration production --base-href "$BASE_HREF"
+      # The same command a developer runs. It owns the base href, writes
+      # 404.html for deep links and .nojekyll so Pages does not run Jekyll
+      # over the artifact — all in one place, so CI cannot drift from local.
+      # Override the subpath here with BASE_HREF if the repository is renamed.
+      - name: Build for Pages
+        run: npm run build:pages
 
-      # GitHub Pages serves 404.html for an unknown path; Angular's router
-      # then resolves it client-side. Without this, every deep link is a dead
-      # end for anyone who did not arrive at the root.
-      - name: SPA fallback and Jekyll opt-out
-        run: |
-          cp dist/REPLOG/browser/index.html dist/REPLOG/browser/404.html
-          touch dist/REPLOG/browser/.nojekyll
+      # The deployment shape itself: the offline suite, re-run against the
+      # subpath build. This is what catches an asset path or a worker scope
+      # that is correct at the root and wrong where it will actually live.
+      - name: Install the browser the offline suite needs
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify the Pages build offline, under the subpath
+        run: node scripts/test-pages.mjs
 
       - uses: actions/upload-pages-artifact@v3
         with:

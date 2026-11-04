@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:pages": "ng build --configuration production --base-href /REPLOG/",
+    "build:pages": "node scripts/build-pages.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false",
     "test:watch": "ng test --watch",
@@ -25,7 +25,8 @@
     "icons": "node scripts/build-icons.mjs",
     "stamp": "node scripts/stamp-build.mjs",
     "build:prod": "ng build --configuration production",
-    "test:pwa": "npm run build:prod && playwright test --config playwright.pwa.config.ts"
+    "test:pwa": "npm run build:prod && playwright test --config playwright.pwa.config.ts",
+    "test:pages": "npm run build:pages && node scripts/test-pages.mjs"
   },
   "private": true,
   "packageManager": "npm@11.20.0",

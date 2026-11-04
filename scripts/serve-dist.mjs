@@ -11,7 +11,7 @@
  *
  *   node scripts/serve-dist.mjs [--port 4301] [--base /REPLOG/]
  */
-import { createReadStream, existsSync, statSync } from 'node:fs';
+import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 
@@ -38,7 +38,23 @@ const TYPES = {
 };
 
 if (!existsSync(join(ROOT, 'index.html'))) {
-  console.error(`serve-dist: no build at ${ROOT}. Run \`npm run build -- --configuration production\` first.`);
+  console.error(
+    `serve-dist: no build at ${ROOT}. Run \`npm run build:prod\` or \`npm run build:pages\` first.`,
+  );
+  process.exit(1);
+}
+
+// The build in dist/ must have been built for the path we are about to serve
+// it from. Both suites share one dist/, so running the root suite after the
+// subpath one — or the reverse — serves a build whose <base href> points
+// somewhere else, and every asset 404s. That failure reads as a broken app
+// rather than a stale artifact, and cost an hour of chasing the wrong thing.
+const builtBase = /<base href="([^"]*)"/.exec(readFileSync(join(ROOT, 'index.html'), 'utf8'))?.[1];
+if (builtBase !== BASE) {
+  console.error(
+    `serve-dist: dist/ was built for "${builtBase}" but is being served at "${BASE}".\n` +
+      `  Rebuild first: ${BASE === '/' ? 'npm run build:prod' : 'npm run build:pages'}`,
+  );
   process.exit(1);
 }
 

@@ -15,6 +15,18 @@ import { defineConfig, devices } from '@playwright/test';
  * Safari behaviour is a device-matrix question (section 18), not one this
  * harness can answer. That limitation is recorded rather than papered over.
  */
+/**
+ * Where the build is served from.
+ *
+ * `PAGES_BASE=/REPLOG/` runs the same suite against the shape GitHub Pages
+ * actually serves — a repository subpath — which is the only way to catch an
+ * asset path, a manifest URL or a worker scope that is correct at the root
+ * and wrong where it will live. A separate port so both can run without
+ * fighting over one service worker registration.
+ */
+const BASE = process.env['PAGES_BASE'] ?? '/';
+const PORT = BASE === '/' ? 4301 : 4302;
+
 export default defineConfig({
   testDir: './e2e-pwa',
   fullyParallel: false,
@@ -26,13 +38,17 @@ export default defineConfig({
   reporter: [['list']],
   timeout: 120_000,
   use: {
-    baseURL: 'http://localhost:4301',
+    // Always ends with "/", because every path in the suite is relative to
+    // it. A leading slash in `page.goto` would reset the path and skip the
+    // subpath entirely, which would make the Pages run silently test the
+    // root — passing, and proving nothing about deployment.
+    baseURL: `http://localhost:${PORT}${BASE}`,
     trace: 'on-first-retry',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: 'node scripts/serve-dist.mjs --port 4301',
-    url: 'http://localhost:4301',
+    command: `node scripts/serve-dist.mjs --port ${PORT} --base ${BASE}`,
+    url: `http://localhost:${PORT}${BASE}`,
     reuseExistingServer: !process.env['CI'],
     timeout: 60_000,
   },

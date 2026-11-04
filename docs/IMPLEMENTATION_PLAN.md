@@ -761,13 +761,35 @@ gh run watch
 
 ### Acceptance criteria
 
-- [ ] `https://USERNAME.github.io/REPOSITORY-NAME/` loads the app
-- [ ] A deep link such as `/REPOSITORY-NAME/progress` loads directly (via the `404.html` fallback) and the router resolves it
-- [ ] No 404s for assets, fonts, locale JSON, or the exercise catalog
-- [ ] The manifest resolves and `start_url`/`scope` both include the subpath
-- [ ] The service worker registers with the correct scope and serves offline
-- [ ] A push to `main` deploys automatically after checks pass
-- [ ] Install from Safari on the deployed URL produces a standalone app
+Everything below is verified against a **Pages-shaped build** — production,
+under the `/REPLOG/` subpath, served by `scripts/serve-dist.mjs` with the
+SPA fallback and 404 status Pages uses. Nothing is verified against a live
+site, because nothing has been deployed: the repository settings that make a
+deploy possible need a human in the GitHub web interface, and the branch has
+not been pushed. Each criterion says which half it has.
+
+- [x] A deep link such as `/REPLOG/progress` loads directly and the router resolves it — `404.html` is written by `scripts/build-pages.mjs`, the local server returns it with a 404 status exactly as Pages does, and the body carries `<base href="/REPLOG/">` and the app root. Every one of the eighteen routes is then navigated to under the subpath in `e2e-pwa/offline.spec.ts`.
+- [x] No 404s for assets, fonts, locale JSON, or the exercise catalog — the offline suite asserts the service worker has cached every URL `ngsw.json` declares for prefetch, which is the whole build: 80 files including both font families and every lazy chunk. The catalog gets its own test that deletes the database, goes offline and opens `/exercises`.
+- [x] The manifest resolves and its URLs are correct under the subpath — served at `/REPLOG/manifest.webmanifest` with every declared icon fetched and asserted 200. **`start_url` and `scope` are `"./"` rather than containing the subpath literally**, which resolves to `/REPLOG/` when served from there; see the deviation below.
+- [x] The service worker registers with the correct scope and serves offline — a test added this phase asserts `registration.scope`, `document.baseURI` and `page.url()` all equal the subpath base. That test exists to stop the suite silently passing against the root: relative paths plus a wrong baseURL would have tested `/` and proved nothing.
+- [ ] `https://mahmoud-hamdan99.github.io/REPLOG/` loads the app — **not ticked: not deployed.** The branch is 15 commits ahead of `origin/main` and has not been pushed, and Pages has not been switched to the GitHub Actions source. Both need the user.
+- [ ] A push to `main` deploys automatically after checks pass — **not ticked: never run.** The workflow is written, its YAML structure is checked, and every command in it has been run locally in the same order. That is not the same as having watched it pass.
+- [ ] Install from Safari on the deployed URL produces a standalone app — **not ticked: not attempted.** Needs an iPhone and a live URL. Carried from Phase 12.
+
+### Deviations
+
+* **`scripts/set-base-href.mjs` was not written, because nothing needs patching.** Task 1 asks for a script that rewrites the manifest's `start_url`/`scope` and the service-worker config from a single base href. Instead the manifest uses `"./"` and relative icon paths — a webmanifest resolves those against its own URL — and `navigationUrls` stays `/**`, which ngsw matches inside the worker's scope, and the scope *is* the base href. Both are correct under any subpath with nothing rewritten, which deletes the class of bug where the app works locally and 404s on Pages. The single source the task wanted is `scripts/build-pages.mjs`, which owns the base href and is the command both a developer and CI run.
+* **The base href briefly lived in two places and that was the bug §10.3 exists to prevent.** Phase 12 put `BASE_HREF` in the workflow's `env` while `build:pages` had its own copy. Neither was wrong yet, which is exactly how that arrangement fails: it drifts later, and the symptom is a white page with four 404s in the console. The workflow now runs `npm run build:pages`.
+* **The deploy workflow runs the offline suite against the subpath build.** Not in the plan. Every Phase 13 failure mode — an asset path, a manifest URL, a worker scope — looks identical from the root, so a gate that only builds would pass while shipping a broken site. `npm run test:pages` is the same assertions one directory deeper.
+* **`scripts/build-pages.mjs` invokes the Angular CLI's JS entry point rather than `npx ng`.** Spawning `npx.cmd` needs a shell on Windows, and a shell is what breaks this particular build; see below.
+
+### Carried forward
+
+* **One `dist/` serves two suites, and a stale artifact reads as a broken app.** The root and subpath runs share a build directory, so running one straight after the other serves a build whose `<base href>` points elsewhere and every asset 404s — which looks exactly like the deployment being broken, and cost a chase in the wrong direction. `serve-dist.mjs` now reads the built `<base href>` and refuses to start when it does not match the path it was asked to serve from, naming the command to run instead.
+* **Git Bash silently corrupts the deployable build on Windows, and this bit twice in one phase.** MSYS rewrites a leading-slash argument into a Windows path, so `ng build --base-href /REPLOG/` becomes `--base-href "C:/Program Files/Git/REPLOG/"` — and *the build succeeds*, with that path baked into `<base href>` and into `ngsw.json`. It then 404s everything on deployment. The same thing ate `serve-dist.mjs --base /REPLOG/` an hour later. The npm scripts are safe because npm runs them through `cmd.exe`; the README now says so, and `build-pages.mjs` avoids the shell entirely. There is no gate against someone typing it by hand.
+* **Nothing has been deployed, and four of the seven criteria need that.** The repository settings — Pages source, the `github-pages` environment's reviewers, branch protection on `main` — cannot be set from repository contents and are listed in the README as a numbered one-time task. The `gh` CLI is not installed in this environment, so they could not be set from here either.
+* **The workflow has never run.** Its YAML is structurally checked and every command in it has been run locally in the same order, which is worth something and is not the same as a green run. The first push will find whatever is wrong with it.
+* **`upload-pages-artifact` makes `.nojekyll` redundant, and it is written anyway.** Jekyll only runs for branch-based Pages, not for the Actions artifact path this uses. It costs nothing and keeps the artifact correct if the source is ever switched back, but it is not doing anything today.
 
 ---
 

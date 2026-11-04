@@ -553,18 +553,25 @@ Honest iOS statements for the About screen (spec §9 forbids claiming unsupporte
 | Hard-coded absolute URLs in the manifest | Not applicable: the manifest is relative (§10.2), so there is nothing to patch. |
 | Router base | `provideRouter` + `APP_BASE_HREF` from `<base href>` injected by the CLI. |
 
-A single `BASE_HREF` value feeds the build flag, and nothing else needs it: the manifest resolves relative to itself and the service worker's `navigationUrls` resolve inside its scope. It lives in the deploy workflow's `env`, so staging under a different repository name is a one-variable change — and there is no second copy to forget. `scripts/set-base-href.mjs` is therefore not needed and was not written.
+A single base href feeds the build flag, and nothing else needs it: the manifest resolves relative to itself and the service worker's `navigationUrls` resolve inside its scope. It lives in **`scripts/build-pages.mjs`**, which is the command both a developer and CI run — `npm run build:pages` — so there is no second copy to drift. Override it with `BASE_HREF` to stage under a different repository name. `scripts/set-base-href.mjs` is therefore not needed and was not written.
+
+That script also writes the two files Pages needs and Angular does not produce: `404.html` (a copy of `index.html`, which Pages serves for any unknown path so the router can resolve it client-side) and `.nojekyll`.
 
 ### 10.4 CI/CD
 
 `.github/workflows/deploy.yml`, triggered on push to `main` and `workflow_dispatch`:
 
 ```
-checkout → setup-node (pinned, npm cache) → npm ci
-  → lint → typecheck (tsc --noEmit) → unit tests → build --configuration production
-  → patch manifest + base href → copy index.html → 404.html → touch .nojekyll
+checkout → setup-node (22, npm cache) → npm ci
+  → lint → lint:css → i18n:check → tokens:check → catalog:check → typecheck → test
+  → icons regenerated and diffed (the committed mark must match its generator)
+  → stamp-build (commit + build time into build-info.ts)
+  → npm run build:pages (base href, 404.html, .nojekyll — one command, same as local)
+  → playwright install chromium → test-pages (offline suite against the subpath build)
   → upload-pages-artifact → deploy-pages (environment: github-pages)
 ```
+
+The offline suite runs here, against the subpath build, because every deployment failure mode — an asset path, a manifest URL, a worker scope — looks identical from the root. A gate that only built would pass while shipping a site that 404s.
 
 Permissions: `contents: read`, `pages: write`, `id-token: write`. Concurrency group `pages` with `cancel-in-progress: false`. A failing lint/test/build fails the deploy — spec §13 requires a green production build before release. "Automatic deployment on approved pushes" (§11) is satisfied by requiring PR review on `main` plus the `github-pages` environment's protection rules.
 
